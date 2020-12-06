@@ -1,0 +1,24 @@
+<mat-toolbar color="primary">
+  <button mat-icon-button class="example-icon" aria-label="Example icon-button with menu icon"
+          [matMenuTriggerFor]="menu">
+    <mat-icon>menu</mat-icon>
+  </button>
+  <span>My App</span>
+</mat-toolbar>
+
+<mat-menu #menu="matMenu">
+  <button mat-menu-item (click)="openModalAddHost()">
+    <mat-icon>playlist_add</mat-icon>
+    <span>Add Zookeeper</span>
+  </button>
+  <button mat-menu-item>
+    <mat-icon>playlist_add_check</mat-icon>
+    <span>Check connections</span>
+  </button>
+</mat-menu>
+
+<!--<main>-->
+<!--  <ng-template *ngFor="let tree of trees; let ind = index">-->
+<!--    <app-tree-elem></app-tree-elem>-->
+<!--  </ng-template>-->
+<!--</main>-->
