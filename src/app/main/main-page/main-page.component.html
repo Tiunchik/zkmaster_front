@@ -17,8 +17,7 @@
   </button>
 </mat-menu>
 
-<!--<main>-->
-<!--  <ng-template *ngFor="let tree of trees; let ind = index">-->
-<!--    <app-tree-elem></app-tree-elem>-->
-<!--  </ng-template>-->
-<!--</main>-->
+<main>
+  <app-tree-elem *ngFor="let branch of trees"
+                 [zknode]="branch"></app-tree-elem>
+</main>

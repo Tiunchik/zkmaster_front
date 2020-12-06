@@ -1,16 +1,18 @@
-<h2 mat-dialog-title>Create connection to Zookeeper</h2>
+<h1 mat-dialog-title>Create connection to Zookeeper</h1>
 <mat-dialog-content class="mat-typography">
   <h3>Tips:</h3>
-  <p>Please inter host name or host IP address with host port number (mask example: xxx.xxx.xxx.xxx:pppp). <br>
-    If host use standard port - 2181 you can press only host name or IP</p>
+  <p>Please enter host name or host IP address with <br>
+    host port number (mask example: xxx.xxx.xxx.xxx:port).<br>
+    If host use standard port - 2181 <br>
+    you can enter only host name or IP</p>
   <form class="example-form">
     <mat-form-field class="example-full-width">
-      <mat-label>Leave a comment</mat-label>
-      <textarea matInput placeholder="Ex. It makes me feel..."></textarea>
+      <mat-label><span>Without http://</span></mat-label>
+      <input type="text" matInput placeholder="xxx.xxx.xxx.xxx:port" [(ngModel)]="host" name="host">
     </mat-form-field>
   </form>
 </mat-dialog-content>
 <mat-dialog-actions align="end">
   <button mat-button [mat-dialog-close]="false">Cancel</button>
-  <button mat-button [mat-dialog-close]="true" cdkFocusInitial>Create</button>
+  <button mat-button [mat-dialog-close]="host" cdkFocusInitial>Create</button>
 </mat-dialog-actions>

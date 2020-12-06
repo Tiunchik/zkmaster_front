@@ -21,8 +21,17 @@ export class MainPageComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  // TODO: сделать верную цепочку observable - pipeline
+  // TODO: сделать отдельный метод для валидации, либо втащить сюда ФормМодуль ?
+
   openModalAddHost(): void {
     const dialogResult = this.modal.open(AddHostModalElemComponent);
-    dialogResult.afterClosed().subscribe((answer) => console.log(answer));
+    dialogResult.afterClosed().subscribe((answer) => {
+      console.log(answer);
+      this.crud.getAll(answer).subscribe((data) => {
+        this.trees.push(data);
+        console.log(this.trees);
+      });
+    });
   }
 }
