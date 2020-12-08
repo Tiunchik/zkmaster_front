@@ -3,9 +3,20 @@
           [matMenuTriggerFor]="menu">
     <mat-icon>menu</mat-icon>
   </button>
-  <span>My App</span>
+  <span>ZKM</span>
+
+<!--  Extended toolbar  -->
+  <button mat-menu-item (click)="openModalAddHost()">
+    <mat-icon class="toolbar-icons">playlist_add</mat-icon>
+    <span>Add Zookeeper</span>
+  </button>
+  <button mat-menu-item>
+    <mat-icon class="toolbar-icons">playlist_add_check</mat-icon>
+    <span>Check connections</span>
+  </button>
 </mat-toolbar>
 
+<!--  MENU -->
 <mat-menu #menu="matMenu">
   <button mat-menu-item (click)="openModalAddHost()">
     <mat-icon>playlist_add</mat-icon>
