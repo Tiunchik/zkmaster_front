@@ -9,7 +9,109 @@
   list-style-type: none;
 }
 
+//.mat-tree {
+//  //margin-left: -5px;
+//  //margin-left: -30px;
+//  //margin-right: -20px; // don't use, cause brake other style
+//
+//}
+
+// короче, убирает огромные промежутки.
 .mat-tree-node, .mat-nested-tree-node {
   min-height: 0;
   max-height: 12px;
+  //padding-right: -200px; // don't use, cause brake other style
+}
+.mat-icon-button {
+  min-height: 10px;
+  max-height: 20px;
+  padding-bottom: 5px;
+}
+
+// next code is copied from and modified:
+// https://stackblitz.com/edit/material-tree-nested?file=app%2Fapp.component.css
+
+.example-tree-progress-bar {
+  margin-left: 30px;
+}
+
+.example-tree-nested-node {
+  padding-left: 30px;
+}
+
+.mat-tree {
+  //margin-left: -70px;
+  margin-left: 20px;
+}
+.mat-tree-node {
+  //padding: -20px;
+  //padding: 5px;
+  width: -10px;
+  //padding-right: -30px;
+  background-color: white;
+}
+
+.mat-nested-tree-node {
+  top: -24px;
+  width: -10px;
+}
+
+.mat-ripple, .mat-button-ripple, .mat-button-ripple-round {
+  width: 0;
+  padding: 0;
+  margin: 0;
+  height: 0;
+}
+
+ul, li {
+  list-style: none;
+  //margin-left: -40px;
+  //padding-left: -40px;
+  //padding-top: -20px; // <<== invalid property value
+  margin-top: 40px;
+;
+}
+
+li.example-tree-container {
+  //border-bottom: 0;
+}
+
+ul {
+  //padding-left: 40px;
+  //padding-top: 100px; // overwrite by other css, IDK that exactly.
+  padding-bottom: 0;
+}
+
+li {
+  padding-left: 40px;
+  //padding-left: 10px;
+  //border: 1px dotted grey;
+  //border-width: 0 0 1px 1px;
+  position: relative;
+  top: -24px;
+}
+
+li.mat-tree-node,
+li div {
+  margin: 0;
+  position: relative;
+  top: 24px;
+}
+
+li ul {
+  //border-top: 1px dotted grey;
+  //margin-left: -40px;
+  margin-top: 20px;
+  margin-left: 0;
+  padding-top: 10px;
+  padding-left: 20px; // <<== IMPORTANT for remove left "white space".
+}
+
+.mat-nested-tree-node:last-child ul {
+  //border-left: 1px solid white;
+  margin-left: -30px;
+}
+
+.mat-icon-button {
+  z-index: 200; // <<== IMPORTANT for remove left "white space".
 }
