@@ -2,6 +2,7 @@
   flex: 1 1 auto;
 }
 
-.main {
-  grid-column: auto;
+main {
+  display: grid;
+  grid-template-columns: [line1] 25%  [line2] 25%  [line3] 25%  [line4] 25%;
 }
