@@ -4,6 +4,8 @@
 .toolbar-icons {
   color: aliceblue;
 }
+
 .main {
-  grid-column: auto;
+  display: grid;
+  grid-template-columns: [line1] 25%  [line2] 25%  [line3] 25%  [line4] 25%;
 }
