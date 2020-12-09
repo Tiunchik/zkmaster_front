@@ -17,7 +17,22 @@ export const ZKNODES_EXPML: ZkNode = {
           value: 'firstNodeChildValue',
           name: 'firstNodeChild',
           father: null,
-          children: null
+          children: [
+            {
+              path: '/firstNode/firstNodeChild/zookeeper',
+              value: '',
+              name: 'zookeeper',
+              father: null,
+              children: null
+            },
+            {
+              path: '/firstNode/firstNodeChild/quota',
+              value: '',
+              name: 'quota',
+              father: null,
+              children: null
+            }
+          ]
         }
       ]
     },

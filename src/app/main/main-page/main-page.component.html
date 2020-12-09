@@ -28,7 +28,14 @@
   </button>
 </mat-menu>
 
-<main>
+<main class="main" cdkDropListGroup>
+  <app-dra-navbar></app-dra-navbar>
+  <app-dra-navbar></app-dra-navbar>
+</main>
+
+<main class="main">
   <app-tree-elem *ngFor="let branch of trees"
                  [zknode]="branch"></app-tree-elem>
 </main>
+
+

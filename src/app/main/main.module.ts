@@ -7,17 +7,19 @@ import {MatToolbarModule} from '@angular/material/toolbar';
 import {MatButtonModule} from '@angular/material/button';
 import {MatMenuModule} from '@angular/material/menu';
 import {MatIconModule} from '@angular/material/icon';
-import {TreeElemComponent} from './elements/tree-elem/tree-elem.component';
-import {AddHostModalElemComponent} from './elements/add-host-modal-elem/add-host-modal-elem.component';
+import {TreeElemComponent} from './tree-block/tree-elem/tree-elem.component';
+import {AddHostModalElemComponent} from './tree-block/add-host-modal-elem/add-host-modal-elem.component';
 import {MatDialogModule} from '@angular/material/dialog';
 import {MatInputModule} from '@angular/material/input';
 import {MatTreeModule} from '@angular/material/tree';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {FormsModule} from '@angular/forms';
-
+import { DraNavbarComponent } from './drag-block/dra-navbar/dra-navbar.component';
+import {DragDropModule} from '@angular/cdk/drag-drop';
+import { DivBlockComponent } from './drag-block/div-block/div-block.component';
 
 @NgModule({
-  declarations: [MainPageComponent, TreeElemComponent, AddHostModalElemComponent],
+  declarations: [MainPageComponent, TreeElemComponent, AddHostModalElemComponent, DraNavbarComponent, DivBlockComponent],
   imports: [
     CommonModule,
     MainRoutingModule,
@@ -29,7 +31,8 @@ import {FormsModule} from '@angular/forms';
     MatFormFieldModule,
     MatInputModule,
     FormsModule,
-    MatTreeModule
+    MatTreeModule,
+    DragDropModule
   ]
 })
 export class MainModule {

@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {ZkNode} from '../shared/domains/ZkNode';
 import {CrudService} from '../shared/services/crud.service';
 import {MatDialog} from '@angular/material/dialog';
-import {AddHostModalElemComponent} from '../elements/add-host-modal-elem/add-host-modal-elem.component';
+import {AddHostModalElemComponent} from '../tree-block/add-host-modal-elem/add-host-modal-elem.component';
 
 
 @Component({
