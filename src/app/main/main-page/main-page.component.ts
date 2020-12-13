@@ -14,6 +14,8 @@ export class MainPageComponent implements OnInit {
 
   trees: ZkNode[] = [];
 
+  dragAndDrop: number[] = [1];
+
   constructor(private crud: CrudService,
               private modal: MatDialog) {
   }
@@ -33,5 +35,9 @@ export class MainPageComponent implements OnInit {
         console.log(this.trees);
       });
     });
+  }
+
+  addTab(): void {
+    this.dragAndDrop.push(2);
   }
 }

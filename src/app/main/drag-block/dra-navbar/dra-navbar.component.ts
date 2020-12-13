@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {CdkDragDrop, moveItemInArray, transferArrayItem} from '@angular/cdk/drag-drop';
 
 @Component({
@@ -7,11 +7,9 @@ import {CdkDragDrop, moveItemInArray, transferArrayItem} from '@angular/cdk/drag
   styleUrls: ['./dra-navbar.component.scss']
 })
 export class DraNavbarComponent implements OnInit {
-  timePeriods = [
-    'first',
-    'second',
-    'third'
-  ];
+
+  @Input() list: string[] = [];
+  @Input() name: string;
 
   constructor() {
   }
@@ -20,6 +18,10 @@ export class DraNavbarComponent implements OnInit {
   }
 
   drop(event: CdkDragDrop<string[]>): void {
+    const current: string[] = event.previousContainer.data;
+    const next: string[] = event.container.data;
+    console.log(current);
+    console.log(next);
     if (event.previousContainer === event.container) {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
     } else {
@@ -31,6 +33,6 @@ export class DraNavbarComponent implements OnInit {
   }
 
   log(): void {
-    console.log('clicked');
+    console.log(`You just have clicked on ${this.name}`);
   }
 }

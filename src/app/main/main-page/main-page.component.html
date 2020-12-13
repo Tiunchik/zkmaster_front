@@ -5,10 +5,14 @@
   </button>
   <span>ZKM</span>
 
-<!--  Extended toolbar  -->
+  <!--  Extended toolbar  -->
   <button mat-menu-item (click)="openModalAddHost()">
     <mat-icon class="toolbar-icons">playlist_add</mat-icon>
     <span>Add Zookeeper</span>
+  </button>
+  <button mat-menu-item (click)="addTab()">
+    <mat-icon class="toolbar-icons">playlist_add</mat-icon>
+    <span>Add Tab</span>
   </button>
   <button mat-menu-item>
     <mat-icon class="toolbar-icons">playlist_add_check</mat-icon>
@@ -29,8 +33,7 @@
 </mat-menu>
 
 <main class="main" cdkDropListGroup>
-  <app-dra-navbar></app-dra-navbar>
-  <app-dra-navbar></app-dra-navbar>
+    <app-dra-navbar *ngFor="let pos of dragAndDrop" [list]="['' + pos + '']" [name]="'first'"></app-dra-navbar>
 </main>
 
 <main class="main">
