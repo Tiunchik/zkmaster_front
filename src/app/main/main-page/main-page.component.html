@@ -1,39 +1,52 @@
-<mat-toolbar color="primary">
-  <button mat-icon-button class="example-icon" aria-label="Example icon-button with menu icon"
-          [matMenuTriggerFor]="menu">
-    <mat-icon>menu</mat-icon>
-  </button>
-  <span>ZKM</span>
+<mat-toolbar color="primary" class="toolbar-zkm">
+  <div class="toolbar-flex">
+    <button mat-icon-button class="example-icon" aria-label="Example icon-button with menu icon"
+            [matMenuTriggerFor]="menu">
+      <mat-icon>menu</mat-icon>
+    </button>
+    <span class="marg-span">ZkMaster</span>
+  </div>
 
-  <!--  Extended toolbar  -->
-  <button mat-menu-item (click)="openModalAddHost()">
-    <mat-icon class="toolbar-icons">playlist_add</mat-icon>
-    <span>Add Zookeeper</span>
-  </button>
-  <button mat-menu-item (click)="addTab()">
-    <mat-icon class="toolbar-icons">playlist_add</mat-icon>
-    <span>Add Tab</span>
-  </button>
-  <button mat-menu-item>
-    <mat-icon class="toolbar-icons">playlist_add_check</mat-icon>
-    <span>Check connections</span>
-  </button>
+  <div class="toolbar-flex">
+    <!--  Extended toolbar  -->
+    <button mat-menu-item *ngIf="buttons[0].navbar" (click)="openModalAddHost()">
+      <mat-icon class="toolbar-icons" title="{{buttons[0].name}}">{{buttons[0].icon}}</mat-icon>
+    </button>
+    <button mat-menu-item *ngIf="buttons[1].navbar" (click)="addTab()">
+      <mat-icon class="toolbar-icons" title="{{buttons[1].name}}">{{buttons[1].icon}}</mat-icon>
+    </button>
+    <button mat-menu-item *ngIf="buttons[2].navbar">
+      <mat-icon class="toolbar-icons" title="{{buttons[2].name}}">{{buttons[2].icon}}k</mat-icon>
+    </button>
+    <button mat-menu-item *ngIf="buttons[3].navbar" (click)="openSettings()">
+      <mat-icon class="toolbar-icons" title="{{buttons[3].name}}">{{buttons[3].icon}}k</mat-icon>
+    </button>
+  </div>
+
 </mat-toolbar>
 
 <!--  MENU -->
 <mat-menu #menu="matMenu">
   <button mat-menu-item (click)="openModalAddHost()">
-    <mat-icon>playlist_add</mat-icon>
-    <span>Add Zookeeper</span>
+    <mat-icon>{{buttons[0].icon}}</mat-icon>
+    <span>{{buttons[0].name}}  </span>
+  </button>
+  <button mat-menu-item (click)="addTab()">
+    <mat-icon>{{buttons[1].icon}}</mat-icon>
+    <span>{{buttons[1].name}}</span>
   </button>
   <button mat-menu-item>
-    <mat-icon>playlist_add_check</mat-icon>
-    <span>Check connections</span>
+    <mat-icon>{{buttons[2].icon}}k</mat-icon>
+    <span>{{buttons[2].name}}</span>
+  </button>
+  <button mat-menu-item (click)="openSettings()">
+    <mat-icon>{{buttons[3].icon}}k</mat-icon>
+    <span>{{buttons[3].name}}</span>
   </button>
 </mat-menu>
 
 <main class="main" cdkDropListGroup>
-    <app-dra-navbar *ngFor="let pos of dragAndDrop" [list]="['' + pos + '']" [name]="'first'"></app-dra-navbar>
+  <app-dra-navbar *ngFor="let pos of dragAndDrop" [list]="['' + pos + '']" [name]="'first'"></app-dra-navbar>
 </main>
 
 <main class="main">

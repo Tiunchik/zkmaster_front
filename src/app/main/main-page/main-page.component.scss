@@ -1,8 +1,15 @@
-.example-spacer {
-  flex: 1 1 auto;
-}
 .toolbar-icons {
   color: aliceblue;
+}
+
+.toolbar-zkm {
+  display: flex;
+  justify-content: space-between;
+}
+
+.toolbar-flex {
+  display: flex;
+  flex-direction: row;
 }
 
 .main {
@@ -10,7 +17,6 @@
   grid-template-columns: [line1] 50%  [line2] 50%;
 }
 
-.navbar {
-  width: 100%;
-  height: 20px;
+.marg-span {
+  margin: auto;
 }

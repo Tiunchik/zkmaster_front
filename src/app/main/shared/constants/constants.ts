@@ -1,6 +1,6 @@
-import {ZkNode} from '../domains/ZkNode';
+import {ZkNodeModel} from '../domains/zk-node.model';
 
-export const ZKNODES_EXPML: ZkNode = {
+export const ZKNODES_EXPML: ZkNodeModel = {
   path: '/',
   value: '',
   name: '/',
@@ -60,3 +60,4 @@ export const ZKNODES_EXPML: ZkNode = {
     }
   ]
 };
+export const SETTINGS_NAME = 'settins';

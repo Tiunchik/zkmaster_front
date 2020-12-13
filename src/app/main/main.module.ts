@@ -8,7 +8,7 @@ import {MatButtonModule} from '@angular/material/button';
 import {MatMenuModule} from '@angular/material/menu';
 import {MatIconModule} from '@angular/material/icon';
 import {TreeElemComponent} from './tree-block/tree-elem/tree-elem.component';
-import {AddHostModalElemComponent} from './tree-block/add-host-modal-elem/add-host-modal-elem.component';
+import {AddHostModalElemComponent} from './modals/add-host-modal-elem/add-host-modal-elem.component';
 import {MatDialogModule} from '@angular/material/dialog';
 import {MatInputModule} from '@angular/material/input';
 import {MatTreeModule} from '@angular/material/tree';
@@ -17,9 +17,11 @@ import {FormsModule} from '@angular/forms';
 import { DraNavbarComponent } from './drag-block/dra-navbar/dra-navbar.component';
 import {DragDropModule} from '@angular/cdk/drag-drop';
 import { DivBlockComponent } from './drag-block/div-block/div-block.component';
+import {MatCheckboxModule} from '@angular/material/checkbox';
+import { DisplaySettingsComponent } from './modals/display-settings/display-settings.component';
 
 @NgModule({
-  declarations: [MainPageComponent, TreeElemComponent, AddHostModalElemComponent, DraNavbarComponent, DivBlockComponent],
+  declarations: [MainPageComponent, TreeElemComponent, AddHostModalElemComponent, DraNavbarComponent, DivBlockComponent, DisplaySettingsComponent],
   imports: [
     CommonModule,
     MainRoutingModule,
@@ -32,7 +34,8 @@ import { DivBlockComponent } from './drag-block/div-block/div-block.component';
     MatInputModule,
     FormsModule,
     MatTreeModule,
-    DragDropModule
+    DragDropModule,
+    MatCheckboxModule
   ]
 })
 export class MainModule {

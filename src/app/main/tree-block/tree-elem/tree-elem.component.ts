@@ -1,7 +1,7 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {NestedTreeControl} from '@angular/cdk/tree';
 import {MatTreeNestedDataSource} from '@angular/material/tree';
-import {ZkNode} from '../../shared/domains/ZkNode';
+import {ZkNodeModel} from '../../shared/domains/zk-node.model';
 
 @Component({
   selector: 'app-tree-elem',
@@ -10,9 +10,9 @@ import {ZkNode} from '../../shared/domains/ZkNode';
 })
 export class TreeElemComponent implements OnInit {
 
-  @Input() zknode: ZkNode;
-  treeControl = new NestedTreeControl<ZkNode>(node => node.children);
-  dataSource = new MatTreeNestedDataSource<ZkNode>();
+  @Input() zknode: ZkNodeModel;
+  treeControl = new NestedTreeControl<ZkNodeModel>(node => node.children);
+  dataSource = new MatTreeNestedDataSource<ZkNodeModel>();
 
   constructor() {}
 
@@ -20,7 +20,7 @@ export class TreeElemComponent implements OnInit {
     this.dataSource.data = [this.zknode];
   }
 
-  hasChild = (_: number, node: ZkNode) => !!node.children && node.children.length > 0;
+  hasChild = (_: number, node: ZkNodeModel) => !!node.children && node.children.length > 0;
 
 }
 
