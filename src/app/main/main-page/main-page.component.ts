@@ -47,6 +47,7 @@ export class MainPageComponent implements OnInit, OnDestroy {
   // TODO: сделать отдельный метод для валидации, либо вытащить сюда ФормМодуль ?
 
   openModalAddHost(): void {
+    console.log('lorem5');
     const dialogResult = this.modal.open(AddHostModalElemComponent);
     dialogResult.afterClosed()
       .pipe(takeUntil(this.destroy$))
@@ -72,13 +73,20 @@ export class MainPageComponent implements OnInit, OnDestroy {
     this.dragAndDrop.push(2);
   }
 
-  loadOrSaveSettings(): void {
+  public loadOrSaveSettings(): void {
     const storagedButtons = localStorage.getItem(SETTINGS_NAME);
     if (storagedButtons) {
       this.buttons = JSON.parse(localStorage.getItem(SETTINGS_NAME));
     } else {
       localStorage.setItem(SETTINGS_NAME, JSON.stringify(this.buttons));
     }
+  }
+
+  // TODO: потыкай function.apply
+  callFunction(name: string): void {
+    const button = this.buttons.filter((but) => but.name === name).pop();
+    const str = button.run;
+    this[str]();
   }
 
 }
