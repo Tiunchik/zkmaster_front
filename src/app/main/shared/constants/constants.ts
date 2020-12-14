@@ -60,4 +60,4 @@ export const ZKNODES_EXPML: ZkNodeModel = {
     }
   ]
 };
-export const SETTINGS_NAME = 'settins';
+export const SETTINGS_NAME = 'settings';

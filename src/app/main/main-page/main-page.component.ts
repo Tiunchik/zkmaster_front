@@ -6,7 +6,7 @@ import {AddHostModalElemComponent} from '../modals/add-host-modal-elem/add-host-
 import {MenuButtonModel} from '../shared/domains/menu-button.model';
 import {SETTINGS_NAME} from '../shared/constants/constants';
 import {DisplaySettingsComponent} from '../modals/display-settings/display-settings.component';
-import {pipe, Subject} from 'rxjs';
+import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
 
 
@@ -20,10 +20,10 @@ export class MainPageComponent implements OnInit, OnDestroy {
   destroy$ = new Subject();
 
   public buttons: MenuButtonModel[] = [
-    {name: 'Add Zookeeper', icon: 'playlist_add', navbar: true},
-    {name: 'Left Tab', icon: 'vertical_split', navbar: true},
-    {name: 'Check connections', icon: 'playlist_add_check', navbar: true},
-    {name: 'Settins', icon: 'settings', navbar: true},
+    {name: 'Add Zookeeper', icon: 'playlist_add', navbar: true, functionName: "openModalAddHost"},
+    {name: 'Left Tab', icon: 'vertical_split', navbar: true, functionName: "addTab"},
+    {name: 'Check connections', icon: 'playlist_add_check', navbar: true, functionName: "Cyberpunk2077! Fix me!"},
+    {name: 'Settings', icon: 'settings', navbar: true, functionName: "openSettings"},
   ];
 
   trees: ZkNodeModel[] = [];
@@ -35,7 +35,7 @@ export class MainPageComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.loadOrSaveSettings();
+    this.storageButtons();
   }
 
   ngOnDestroy(): void {
@@ -47,7 +47,7 @@ export class MainPageComponent implements OnInit, OnDestroy {
   // TODO: сделать отдельный метод для валидации, либо вытащить сюда ФормМодуль ?
 
   openModalAddHost(): void {
-    console.log('lorem5');
+    console.log("openModalAddHost - work!!!");
     const dialogResult = this.modal.open(AddHostModalElemComponent);
     dialogResult.afterClosed()
       .pipe(takeUntil(this.destroy$))
@@ -63,6 +63,7 @@ export class MainPageComponent implements OnInit, OnDestroy {
   }
 
   openSettings(): void {
+    console.log("openSettings - work!!!");
     const dialogResult = this.modal.open(DisplaySettingsComponent);
     dialogResult.afterClosed()
       .pipe(takeUntil(this.destroy$))
@@ -70,10 +71,12 @@ export class MainPageComponent implements OnInit, OnDestroy {
   }
 
   addTab(): void {
+    console.log("addTab - work!!!");
     this.dragAndDrop.push(2);
   }
 
   public loadOrSaveSettings(): void {
+    console.log("loadOrSaveSettings - work!!!");
     const storagedButtons = localStorage.getItem(SETTINGS_NAME);
     if (storagedButtons) {
       this.buttons = JSON.parse(localStorage.getItem(SETTINGS_NAME));
@@ -82,11 +85,14 @@ export class MainPageComponent implements OnInit, OnDestroy {
     }
   }
 
-  // TODO: потыкай function.apply
-  callFunction(name: string): void {
-    const button = this.buttons.filter((but) => but.name === name).pop();
-    const str = button.run;
-    this[str]();
+  exeFunc(name: string): void {
+    // console.log("exeFunc - work!!!");
+    // console.log("param: ", name);
+    // console.log("typeof: ", name);
+    this[name]();
   }
 
+  private storageButtons() {
+    // just stub for compile
+  }
 }

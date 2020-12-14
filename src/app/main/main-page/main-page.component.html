@@ -4,44 +4,24 @@
             [matMenuTriggerFor]="menu">
       <mat-icon>menu</mat-icon>
     </button>
-    <span class="marg-span">ZkMaster</span>
+    <span class="marg-span">ZKM Admin edition v0.4 Beta XD</span>
   </div>
 
   <div class="toolbar-flex">
     <!--  Extended toolbar  -->
-    <button mat-menu-item *ngIf="buttons[0].navbar" (click)="openModalAddHost()">
-      <mat-icon class="toolbar-icons" title="{{buttons[0].name}}">{{buttons[0].icon}}</mat-icon>
-    </button>
-    <button mat-menu-item *ngIf="buttons[1].navbar" (click)="addTab()">
-      <mat-icon class="toolbar-icons" title="{{buttons[1].name}}">{{buttons[1].icon}}</mat-icon>
-    </button>
-    <button mat-menu-item *ngIf="buttons[2].navbar">
-      <mat-icon class="toolbar-icons" title="{{buttons[2].name}}">{{buttons[2].icon}}k</mat-icon>
-    </button>
-    <button mat-menu-item *ngIf="buttons[3].navbar" (click)="openSettings()">
-      <mat-icon class="toolbar-icons" title="{{buttons[3].name}}">{{buttons[3].icon}}k</mat-icon>
+    <button *ngFor="let button of buttons"
+            mat-menu-item="{{button.navbar}}" (click)='exeFunc(button.functionName)'>
+      <mat-icon class="toolbar-icons" title="{{button.name}}">{{button.icon}}</mat-icon>
     </button>
   </div>
-
 </mat-toolbar>
 
 <!--  MENU -->
 <mat-menu #menu="matMenu">
-  <button mat-menu-item (click)="openModalAddHost()">
-    <mat-icon>{{buttons[0].icon}}</mat-icon>
-    <span>{{buttons[0].name}}  </span>
-  </button>
-  <button mat-menu-item (click)="addTab()">
-    <mat-icon>{{buttons[1].icon}}</mat-icon>
-    <span>{{buttons[1].name}}</span>
-  </button>
-  <button mat-menu-item>
-    <mat-icon>{{buttons[2].icon}}k</mat-icon>
-    <span>{{buttons[2].name}}</span>
-  </button>
-  <button mat-menu-item (click)="openSettings()">
-    <mat-icon>{{buttons[3].icon}}k</mat-icon>
-    <span>{{buttons[3].name}}</span>
+  <button *ngFor="let button of buttons"
+          mat-menu-item (click)='exeFunc(button.functionName)'>
+    <mat-icon>{{button.icon}}</mat-icon>
+    <span>{{button.name}}  </span>
   </button>
 </mat-menu>
 
