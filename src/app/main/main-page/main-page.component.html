@@ -27,8 +27,9 @@
   </button>
 </mat-menu>
 
-<main class="main" cdkDropListGroup>
-  <app-dra-navbar *ngFor="let pos of dragAndDrop" [list]="['' + pos + '']" [name]="'first'"></app-dra-navbar>
+<main class="main" [ngClass]="{'main-columns': dragAndDrop}" cdkDropListGroup>
+  <app-div-block></app-div-block>
+  <app-div-block *ngIf="dragAndDrop"></app-div-block>
 </main>
 
 <main class="main">

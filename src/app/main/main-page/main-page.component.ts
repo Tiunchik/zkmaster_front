@@ -29,7 +29,7 @@ export class MainPageComponent implements OnDestroy, AfterViewInit {
 
   trees: ZkNodeModel[] = [];
 
-  dragAndDrop: number[] = [1];
+  dragAndDrop = false;
 
   constructor(private crud: CrudService,
               private modal: MatDialog) {
@@ -68,7 +68,7 @@ export class MainPageComponent implements OnDestroy, AfterViewInit {
   }
 
   addTab(): void {
-    this.dragAndDrop.push(2);
+    this.dragAndDrop = !this.dragAndDrop;
   }
 
   public loadOrSaveSettings(): void {

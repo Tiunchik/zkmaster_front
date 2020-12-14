@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 
 @Component({
   selector: 'app-div-block',
@@ -7,7 +7,10 @@ import { Component, OnInit } from '@angular/core';
 })
 export class DivBlockComponent implements OnInit {
 
-  constructor() { }
+  @Input() tabs: string[] = [];
+
+  constructor() {
+  }
 
   ngOnInit(): void {
   }
