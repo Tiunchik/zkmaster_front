@@ -9,7 +9,7 @@
 
   <div class="toolbar-flex">
     <!--  Extended toolbar  -->
-    <ng-container *ngFor="let button of buttons">
+    <ng-container *ngFor="let button of (buttons$ | async)">
       <button *ngIf="button.navbar"
               mat-menu-item="{{button.navbar}}" (click)='exeFunc(button.functionName)'>
         <mat-icon class="toolbar-icons" title="{{button.name}}">{{button.icon}}</mat-icon>
@@ -20,7 +20,7 @@
 
 <!--  MENU -->
 <mat-menu #menu="matMenu">
-  <button *ngFor="let button of buttons"
+  <button *ngFor="let button of (buttons$ | async)"
           mat-menu-item (click)='exeFunc(button.functionName)'>
     <mat-icon>{{button.icon}}</mat-icon>
     <span>{{button.name}}  </span>
@@ -37,4 +37,4 @@
                  [zknode]="branch"></app-tree-elem>
 </main>
 
-
+<div>{{buttons$ | async | json}}</div>

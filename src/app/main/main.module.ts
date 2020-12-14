@@ -1,5 +1,7 @@
 import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
+import {StoreModule} from '@ngrx/store';
+import {menuReducer} from './redux/menu.reducer';
 
 import {MainRoutingModule} from './main-routing.module';
 import {MainPageComponent} from './main-page/main-page.component';
@@ -14,14 +16,20 @@ import {MatInputModule} from '@angular/material/input';
 import {MatTreeModule} from '@angular/material/tree';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {FormsModule} from '@angular/forms';
-import { DraNavbarComponent } from './drag-block/dra-navbar/dra-navbar.component';
+import {DraNavbarComponent} from './drag-block/dra-navbar/dra-navbar.component';
 import {DragDropModule} from '@angular/cdk/drag-drop';
-import { DivBlockComponent } from './drag-block/div-block/div-block.component';
+import {DivBlockComponent} from './drag-block/div-block/div-block.component';
 import {MatCheckboxModule} from '@angular/material/checkbox';
-import { DisplaySettingsComponent } from './modals/display-settings/display-settings.component';
+import {DisplaySettingsComponent} from './modals/display-settings/display-settings.component';
 
 @NgModule({
-  declarations: [MainPageComponent, TreeElemComponent, AddHostModalElemComponent, DraNavbarComponent, DivBlockComponent, DisplaySettingsComponent],
+  declarations: [
+    MainPageComponent,
+    TreeElemComponent,
+    AddHostModalElemComponent,
+    DraNavbarComponent,
+    DivBlockComponent,
+    DisplaySettingsComponent],
   imports: [
     CommonModule,
     MainRoutingModule,
@@ -35,7 +43,10 @@ import { DisplaySettingsComponent } from './modals/display-settings/display-sett
     FormsModule,
     MatTreeModule,
     DragDropModule,
-    MatCheckboxModule
+    MatCheckboxModule,
+    StoreModule.forRoot(
+      {buttons: menuReducer}
+    )
   ]
 })
 export class MainModule {

@@ -1,14 +1,15 @@
-import {AfterContentChecked, AfterViewInit, Component, DoCheck, OnChanges, OnDestroy, OnInit, SimpleChanges} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ZkNodeModel} from '../shared/domains/zk-node.model';
 import {CrudService} from '../shared/services/crud.service';
 import {MatDialog} from '@angular/material/dialog';
 import {AddHostModalElemComponent} from '../modals/add-host-modal-elem/add-host-modal-elem.component';
-import {MenuButtonModel} from '../shared/domains/menu-button.model';
-import {SETTINGS_NAME} from '../shared/constants/constants';
 import {DisplaySettingsComponent} from '../modals/display-settings/display-settings.component';
-import {Subject} from 'rxjs';
+import {Observable, Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
-import {log} from 'util';
+import {select, Store} from '@ngrx/store';
+import {selectButtons} from '../redux/menu.selectors';
+import {AppState} from '../redux/app.state';
+import {MenuButtonModel} from '../shared/domains/menu-button.model';
 
 
 @Component({
@@ -16,27 +17,23 @@ import {log} from 'util';
   templateUrl: './main-page.component.html',
   styleUrls: ['./main-page.component.scss']
 })
-export class MainPageComponent implements OnDestroy, AfterViewInit {
+export class MainPageComponent implements OnDestroy, OnInit {
 
   destroy$ = new Subject();
 
-  public buttons: MenuButtonModel[] = [
-    {name: 'Add Zookeeper', icon: 'playlist_add', navbar: true, functionName: 'openModalAddHost'},
-    {name: 'Left Tab', icon: 'vertical_split', navbar: true, functionName: 'addTab'},
-    {name: 'Check connections', icon: 'playlist_add_check', navbar: false, functionName: 'Cyberpunk2077! Fix me!'},
-    {name: 'Settings', icon: 'settings', navbar: false, functionName: 'openSettings'},
-  ];
+  buttons$: Observable<MenuButtonModel[]> = this.store.pipe(
+    select(selectButtons));
 
   trees: ZkNodeModel[] = [];
 
   dragAndDrop = false;
 
   constructor(private crud: CrudService,
-              private modal: MatDialog) {
+              private modal: MatDialog,
+              private store: Store<AppState>) {
   }
 
-  ngAfterViewInit(): void {
-    this.loadOrSaveSettings();
+  ngOnInit(): void {
   }
 
   ngOnDestroy(): void {
@@ -72,13 +69,13 @@ export class MainPageComponent implements OnDestroy, AfterViewInit {
   }
 
   public loadOrSaveSettings(): void {
-    const storedButtons = localStorage.getItem(SETTINGS_NAME);
-    if (storedButtons === 'undefined') {
-      localStorage.setItem(SETTINGS_NAME, JSON.stringify(this.buttons));
-    }
-    if (storedButtons && storedButtons !== 'undefined') {
-      this.buttons = JSON.parse(localStorage.getItem(SETTINGS_NAME));
-    }
+    // const storedButtons = localStorage.getItem(SETTINGS_NAME);
+    // if (storedButtons === 'undefined') {
+    //   localStorage.setItem(SETTINGS_NAME, JSON.stringify(this.buttons));
+    // }
+    // if (storedButtons && storedButtons !== 'undefined') {
+    //   this.buttons = JSON.parse(localStorage.getItem(SETTINGS_NAME));
+    // }
   }
 
   exeFunc(name): void {
