@@ -12,11 +12,10 @@ export class DisplaySettingsComponent implements OnInit, OnDestroy {
 
   innerSettings: MenuButtonModel[];
 
-  constructor() {
-    this.loadSettings();
-  }
+  constructor() {}
 
   ngOnInit(): void {
+    this.loadSettings();
   }
 
   ngOnDestroy(): void {
@@ -24,8 +23,8 @@ export class DisplaySettingsComponent implements OnInit, OnDestroy {
   }
 
   loadSettings(): void {
-    const storagedButtons = localStorage.getItem(SETTINGS_NAME);
-    if (storagedButtons) {
+    const storedButtons = localStorage.getItem(SETTINGS_NAME);
+    if (storedButtons) {
       this.innerSettings = JSON.parse(localStorage.getItem(SETTINGS_NAME));
     }
   }

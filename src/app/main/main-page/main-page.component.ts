@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {AfterContentChecked, AfterViewInit, Component, DoCheck, OnChanges, OnDestroy, OnInit, SimpleChanges} from '@angular/core';
 import {ZkNodeModel} from '../shared/domains/zk-node.model';
 import {CrudService} from '../shared/services/crud.service';
 import {MatDialog} from '@angular/material/dialog';
@@ -8,6 +8,7 @@ import {SETTINGS_NAME} from '../shared/constants/constants';
 import {DisplaySettingsComponent} from '../modals/display-settings/display-settings.component';
 import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
+import {log} from 'util';
 
 
 @Component({
@@ -15,15 +16,15 @@ import {takeUntil} from 'rxjs/operators';
   templateUrl: './main-page.component.html',
   styleUrls: ['./main-page.component.scss']
 })
-export class MainPageComponent implements OnInit, OnDestroy {
+export class MainPageComponent implements OnDestroy, AfterViewInit {
 
   destroy$ = new Subject();
 
   public buttons: MenuButtonModel[] = [
-    {name: 'Add Zookeeper', icon: 'playlist_add', navbar: true, functionName: "openModalAddHost"},
-    {name: 'Left Tab', icon: 'vertical_split', navbar: true, functionName: "addTab"},
-    {name: 'Check connections', icon: 'playlist_add_check', navbar: true, functionName: "Cyberpunk2077! Fix me!"},
-    {name: 'Settings', icon: 'settings', navbar: true, functionName: "openSettings"},
+    {name: 'Add Zookeeper', icon: 'playlist_add', navbar: true, functionName: 'openModalAddHost'},
+    {name: 'Left Tab', icon: 'vertical_split', navbar: true, functionName: 'addTab'},
+    {name: 'Check connections', icon: 'playlist_add_check', navbar: false, functionName: 'Cyberpunk2077! Fix me!'},
+    {name: 'Settings', icon: 'settings', navbar: false, functionName: 'openSettings'},
   ];
 
   trees: ZkNodeModel[] = [];
@@ -34,8 +35,8 @@ export class MainPageComponent implements OnInit, OnDestroy {
               private modal: MatDialog) {
   }
 
-  ngOnInit(): void {
-    this.storageButtons();
+  ngAfterViewInit(): void {
+    this.loadOrSaveSettings();
   }
 
   ngOnDestroy(): void {
@@ -47,23 +48,19 @@ export class MainPageComponent implements OnInit, OnDestroy {
   // TODO: сделать отдельный метод для валидации, либо вытащить сюда ФормМодуль ?
 
   openModalAddHost(): void {
-    console.log("openModalAddHost - work!!!");
     const dialogResult = this.modal.open(AddHostModalElemComponent);
     dialogResult.afterClosed()
       .pipe(takeUntil(this.destroy$))
       .subscribe((answer) => {
-        console.log(answer);
         this.crud.getAll(answer)
           .pipe(takeUntil(this.destroy$))
           .subscribe((data) => {
             this.trees.push(data);
-            console.log(this.trees);
           });
       });
   }
 
   openSettings(): void {
-    console.log("openSettings - work!!!");
     const dialogResult = this.modal.open(DisplaySettingsComponent);
     dialogResult.afterClosed()
       .pipe(takeUntil(this.destroy$))
@@ -71,28 +68,20 @@ export class MainPageComponent implements OnInit, OnDestroy {
   }
 
   addTab(): void {
-    console.log("addTab - work!!!");
     this.dragAndDrop.push(2);
   }
 
   public loadOrSaveSettings(): void {
-    console.log("loadOrSaveSettings - work!!!");
-    const storagedButtons = localStorage.getItem(SETTINGS_NAME);
-    if (storagedButtons) {
-      this.buttons = JSON.parse(localStorage.getItem(SETTINGS_NAME));
-    } else {
+    const storedButtons = localStorage.getItem(SETTINGS_NAME);
+    if (storedButtons === 'undefined') {
       localStorage.setItem(SETTINGS_NAME, JSON.stringify(this.buttons));
+    }
+    if (storedButtons && storedButtons !== 'undefined') {
+      this.buttons = JSON.parse(localStorage.getItem(SETTINGS_NAME));
     }
   }
 
-  exeFunc(name: string): void {
-    // console.log("exeFunc - work!!!");
-    // console.log("param: ", name);
-    // console.log("typeof: ", name);
+  exeFunc(name): void {
     this[name]();
-  }
-
-  private storageButtons() {
-    // just stub for compile
   }
 }
