@@ -7,7 +7,7 @@ export const SHOW_TOOLBAR_BUTTON = createAction('[Menu component] Show', props<{
 export const HIDE_TOOLBAR_BUTTON = createAction('[Menu component] Hide', props<{ button: MenuButtonModel }>());
 
 /* Menu actions */
-export const LOAD_SETTINGS = createAction('[Menu component] load settings', props<{ button: MenuButtonModel }>());
+export const LOAD_SETTINGS = createAction('[Menu component] load settings');
 
 /* Menu button's actions */
 // like "check connection", "create connection" and others...

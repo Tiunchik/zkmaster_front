@@ -1,7 +1,6 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {SETTINGS_NAME} from '../../shared/constants/constants';
 import {MenuButtonModel} from '../../shared/domains/menu-button.model';
-import {MainPageComponent} from '../../main-page/main-page.component';
 
 @Component({
   selector: 'app-display-settings',
@@ -12,7 +11,8 @@ export class DisplaySettingsComponent implements OnInit, OnDestroy {
 
   innerSettings: MenuButtonModel[];
 
-  constructor() {}
+  constructor() {
+  }
 
   ngOnInit(): void {
     this.loadSettings();
@@ -29,6 +29,13 @@ export class DisplaySettingsComponent implements OnInit, OnDestroy {
     }
   }
 
+  /**
+   * Попробовал сделать как в примерах, у меня какая то фигня - я делаю апдейт параметра через SHOW/HIDE, а он мне
+   * говорит что это невозможно, так как я пытаюсь изменить значение которое уже есть в store.
+   * То есть, в store можно только добавить новый элемент, но нельзя изменить уже имеющийся
+   *
+   * В примерах они используют просто counter, его можно увеличить или уменьшить но внутрянку же не поменяешь
+   */
   saveSettings(): void {
     localStorage.setItem(SETTINGS_NAME, JSON.stringify(this.innerSettings));
   }

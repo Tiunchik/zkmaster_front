@@ -36,6 +36,7 @@ export class MainPageComponent implements OnDestroy, OnInit {
   }
 
   ngOnInit(): void {
+    this.store.dispatch(LOAD_SETTINGS());
   }
 
   ngOnDestroy(): void {
@@ -63,23 +64,11 @@ export class MainPageComponent implements OnDestroy, OnInit {
     const dialogResult = this.modal.open(DisplaySettingsComponent);
     dialogResult.afterClosed()
       .pipe(takeUntil(this.destroy$))
-      .subscribe(() => this.loadOrSaveSettings());
+      .subscribe(() => this.store.dispatch(LOAD_SETTINGS()));
   }
 
   addTab(): void {
     this.dragAndDrop = !this.dragAndDrop;
-  }
-
-  public loadOrSaveSettings(): void {
-    this.store.dispatch(LOAD_SETTINGS(null));
-
-    // const storedButtons = localStorage.getItem(SETTINGS_NAME);
-    // if (storedButtons === 'undefined') {
-    //   localStorage.setItem(SETTINGS_NAME, JSON.stringify(this.buttons));
-    // }
-    // if (storedButtons && storedButtons !== 'undefined') {
-    //   this.buttons = JSON.parse(localStorage.getItem(SETTINGS_NAME));
-    // }
   }
 
   exeFunc(name): void {
