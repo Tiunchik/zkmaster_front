@@ -10,6 +10,7 @@ import {select, Store} from '@ngrx/store';
 import {selectButtons} from '../redux/menu.selectors';
 import {AppState} from '../redux/app.state';
 import {MenuButtonModel} from '../shared/domains/menu-button.model';
+import {LOAD_SETTINGS} from "../redux/menu.actions";
 
 
 @Component({
@@ -26,6 +27,7 @@ export class MainPageComponent implements OnDestroy, OnInit {
 
   trees: ZkNodeModel[] = [];
 
+  // TODO: re-Fuck-toring var naming
   dragAndDrop = false;
 
   constructor(private crud: CrudService,
@@ -69,6 +71,8 @@ export class MainPageComponent implements OnDestroy, OnInit {
   }
 
   public loadOrSaveSettings(): void {
+    this.store.dispatch(LOAD_SETTINGS(null));
+
     // const storedButtons = localStorage.getItem(SETTINGS_NAME);
     // if (storedButtons === 'undefined') {
     //   localStorage.setItem(SETTINGS_NAME, JSON.stringify(this.buttons));

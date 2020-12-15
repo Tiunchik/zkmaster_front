@@ -4,14 +4,14 @@
             [matMenuTriggerFor]="menu">
       <mat-icon>menu</mat-icon>
     </button>
-    <span class="marg-span">ZKM Admin edition v0.5 Alfa</span>
+    <span class="marg-span">ZKM Admin edition v0.6 Alfa-Kun :D</span>
   </div>
 
   <div class="toolbar-flex">
     <!--  Extended toolbar  -->
     <ng-container *ngFor="let button of (buttons$ | async)">
-      <button *ngIf="button.navbar"
-              mat-menu-item="{{button.navbar}}" (click)='exeFunc(button.functionName)'>
+      <button *ngIf="button.toolbar"
+              mat-menu-item="{{button.toolbar}}" (click)='exeFunc(button.functionName)'>
         <mat-icon class="toolbar-icons" title="{{button.name}}">{{button.icon}}</mat-icon>
       </button>
     </ng-container>
