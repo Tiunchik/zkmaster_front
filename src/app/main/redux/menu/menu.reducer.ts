@@ -1,7 +1,7 @@
-import {MenuButtonModel} from '../shared/domains/menu-button.model';
+import {MenuButtonModel} from '../../shared/domains/menu-button.model';
 import {createReducer, on} from '@ngrx/store';
 import {HIDE_TOOLBAR_BUTTON, LOAD_SETTINGS, SHOW_TOOLBAR_BUTTON} from './menu.actions';
-import {SETTINGS_NAME} from "../shared/constants/constants";
+import {SETTINGS_NAME} from '../../shared/constants/constants';
 
 export const INIT_BUTTONS_PACK: MenuButtonModel[] = [
   {name: 'Add Zookeeper', icon: 'playlist_add', toolbar: true, functionName: 'openModalAddHost'},
@@ -21,21 +21,19 @@ export const INIT_BUTTONS_PACK: MenuButtonModel[] = [
 export const menuReducer = createReducer(
   INIT_BUTTONS_PACK,
   on(SHOW_TOOLBAR_BUTTON, (state: MenuButtonModel[], {button}) => {
-    const newState = [...state];
-    newState.map(el => {
-      if (el.name === button.name) {
-        el.toolbar = true;
-      }
-    });
+    const newState: MenuButtonModel[] = [];
+    state.forEach((val) =>
+      newState.push(val.name === button.name
+        ? new MenuButtonModel(button.name, button.icon, true, button.functionName)
+        : val));
     return newState;
   }),
   on(HIDE_TOOLBAR_BUTTON, (state: MenuButtonModel[], {button}) => {
-    const newState = [...state];
-    newState.map(el => {
-      if (el.name === button.name) {
-        el.toolbar = false;
-      }
-    });
+    const newState: MenuButtonModel[] = [];
+    state.forEach((val) =>
+      newState.push(val.name === button.name
+        ? new MenuButtonModel(button.name, button.icon, false, button.functionName)
+        : val));
     return newState;
   }),
   on(LOAD_SETTINGS, (() => {
@@ -49,8 +47,8 @@ export const menuReducer = createReducer(
       rsl = JSON.parse(localStorage.getItem(SETTINGS_NAME));
     }
     return rsl;
-  }) )
-  );
+  }))
+);
 
 // export const settingReducer = createReducer(
 //   initialState,

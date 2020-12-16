@@ -7,10 +7,11 @@ import {DisplaySettingsComponent} from '../modals/display-settings/display-setti
 import {Observable, Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
 import {select, Store} from '@ngrx/store';
-import {selectButtons} from '../redux/menu.selectors';
+import {selectButtons} from '../redux/menu/menu.selectors';
 import {AppState} from '../redux/app.state';
 import {MenuButtonModel} from '../shared/domains/menu-button.model';
-import {LOAD_SETTINGS} from "../redux/menu.actions";
+import {LOAD_SETTINGS} from '../redux/menu/menu.actions';
+import {CREATE_TAB} from '../redux/tab/tab.actions';
 
 
 @Component({
@@ -42,6 +43,7 @@ export class MainPageComponent implements OnDestroy, OnInit {
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
+
   }
 
   // TODO: сделать верную цепочку observable - pipeline
@@ -51,20 +53,14 @@ export class MainPageComponent implements OnDestroy, OnInit {
     const dialogResult = this.modal.open(AddHostModalElemComponent);
     dialogResult.afterClosed()
       .pipe(takeUntil(this.destroy$))
-      .subscribe((answer) => {
-        this.crud.getAll(answer)
-          .pipe(takeUntil(this.destroy$))
-          .subscribe((data) => {
-            this.trees.push(data);
-          });
+      .subscribe((str) => {
+        console.log(`Str is ${str}`);
+        this.store.dispatch(CREATE_TAB({str}));
       });
   }
 
   openSettings(): void {
-    const dialogResult = this.modal.open(DisplaySettingsComponent);
-    dialogResult.afterClosed()
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(() => this.store.dispatch(LOAD_SETTINGS()));
+    this.modal.open(DisplaySettingsComponent);
   }
 
   addTab(): void {

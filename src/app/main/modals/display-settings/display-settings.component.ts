@@ -1,6 +1,11 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {SETTINGS_NAME} from '../../shared/constants/constants';
 import {MenuButtonModel} from '../../shared/domains/menu-button.model';
+import {Store} from '@ngrx/store';
+import {HIDE_TOOLBAR_BUTTON, SHOW_TOOLBAR_BUTTON} from '../../redux/menu/menu.actions';
+import {Observable, Subject} from 'rxjs';
+import {selectButtons} from '../../redux/menu/menu.selectors';
+import {map, takeUntil} from 'rxjs/operators';
 
 @Component({
   selector: 'app-display-settings',
@@ -10,33 +15,34 @@ import {MenuButtonModel} from '../../shared/domains/menu-button.model';
 export class DisplaySettingsComponent implements OnInit, OnDestroy {
 
   innerSettings: MenuButtonModel[];
+  subject$ = new Subject();
 
-  constructor() {
+  constructor(private store: Store) {
   }
 
   ngOnInit(): void {
-    this.loadSettings();
+    this.store.select(selectButtons)
+      .pipe(takeUntil(this.subject$))
+      .subscribe(data => this.innerSettings = data);
   }
+
 
   ngOnDestroy(): void {
     this.saveSettings();
+    this.subject$.next();
+    this.subject$.complete();
   }
 
-  loadSettings(): void {
-    const storedButtons = localStorage.getItem(SETTINGS_NAME);
-    if (storedButtons) {
-      this.innerSettings = JSON.parse(localStorage.getItem(SETTINGS_NAME));
-    }
-  }
-
-  /**
-   * Попробовал сделать как в примерах, у меня какая то фигня - я делаю апдейт параметра через SHOW/HIDE, а он мне
-   * говорит что это невозможно, так как я пытаюсь изменить значение которое уже есть в store.
-   * То есть, в store можно только добавить новый элемент, но нельзя изменить уже имеющийся
-   *
-   * В примерах они используют просто counter, его можно увеличить или уменьшить но внутрянку же не поменяешь
-   */
   saveSettings(): void {
     localStorage.setItem(SETTINGS_NAME, JSON.stringify(this.innerSettings));
   }
+
+  onOff($event, button: MenuButtonModel): void {
+    if ($event.checked) {
+      this.store.dispatch(SHOW_TOOLBAR_BUTTON({button}));
+    } else {
+      this.store.dispatch(HIDE_TOOLBAR_BUTTON({button}));
+    }
+  }
+
 }

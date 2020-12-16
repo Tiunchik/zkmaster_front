@@ -1,5 +1,5 @@
 import {createAction, props} from '@ngrx/store';
-import {MenuButtonModel} from '../shared/domains/menu-button.model';
+import {MenuButtonModel} from '../../shared/domains/menu-button.model';
 
 /* Toolbar actions */
 export const SHOW_TOOLBAR_BUTTON = createAction('[Menu component] Show', props<{ button: MenuButtonModel }>());

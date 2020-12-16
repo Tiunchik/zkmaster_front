@@ -1,5 +1,8 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {CdkDragDrop, moveItemInArray, transferArrayItem} from '@angular/cdk/drag-drop';
+import {Observable} from 'rxjs';
+import {Store} from '@ngrx/store';
+import {selectLeftTab} from '../../redux/tab/tab.selector';
 
 @Component({
   selector: 'app-dra-navbar',
@@ -8,10 +11,10 @@ import {CdkDragDrop, moveItemInArray, transferArrayItem} from '@angular/cdk/drag
 })
 export class DraNavbarComponent implements OnInit {
 
-  @Input() list: string[] = [];
   @Input() name: string;
+  list: Observable<string[]> = this.store.select(selectLeftTab);
 
-  constructor() {
+  constructor(private store: Store) {
   }
 
   ngOnInit(): void {

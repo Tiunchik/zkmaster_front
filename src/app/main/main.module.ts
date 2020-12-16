@@ -1,7 +1,8 @@
 import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {StoreModule} from '@ngrx/store';
-import {menuReducer} from './redux/menu.reducer';
+import {menuReducer} from './redux/menu/menu.reducer';
+import {leftReducer} from './redux/tab/tab.reducer';
 
 import {MainRoutingModule} from './main-routing.module';
 import {MainPageComponent} from './main-page/main-page.component';
@@ -21,6 +22,7 @@ import {DragDropModule} from '@angular/cdk/drag-drop';
 import {DivBlockComponent} from './drag-block/div-block/div-block.component';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import {DisplaySettingsComponent} from './modals/display-settings/display-settings.component';
+
 
 @NgModule({
   declarations: [
@@ -45,7 +47,7 @@ import {DisplaySettingsComponent} from './modals/display-settings/display-settin
     DragDropModule,
     MatCheckboxModule,
     StoreModule.forRoot(
-      {buttons: menuReducer}
+      {buttons: menuReducer, leftTabs: leftReducer}
     )
   ]
 })
