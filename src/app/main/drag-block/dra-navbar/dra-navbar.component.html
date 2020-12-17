@@ -1,7 +1,6 @@
 <div cdkDropList cdkDropListOrientation="horizontal" [cdkDropListData]="list | async" class="example-list"
      (cdkDropListDropped)="drop($event)">
-
   <div class="example-box" *ngFor="let item of list | async" cdkDrag
-       (click)="log()">{{item}}</div>
-
+       (click)="chooseHost(item)">{{item}}</div>
 </div>
+<app-tree-elem *ngIf="(list | async).length > 0" [hostAddress]="currentTree"></app-tree-elem>

@@ -54,8 +54,9 @@ export class MainPageComponent implements OnDestroy, OnInit {
     dialogResult.afterClosed()
       .pipe(takeUntil(this.destroy$))
       .subscribe((str) => {
-        console.log(`Str is ${str}`);
-        this.store.dispatch(CREATE_TAB({str}));
+        if (str.trim()) {
+          this.store.dispatch(CREATE_TAB({str}));
+        }
       });
   }
 

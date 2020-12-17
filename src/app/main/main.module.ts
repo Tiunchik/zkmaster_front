@@ -44,6 +44,7 @@ import {DisplaySettingsComponent} from './modals/display-settings/display-settin
     MatInputModule,
     FormsModule,
     MatTreeModule,
+    MatMenuModule,
     DragDropModule,
     MatCheckboxModule,
     StoreModule.forRoot(

@@ -18,6 +18,10 @@
   grid-template-columns: [line1] 100% ;
 }
 
+.tab {
+  min-height: 10px;
+}
+
 .main-columns {
   grid-template-columns: [line1] 50%  [line2] 50% !important;
 }

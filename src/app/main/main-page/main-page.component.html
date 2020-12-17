@@ -4,7 +4,7 @@
             [matMenuTriggerFor]="menu">
       <mat-icon>menu</mat-icon>
     </button>
-    <span class="marg-span">ZKM Admin edition v0.6 Alfa-Kun :D</span>
+    <span class="marg-span">ZKM Admin edition v0.7 Beta-Chan ^_^</span>
   </div>
 
   <div class="toolbar-flex">
@@ -28,13 +28,8 @@
 </mat-menu>
 
 <main class="main" [ngClass]="{'main-columns': dragAndDrop}" cdkDropListGroup>
-  <app-div-block></app-div-block>
-  <app-div-block *ngIf="dragAndDrop"></app-div-block>
+  <div class="tab"></div>
+  <app-dra-navbar></app-dra-navbar>
 </main>
 
-<main class="main">
-  <app-tree-elem *ngFor="let branch of trees"
-                 [zknode]="branch"></app-tree-elem>
-</main>
 
-<div>{{buttons$ | async | json}}</div>

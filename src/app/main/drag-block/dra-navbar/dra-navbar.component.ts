@@ -13,6 +13,7 @@ export class DraNavbarComponent implements OnInit {
 
   @Input() name: string;
   list: Observable<string[]> = this.store.select(selectLeftTab);
+  currentTree: string = '';
 
   constructor(private store: Store) {
   }
@@ -35,7 +36,8 @@ export class DraNavbarComponent implements OnInit {
     }
   }
 
-  log(): void {
-    console.log(`You just have clicked on ${this.name}`);
+  chooseHost(hostName: string): void {
+    console.log('clicked');
+    this.currentTree = hostName;
   }
 }
