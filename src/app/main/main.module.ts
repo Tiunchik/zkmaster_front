@@ -46,9 +46,10 @@ import {DisplaySettingsComponent} from './modals/display-settings/display-settin
     MatTreeModule,
     DragDropModule,
     MatCheckboxModule,
-    StoreModule.forRoot(
-      {buttons: menuReducer, leftTabs: leftReducer}
-    )
+    StoreModule.forRoot({
+      buttons: menuReducer,
+      leftTabs: leftReducer
+    })
   ]
 })
 export class MainModule {
