@@ -1,4 +1,5 @@
 import {Component} from '@angular/core';
+import {HostModel} from '../../shared/domains/host.model';
 
 @Component({
   selector: 'app-add-host-modal-elem',
@@ -7,7 +8,7 @@ import {Component} from '@angular/core';
 })
 export class AddHostModalElemComponent {
 
-  public host: string;
+  public host: HostModel = new HostModel('', '');
 
   constructor() {
   }

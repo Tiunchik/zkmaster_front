@@ -7,12 +7,16 @@
     you can enter only host name or IP</p>
   <form class="example-form">
     <mat-form-field class="example-full-width">
+      <mat-label><span>Host alias</span></mat-label>
+      <input type="text" matInput placeholder="Name" [(ngModel)]="host.name" name="host" cdkFocusInitial>
+    </mat-form-field>
+    <mat-form-field class="example-full-width">
       <mat-label><span>Without http://</span></mat-label>
-      <input type="text" matInput placeholder="xxx.xxx.xxx.xxx:port" [(ngModel)]="host" name="host" cdkFocusInitial>
+      <input type="text" matInput placeholder="xxx.xxx.xxx.xxx:port" [(ngModel)]="host.address" name="host" cdkFocusInitial>
     </mat-form-field>
   </form>
 </mat-dialog-content>
 <mat-dialog-actions align="end">
   <button mat-button [mat-dialog-close]="host">Create</button>
-  <button mat-button [mat-dialog-close]="false">Cancel</button>
+  <button mat-button [mat-dialog-close]>Cancel</button>
 </mat-dialog-actions>

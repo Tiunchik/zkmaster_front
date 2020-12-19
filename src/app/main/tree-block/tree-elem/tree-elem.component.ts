@@ -1,4 +1,4 @@
-import {Component, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {Component, Input, OnChanges, OnDestroy, ViewChild} from '@angular/core';
 import {NestedTreeControl} from '@angular/cdk/tree';
 import {MatTreeNestedDataSource} from '@angular/material/tree';
 import {ZkNodeModel} from '../../shared/domains/zk-node.model';
@@ -7,17 +7,21 @@ import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
 import {MatMenuTrigger} from '@angular/material/menu';
 import {RequestDto} from '../../shared/domains/request.dto';
+import {ZKNODES_EXPML} from '../../shared/constants/constants';
 
 @Component({
   selector: 'app-tree-elem',
   templateUrl: './tree-elem.component.html',
   styleUrls: ['./tree-elem.component.scss']
 })
-export class TreeElemComponent implements OnInit, OnDestroy {
+export class TreeElemComponent implements OnChanges, OnDestroy {
 
-  @Input('hostAddress') host: string;
+  @Input() set loadHost(value: string) {
+    this.host = value;
+  }
+
   subject$ = new Subject();
-
+  host = '';
   treeControl = new NestedTreeControl<ZkNodeModel>(node => node.children);
   dataSource = new MatTreeNestedDataSource<ZkNodeModel>();
 
@@ -27,15 +31,18 @@ export class TreeElemComponent implements OnInit, OnDestroy {
   constructor(private http: CrudService) {
   }
 
-  ngOnInit(): void {
-    this.http.getAll(this.host)
-      .pipe(takeUntil(this.subject$))
-      .subscribe(data => this.dataSource.data = [data]);
-  }
-
   ngOnDestroy(): void {
     this.subject$.next();
     this.subject$.complete();
+  }
+
+  ngOnChanges(): void {
+    this.http.getAll(this.host)
+      .pipe(takeUntil(this.subject$))
+      .subscribe(data => {
+        this.dataSource.data = [data];
+        console.log(this.dataSource);
+      }, er => this.dataSource.data = [ZKNODES_EXPML]);
   }
 
   hasChild = (_: number, node: ZkNodeModel) => !!node.children && node.children.length > 0;

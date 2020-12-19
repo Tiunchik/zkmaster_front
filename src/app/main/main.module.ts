@@ -22,6 +22,7 @@ import {DragDropModule} from '@angular/cdk/drag-drop';
 import {DivBlockComponent} from './drag-block/div-block/div-block.component';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import {DisplaySettingsComponent} from './modals/display-settings/display-settings.component';
+import { ChangeValueComponent } from './modals/change-value/change-value.component';
 
 
 @NgModule({
@@ -31,7 +32,8 @@ import {DisplaySettingsComponent} from './modals/display-settings/display-settin
     AddHostModalElemComponent,
     DraNavbarComponent,
     DivBlockComponent,
-    DisplaySettingsComponent],
+    DisplaySettingsComponent,
+    ChangeValueComponent],
   imports: [
     CommonModule,
     MainRoutingModule,

@@ -12,6 +12,7 @@ import {AppState} from '../redux/app.state';
 import {MenuButtonModel} from '../shared/domains/menu-button.model';
 import {LOAD_SETTINGS} from '../redux/menu/menu.actions';
 import {CREATE_TAB} from '../redux/tab/tab.actions';
+import {HostModel} from '../shared/domains/host.model';
 
 @Component({
   selector: 'app-main-page',
@@ -51,9 +52,12 @@ export class MainPageComponent implements OnDestroy, OnInit {
     const dialogResult = this.modal.open(AddHostModalElemComponent);
     dialogResult.afterClosed()
       .pipe(takeUntil(this.destroy$))
-      .subscribe((str) => {
-        if (str.trim()) {
-          this.store.dispatch(CREATE_TAB({str}));
+      .subscribe((host: HostModel) => {
+        if (host && host.name.length === 0) {
+          host.name = host.address;
+        }
+        if (host && host.address.length > 5) {
+          this.store.dispatch(CREATE_TAB({host}));
         }
       });
   }
