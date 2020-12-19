@@ -13,7 +13,6 @@ import {MenuButtonModel} from '../shared/domains/menu-button.model';
 import {LOAD_SETTINGS} from '../redux/menu/menu.actions';
 import {CREATE_TAB} from '../redux/tab/tab.actions';
 
-
 @Component({
   selector: 'app-main-page',
   templateUrl: './main-page.component.html',
@@ -43,7 +42,6 @@ export class MainPageComponent implements OnDestroy, OnInit {
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
-
   }
 
   // TODO: сделать верную цепочку observable - pipeline

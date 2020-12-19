@@ -10,28 +10,21 @@ export const INIT_BUTTONS_PACK: MenuButtonModel[] = [
   {name: 'Settings', icon: 'settings', toolbar: false, functionName: 'openSettings'},
 ];
 
-/**
- * {@link createReducer } - почитай доку, особенно {@param 2-ой }
- * +++
- * (тайм-код) https://youtu.be/dvLp9bfpxyQ?list=PL6tnFekR2qfPBdxroaLRqvIv_EJoxauUO&t=83
- * проливает свет на сущность 2-ого параметра.
- *
- * Один STATE == Один Reducer
- */
 export const menuReducer = createReducer(
   INIT_BUTTONS_PACK,
   on(SHOW_TOOLBAR_BUTTON, (state: MenuButtonModel[], {button}) => {
     const newState: MenuButtonModel[] = [];
     state.forEach((val) =>
-      newState.push(val.name === button.name
+      newState.push((val.name === button.name)
         ? new MenuButtonModel(button.name, button.icon, true, button.functionName)
         : val));
     return newState;
+    let tes = undefined
   }),
   on(HIDE_TOOLBAR_BUTTON, (state: MenuButtonModel[], {button}) => {
     const newState: MenuButtonModel[] = [];
     state.forEach((val) =>
-      newState.push(val.name === button.name
+      newState.push((val.name === button.name)
         ? new MenuButtonModel(button.name, button.icon, false, button.functionName)
         : val));
     return newState;
@@ -49,18 +42,4 @@ export const menuReducer = createReducer(
     return rsl;
   }))
 );
-
-// export const settingReducer = createReducer(
-//   initialState,
-//   on(LOAD_SETTINGS, (state => {
-//     const storedButtons = localStorage.getItem(SETTINGS_NAME);
-//     if (storedButtons === 'undefined') {
-//       localStorage.setItem(SETTINGS_NAME, JSON.stringify(this.buttons));
-//     }
-//     if (storedButtons && storedButtons !== 'undefined') {
-//       this.buttons = JSON.parse(localStorage.getItem(SETTINGS_NAME));
-//     }
-//     return initialState;
-//   }) )
-//   )
 

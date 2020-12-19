@@ -3,9 +3,9 @@ import {SETTINGS_NAME} from '../../shared/constants/constants';
 import {MenuButtonModel} from '../../shared/domains/menu-button.model';
 import {Store} from '@ngrx/store';
 import {HIDE_TOOLBAR_BUTTON, SHOW_TOOLBAR_BUTTON} from '../../redux/menu/menu.actions';
-import {Observable, Subject} from 'rxjs';
+import {Subject} from 'rxjs';
 import {selectButtons} from '../../redux/menu/menu.selectors';
-import {map, takeUntil} from 'rxjs/operators';
+import {takeUntil} from 'rxjs/operators';
 
 @Component({
   selector: 'app-display-settings',
@@ -25,7 +25,6 @@ export class DisplaySettingsComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.subject$))
       .subscribe(data => this.innerSettings = data);
   }
-
 
   ngOnDestroy(): void {
     this.saveSettings();
