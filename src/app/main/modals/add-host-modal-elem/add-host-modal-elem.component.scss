@@ -7,6 +7,10 @@ p,span {
   line-height: 120%;
 }
 
+.mat-dialog-actions {
+  justify-content: flex-end;
+}
+
 .example-form {
   min-width: 150px;
   max-width: 500px;
