@@ -53,7 +53,9 @@ export class MainPageComponent implements OnDestroy, OnInit {
     dialogResult.afterClosed()
       .pipe(takeUntil(this.destroy$))
       .subscribe((host: HostModel) => {
+        console.log(`host - ${host.name}`);
         if (host && host.name.length === 0) {
+          console.log(`внутри`);
           host.name = host.address;
         }
         if (host && host.address.length > 5) {

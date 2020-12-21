@@ -1,4 +1,5 @@
 import {Component, OnInit} from '@angular/core';
+import {ZkNodeModel} from '../../shared/domains/zk-node.model';
 
 @Component({
   selector: 'app-change-value',
@@ -7,7 +8,7 @@ import {Component, OnInit} from '@angular/core';
 })
 export class ChangeValueComponent implements OnInit {
 
-  value = '';
+  zkNode: ZkNodeModel = new ZkNodeModel();
 
   constructor() {
   }

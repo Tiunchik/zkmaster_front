@@ -1,4 +1,4 @@
-import {Component, Input, OnChanges, OnDestroy, ViewChild} from '@angular/core';
+import {Component, Input, OnChanges, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {NestedTreeControl} from '@angular/cdk/tree';
 import {MatTreeNestedDataSource} from '@angular/material/tree';
 import {ZkNodeModel} from '../../shared/domains/zk-node.model';
@@ -7,14 +7,19 @@ import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
 import {MatMenuTrigger} from '@angular/material/menu';
 import {RequestDto} from '../../shared/domains/request.dto';
-import {ZKNODES_EXPML} from '../../shared/constants/constants';
+import {Store} from '@ngrx/store';
+import {selectZkHosts} from '../../redux/zkhost/zkhost.selector';
+import {ZkHostModel} from '../../shared/domains/zk-host.model';
+import {LOAD_TREE} from '../../redux/zkhost/zkhost.actions';
+import {MatDialog} from '@angular/material/dialog';
+import {ChangeValueComponent} from '../../modals/change-value/change-value.component';
 
 @Component({
   selector: 'app-tree-elem',
   templateUrl: './tree-elem.component.html',
   styleUrls: ['./tree-elem.component.scss']
 })
-export class TreeElemComponent implements OnChanges, OnDestroy {
+export class TreeElemComponent implements OnInit, OnChanges, OnDestroy {
 
   @Input() set loadHost(value: string) {
     this.host = value;
@@ -28,21 +33,32 @@ export class TreeElemComponent implements OnChanges, OnDestroy {
   @ViewChild(MatMenuTrigger, {static: false}) contextMenu: MatMenuTrigger;
   contextMenuPosition = {x: '0px', y: '0px'};
 
-  constructor(private http: CrudService) {
+  constructor(private http: CrudService,
+              private modal: MatDialog,
+              private store: Store
+  ) {
+  }
+
+  ngOnInit(): void {
+    this.store.select(selectZkHosts)
+      .pipe(takeUntil(this.subject$))
+      .subscribe((data) => {
+        console.log(data);
+        data.forEach((value) => {
+          if (value.host === this.host) {
+            this.dataSource.data = [value.zkTree];
+          }
+        });
+      });
+  }
+
+  ngOnChanges(): void {
+    this.getAll();
   }
 
   ngOnDestroy(): void {
     this.subject$.next();
     this.subject$.complete();
-  }
-
-  ngOnChanges(): void {
-    this.http.getAll(this.host)
-      .pipe(takeUntil(this.subject$))
-      .subscribe(data => {
-        this.dataSource.data = [data];
-        console.log(this.dataSource);
-      }, er => this.dataSource.data = [ZKNODES_EXPML]);
   }
 
   hasChild = (_: number, node: ZkNodeModel) => !!node.children && node.children.length > 0;
@@ -56,21 +72,40 @@ export class TreeElemComponent implements OnChanges, OnDestroy {
     this.contextMenu.openMenu();
   }
 
-  addChildren(item: ZkNodeModel): void {
-    const dto = new RequestDto(this.host, item.path, item.value);
-    this.http.addNode(dto).pipe(takeUntil(this.subject$)).subscribe();
+  getAll(): void {
+    this.http.getAll(this.host)
+      .pipe(takeUntil(this.subject$))
+      .subscribe((data) => {
+        const tree: ZkHostModel = new ZkHostModel(this.host, data);
+        this.store.dispatch(LOAD_TREE({tree}));
+      });
+  }
+
+  addChildren(parent: ZkNodeModel): void {
+    const dialogResult = this.modal.open(ChangeValueComponent);
+    dialogResult.afterClosed()
+      .pipe(takeUntil(this.subject$))
+      .subscribe((data: ZkNodeModel) => {
+        if (data) {
+          const dto = new RequestDto(this.host, `${parent.path}/${data.name}`, data.value);
+          this.http.addNode(dto).pipe(takeUntil(this.subject$))
+            .pipe(takeUntil(this.subject$))
+            .subscribe(() => this.getAll());
+        }
+      });
+
   }
 
 
   updateValue(item: ZkNodeModel): void {
     const dto = new RequestDto(this.host, item.path, item.value);
-    this.http.updateNode(dto).pipe(takeUntil(this.subject$)).subscribe();
+    // this.http.updateNode(dto).pipe(takeUntil(this.subject$)).subscribe();
   }
 
 
   deleteValue(item: ZkNodeModel): void {
     const dto = new RequestDto(this.host, item.path, item.value);
-    this.http.deleteNode(dto).pipe(takeUntil(this.subject$)).subscribe();
+    // this.http.deleteNode(dto).pipe(takeUntil(this.subject$)).subscribe();
   }
 }
 

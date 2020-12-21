@@ -1,13 +1,17 @@
-<h1 mat-dialog-title>Change Node's Value</h1>
+<h1 mat-dialog-title>Create Node</h1>
 <mat-dialog-content class="mat-typography">
   <form class="example-form">
     <mat-form-field class="example-full-width">
-      <mat-label><span>Without http://</span></mat-label>
-      <input type="text" matInput placeholder="xxx.xxx.xxx.xxx:port" [(ngModel)]="value" name="host" cdkFocusInitial>
+      <mat-label><span>Name</span></mat-label>
+      <input type="text" matInput placeholder="name" [(ngModel)]="zkNode.name" name="host" cdkFocusInitial>
+    </mat-form-field>
+    <mat-form-field class="example-full-width">
+      <mat-label><span>Value</span></mat-label>
+      <input type="text" matInput placeholder="value" [(ngModel)]="zkNode.value" name="host" cdkFocusInitial>
     </mat-form-field>
   </form>
 </mat-dialog-content>
 <mat-dialog-actions align="end">
-  <button mat-button [mat-dialog-close]="value">Change</button>
+  <button mat-button [mat-dialog-close]="zkNode">Change</button>
   <button mat-button [mat-dialog-close]>Back</button>
 </mat-dialog-actions>

@@ -23,6 +23,7 @@ import {DivBlockComponent} from './drag-block/div-block/div-block.component';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import {DisplaySettingsComponent} from './modals/display-settings/display-settings.component';
 import { ChangeValueComponent } from './modals/change-value/change-value.component';
+import {hostReducer} from './redux/zkhost/zkhost.reducer';
 
 
 @NgModule({
@@ -51,7 +52,8 @@ import { ChangeValueComponent } from './modals/change-value/change-value.compone
     MatCheckboxModule,
     StoreModule.forRoot({
       buttons: menuReducer,
-      leftTabs: leftReducer
+      leftTabs: leftReducer,
+      zkHost: hostReducer
     })
   ]
 })
