@@ -16,7 +16,7 @@ import {MatDialogModule} from '@angular/material/dialog';
 import {MatInputModule} from '@angular/material/input';
 import {MatTreeModule} from '@angular/material/tree';
 import {MatFormFieldModule} from '@angular/material/form-field';
-import {FormsModule} from '@angular/forms';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {DraNavbarComponent} from './main-page/dra-navbar/dra-navbar.component';
 import {DragDropModule} from '@angular/cdk/drag-drop';
 import {DivBlockComponent} from './main-page/div-block/div-block.component';
@@ -54,7 +54,8 @@ import {hostReducer} from './redux/zkhost/zkhost.reducer';
       buttons: menuReducer,
       leftTabs: leftReducer,
       zkHost: hostReducer
-    })
+    }),
+    ReactiveFormsModule
   ]
 })
 export class MainModule {

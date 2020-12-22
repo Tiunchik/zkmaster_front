@@ -13,6 +13,7 @@ import {ZkHostModel} from '../../../shared/domains/zk-host.model';
 import {LOAD_TREE} from '../../../redux/zkhost/zkhost.actions';
 import {MatDialog} from '@angular/material/dialog';
 import {ChangeValueComponent} from '../../../modals/change-value/change-value.component';
+import {log} from 'util';
 
 @Component({
   selector: 'app-tree-elem',
@@ -82,7 +83,7 @@ export class TreeElemComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   addChildren(parent: ZkNodeModel): void {
-    const dialogResult = this.modal.open(ChangeValueComponent);
+    const dialogResult = this.modal.open(ChangeValueComponent, {data: null});
     dialogResult.afterClosed()
       .pipe(takeUntil(this.subject$))
       .subscribe((data: ZkNodeModel) => {
@@ -97,9 +98,24 @@ export class TreeElemComponent implements OnInit, OnChanges, OnDestroy {
   }
 
 
-  updateValue(item: ZkNodeModel): void {
-    const dto = new RequestDto(this.host, item.path, item.value);
-    // this.http.updateNode(dto).pipe(takeUntil(this.subject$)).subscribe();
+  updateValue(node: ZkNodeModel): void {
+    const dialogResult = this.modal.open(ChangeValueComponent, {
+      data:
+        {oldNode: node},
+    });
+    dialogResult.afterClosed()
+      .pipe(takeUntil(this.subject$))
+      .subscribe((data: ZkNodeModel) => {
+          console.log(`data is ${data}`);
+          if (data) {
+            console.log('start update');
+            const dto = new RequestDto(this.host, `${node.path}`, data.value);
+            this.http.updateNode(dto).pipe(takeUntil(this.subject$))
+              .pipe(takeUntil(this.subject$))
+              .subscribe(() => this.getAll());
+          }
+        }, er => console.log('error'),
+        () => console.log('finish'));
   }
 
 
