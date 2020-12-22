@@ -1,18 +1,18 @@
 import {Component, Input, OnChanges, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {NestedTreeControl} from '@angular/cdk/tree';
 import {MatTreeNestedDataSource} from '@angular/material/tree';
-import {ZkNodeModel} from '../../shared/domains/zk-node.model';
-import {CrudService} from '../../shared/services/crud.service';
+import {ZkNodeModel} from '../../../shared/domains/zk-node.model';
+import {CrudService} from '../../../shared/services/crud.service';
 import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
 import {MatMenuTrigger} from '@angular/material/menu';
-import {RequestDto} from '../../shared/domains/request.dto';
+import {RequestDto} from '../../../shared/domains/request.dto';
 import {Store} from '@ngrx/store';
-import {selectZkHosts} from '../../redux/zkhost/zkhost.selector';
-import {ZkHostModel} from '../../shared/domains/zk-host.model';
-import {LOAD_TREE} from '../../redux/zkhost/zkhost.actions';
+import {selectZkHosts} from '../../../redux/zkhost/zkhost.selector';
+import {ZkHostModel} from '../../../shared/domains/zk-host.model';
+import {LOAD_TREE} from '../../../redux/zkhost/zkhost.actions';
 import {MatDialog} from '@angular/material/dialog';
-import {ChangeValueComponent} from '../../modals/change-value/change-value.component';
+import {ChangeValueComponent} from '../../../modals/change-value/change-value.component';
 
 @Component({
   selector: 'app-tree-elem',
