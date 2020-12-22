@@ -10,7 +10,7 @@ import {HostModel} from '../../shared/domains/host.model';
 })
 export class AddHostModalElemComponent {
 
-  public host: HostModel = new HostModel('', '');
+  public host: HostModel = new HostModel('local', 'localhost:2181');
 
   constructor() {
   }

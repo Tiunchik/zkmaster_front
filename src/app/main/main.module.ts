@@ -24,6 +24,7 @@ import {MatCheckboxModule} from '@angular/material/checkbox';
 import {DisplaySettingsComponent} from './modals/display-settings/display-settings.component';
 import { ChangeValueComponent } from './modals/change-value/change-value.component';
 import {hostReducer} from './redux/zkhost/zkhost.reducer';
+import { ApproveComponent } from './modals/approve/approve.component';
 
 
 @NgModule({
@@ -34,7 +35,8 @@ import {hostReducer} from './redux/zkhost/zkhost.reducer';
     DraNavbarComponent,
     DivBlockComponent,
     DisplaySettingsComponent,
-    ChangeValueComponent],
+    ChangeValueComponent,
+    ApproveComponent],
   imports: [
     CommonModule,
     MainRoutingModule,

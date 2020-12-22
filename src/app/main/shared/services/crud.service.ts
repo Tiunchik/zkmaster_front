@@ -19,7 +19,6 @@ export class CrudService {
   }
 
   public getAll(host: string): Observable<ZkNodeModel> {
-    console.log(`send request to - ${BackEnd}${Rest}${host}`);
     return this.http.get<ZkNodeModel>(`${BackEnd}${Rest}${host}`);
   }
 
@@ -32,7 +31,7 @@ export class CrudService {
   }
 
   public deleteNode(dto: RequestDto): Observable<void> {
-    return this.http.delete<void>(`${BackEnd}${Rest}${dto.host}/${dto.path}`);
+    return this.http.delete<void>(`${BackEnd}${Rest}${dto.host}${dto.path}`);
   }
 
 }

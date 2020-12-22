@@ -14,6 +14,7 @@ import {LOAD_TREE} from '../../../redux/zkhost/zkhost.actions';
 import {MatDialog} from '@angular/material/dialog';
 import {ChangeValueComponent} from '../../../modals/change-value/change-value.component';
 import {log} from 'util';
+import {ApproveComponent} from '../../../modals/approve/approve.component';
 
 @Component({
   selector: 'app-tree-elem',
@@ -44,7 +45,6 @@ export class TreeElemComponent implements OnInit, OnChanges, OnDestroy {
     this.store.select(selectZkHosts)
       .pipe(takeUntil(this.subject$))
       .subscribe((data) => {
-        console.log(data);
         data.forEach((value) => {
           if (value.host === this.host) {
             this.dataSource.data = [value.zkTree];
@@ -94,7 +94,6 @@ export class TreeElemComponent implements OnInit, OnChanges, OnDestroy {
             .subscribe(() => this.getAll());
         }
       });
-
   }
 
 
@@ -106,22 +105,28 @@ export class TreeElemComponent implements OnInit, OnChanges, OnDestroy {
     dialogResult.afterClosed()
       .pipe(takeUntil(this.subject$))
       .subscribe((data: ZkNodeModel) => {
-          console.log(`data is ${data}`);
           if (data) {
-            console.log('start update');
             const dto = new RequestDto(this.host, `${node.path}`, data.value);
             this.http.updateNode(dto).pipe(takeUntil(this.subject$))
               .pipe(takeUntil(this.subject$))
               .subscribe(() => this.getAll());
           }
-        }, er => console.log('error'),
-        () => console.log('finish'));
+        });
   }
 
 
   deleteValue(item: ZkNodeModel): void {
-    const dto = new RequestDto(this.host, item.path, item.value);
-    // this.http.deleteNode(dto).pipe(takeUntil(this.subject$)).subscribe();
+    const dialogResult = this.modal.open(ApproveComponent);
+    dialogResult.afterClosed()
+      .pipe(takeUntil(this.subject$))
+      .subscribe((data: boolean) => {
+        if (data) {
+          const dto = new RequestDto(this.host, `${item.path}`, item.value);
+          this.http.deleteNode(dto).pipe(takeUntil(this.subject$))
+            .pipe(takeUntil(this.subject$))
+            .subscribe(() => this.getAll());
+        }
+      });
   }
 }
 
