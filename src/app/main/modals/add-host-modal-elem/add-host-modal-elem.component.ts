@@ -1,22 +1,34 @@
-import {Component} from '@angular/core';
-import {HostModel} from '../../shared/domains/host.model';
-
-// TODO: сделать закрытие на Enter
+import {Component, HostListener, OnInit} from '@angular/core';
+import {MatDialogRef} from '@angular/material/dialog';
+import {FormControl, FormGroup, Validators} from '@angular/forms';
 
 @Component({
   selector: 'app-add-host-modal-elem',
   templateUrl: './add-host-modal-elem.component.html',
   styleUrls: ['./add-host-modal-elem.component.scss']
 })
-export class AddHostModalElemComponent {
+export class AddHostModalElemComponent implements OnInit {
 
-  public host: HostModel = new HostModel('local', 'localhost:2181');
+  form: FormGroup;
 
-  constructor() {
+  @HostListener('window:keypress', ['$event']) onPress(event: KeyboardEvent): void {
+    console.log(event);
+    if (event.key === 'Enter') {
+      this.submit();
+    }
   }
 
+  constructor(public dialogRef: MatDialogRef<AddHostModalElemComponent>) {
+  }
 
-  submit() : void {
-    console.log("just test= (Add host):: Close Enter");
+  ngOnInit(): void {
+    this.form = new FormGroup({
+      name: new FormControl('local', Validators.required),
+      address: new FormControl('localhost:2181', Validators.required)
+    });
+  }
+
+  submit(): void {
+    this.dialogRef.close({...this.form.value});
   }
 }

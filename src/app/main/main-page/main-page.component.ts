@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, HostListener, OnDestroy, OnInit} from '@angular/core';
 import {ZkNodeModel} from '../shared/domains/zk-node.model';
 import {CrudService} from '../shared/services/crud.service';
 import {MatDialog} from '@angular/material/dialog';
@@ -21,6 +21,7 @@ import {HostModel} from '../shared/domains/host.model';
 })
 export class MainPageComponent implements OnDestroy, OnInit {
 
+
   destroy$ = new Subject();
 
   buttons$: Observable<MenuButtonModel[]> = this.store.pipe(
@@ -30,6 +31,18 @@ export class MainPageComponent implements OnDestroy, OnInit {
 
   // TODO: re-Fuck-toring var naming
   dragAndDrop = false;
+
+  @HostListener('window:keypress', ['$event']) onPress(event: KeyboardEvent): void {
+    if (event.key === 'a') {
+      this.openModalAddHost();
+    }
+    if (event.key === 'o') {
+      this.openSettings();
+    }
+    if (event.key === 's') {
+      this.addTab();
+    }
+  }
 
   constructor(private crud: CrudService,
               private modal: MatDialog,
@@ -74,5 +87,9 @@ export class MainPageComponent implements OnDestroy, OnInit {
 
   exeFunc(name): void {
     this[name]();
+  }
+
+  keyPress($event): void {
+    console.log($event);
   }
 }

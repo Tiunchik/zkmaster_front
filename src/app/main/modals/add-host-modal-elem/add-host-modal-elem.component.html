@@ -5,20 +5,20 @@
     host port number (mask example: xxx.xxx.xxx.xxx:port).<br>
     If host use standard port - 2181 <br>
     you can enter only host name or IP</p>
-  <form class="example-form">
+  <form class="example-form" [formGroup]="form">
     <mat-form-field class="example-full-width">
       <mat-label><span>Host alias</span></mat-label>
-      <input type="text" matInput placeholder="Name" [(ngModel)]="host.name" name="host" cdkFocusInitial>
+      <input type="text" matInput placeholder="Name" name="host"
+             formControlName="name" cdkFocusInitial>
     </mat-form-field>
     <mat-form-field class="example-full-width">
       <mat-label><span>Without http://</span></mat-label>
-      <input type="text" matInput placeholder="xxx.xxx.xxx.xxx:port" [(ngModel)]="host.address" name="host" cdkFocusInitial>
-<!-- TODO : так оно закрывается, но не сохраняет host, тебе сделать так, что бы оно работало.     -->
-<!--      <input  mat-dialog-close (keyup.enter)="submit()" matInput placeholder="xxx.xxx.xxx.xxx:port" [(ngModel)]="host.address" name="host" cdkFocusInitial>-->
+      <input type="text" matInput placeholder="xxx.xxx.xxx.xxx:port" name="host"
+             formControlName="address">
     </mat-form-field>
   </form>
 </mat-dialog-content>
 <mat-dialog-actions>
   <button mat-button [mat-dialog-close]>Cancel</button>
-  <button class="mat-primary" mat-button [mat-dialog-close]="host">Create</button>
+  <button class="mat-primary" mat-button (click)="submit()">Create</button>
 </mat-dialog-actions>

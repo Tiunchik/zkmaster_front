@@ -4,7 +4,7 @@
             [matMenuTriggerFor]="menu">
       <mat-icon>menu</mat-icon>
     </button>
-    <span class="marg-span">ZKM Admin edition v0.9 Ahsoka Tano Return!</span>
+    <span class="marg-span">ZKM Admin edition v0.9.1 Xiaomi Chip And Cool ^_^ !</span>
   </div>
 
   <div class="toolbar-flex">
@@ -12,7 +12,7 @@
     <ng-container *ngFor="let button of (buttons$ | async)">
       <button *ngIf="button.toolbar"
               mat-menu-item="{{button.toolbar}}" (click)='exeFunc(button.functionName)'>
-        <mat-icon class="toolbar-icons" title="{{button.name}}">{{button.icon}}</mat-icon>
+        <mat-icon class="toolbar-icons" title="{{button.name + '(' + button.title + ')'}}">{{button.icon}}</mat-icon>
       </button>
     </ng-container>
   </div>
@@ -21,7 +21,7 @@
 <!--  MENU -->
 <mat-menu #menu="matMenu">
   <button *ngFor="let button of (buttons$ | async)"
-          mat-menu-item (click)='exeFunc(button.functionName)'>
+          mat-menu-item (click)='exeFunc(button.functionName)' title="{{button.title}}">
     <mat-icon>{{button.icon}}</mat-icon>
     <span>{{button.name}}  </span>
   </button>

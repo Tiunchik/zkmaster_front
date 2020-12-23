@@ -4,10 +4,10 @@ import {HIDE_TOOLBAR_BUTTON, LOAD_SETTINGS, SHOW_TOOLBAR_BUTTON} from './menu.ac
 import {SETTINGS_NAME} from '../../shared/constants/constants';
 
 export const INIT_BUTTONS_PACK: MenuButtonModel[] = [
-  {name: 'Add Zookeeper', icon: 'playlist_add', toolbar: true, functionName: 'openModalAddHost'},
-  {name: 'Left Tab', icon: 'vertical_split', toolbar: true, functionName: 'addTab'},
+  {name: 'Add Zookeeper', icon: 'playlist_add', toolbar: true, functionName: 'openModalAddHost', title: 'A'},
+  {name: 'Split', icon: 'vertical_split', toolbar: true, functionName: 'addTab', title: 'S'},
   {name: 'Check connections', icon: 'playlist_add_check', toolbar: false, functionName: 'Cyberpunk2077! Fix me!'},
-  {name: 'Settings', icon: 'settings', toolbar: false, functionName: 'openSettings'},
+  {name: 'Options', icon: 'settings', toolbar: false, functionName: 'openSettings', title: 'O'},
 ];
 
 export const menuReducer = createReducer(
@@ -19,7 +19,6 @@ export const menuReducer = createReducer(
         ? new MenuButtonModel(button.name, button.icon, true, button.functionName)
         : val));
     return newState;
-    let tes = undefined
   }),
   on(HIDE_TOOLBAR_BUTTON, (state: MenuButtonModel[], {button}) => {
     const newState: MenuButtonModel[] = [];

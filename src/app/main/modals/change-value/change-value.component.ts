@@ -1,4 +1,4 @@
-import {Component, Inject, OnInit} from '@angular/core';
+import {Component, HostListener, Inject, OnInit} from '@angular/core';
 import {ZkNodeModel} from '../../shared/domains/zk-node.model';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {FormControl, FormGroup} from '@angular/forms';
@@ -12,6 +12,12 @@ export class ChangeValueComponent implements OnInit {
 
   form: FormGroup;
   zkNode: ZkNodeModel = new ZkNodeModel('', '', '');
+
+  @HostListener('window:keypress', ['$event']) onPress(event: KeyboardEvent): void {
+    if (event.key === 'Enter') {
+      this.submit();
+    }
+  }
 
   constructor(@Inject(MAT_DIALOG_DATA) public data: { oldNode: ZkNodeModel },
               public dialogRef: MatDialogRef<ChangeValueComponent>) {
