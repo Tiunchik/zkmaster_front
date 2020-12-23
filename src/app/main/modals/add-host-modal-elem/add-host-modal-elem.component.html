@@ -13,6 +13,8 @@
     <mat-form-field class="example-full-width">
       <mat-label><span>Without http://</span></mat-label>
       <input type="text" matInput placeholder="xxx.xxx.xxx.xxx:port" [(ngModel)]="host.address" name="host" cdkFocusInitial>
+<!-- TODO : так оно закрывается, но не сохраняет host, тебе сделать так, что бы оно работало.     -->
+<!--      <input  mat-dialog-close (keyup.enter)="submit()" matInput placeholder="xxx.xxx.xxx.xxx:port" [(ngModel)]="host.address" name="host" cdkFocusInitial>-->
     </mat-form-field>
   </form>
 </mat-dialog-content>

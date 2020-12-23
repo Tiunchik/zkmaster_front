@@ -15,4 +15,8 @@ export class AddHostModalElemComponent {
   constructor() {
   }
 
+
+  submit() : void {
+    console.log("just test= (Add host):: Close Enter");
+  }
 }
