@@ -1,9 +1,11 @@
-import {Component, Host, Input, OnInit} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {CdkDragDrop, moveItemInArray, transferArrayItem} from '@angular/cdk/drag-drop';
 import {Observable} from 'rxjs';
 import {Store} from '@ngrx/store';
-import {selectLeftTab} from '../../redux/tab/tab.selector';
 import {HostModel} from '../../shared/domains/host.model';
+import {selectHosts} from '../../redux/host/host.selector';
+import {TabModel} from '../../shared/domains/tab.model';
+import {selectTabs} from '../../redux/tabs/tabs.selector';
 
 @Component({
   selector: 'app-dra-navbar',
@@ -13,13 +15,22 @@ import {HostModel} from '../../shared/domains/host.model';
 export class DraNavbarComponent implements OnInit {
 
   @Input() name: string;
-  list: Observable<HostModel[]> = this.store.select(selectLeftTab);
-  currentTree: string = '';
+  tab: TabModel;
+  currentTree = '';
 
   constructor(private store: Store) {
   }
 
   ngOnInit(): void {
+    this.store
+      .select(selectTabs)
+      .subscribe((inpTab) => {
+        inpTab.forEach((val) => {
+          if (val.name === this.name) {
+            this.tab = val;
+          }
+        });
+      });
   }
 
   drop(event: CdkDragDrop<HostModel[]>): void {

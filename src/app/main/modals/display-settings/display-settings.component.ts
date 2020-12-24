@@ -2,9 +2,9 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import {SETTINGS_NAME} from '../../shared/constants/constants';
 import {MenuButtonModel} from '../../shared/domains/menu-button.model';
 import {Store} from '@ngrx/store';
-import {HIDE_TOOLBAR_BUTTON, SHOW_TOOLBAR_BUTTON} from '../../redux/menu/menu.actions';
+import {HIDE_TOOLBAR_BUTTON, SHOW_TOOLBAR_BUTTON} from '../../redux/menu/buttons.actions';
 import {Subject} from 'rxjs';
-import {selectButtons} from '../../redux/menu/menu.selectors';
+import {selectButtons} from '../../redux/menu/buttons.selectors';
 import {takeUntil} from 'rxjs/operators';
 
 @Component({

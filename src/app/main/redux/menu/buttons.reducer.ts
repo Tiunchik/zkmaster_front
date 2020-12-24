@@ -1,6 +1,6 @@
 import {MenuButtonModel} from '../../shared/domains/menu-button.model';
 import {createReducer, on} from '@ngrx/store';
-import {HIDE_TOOLBAR_BUTTON, LOAD_SETTINGS, SHOW_TOOLBAR_BUTTON} from './menu.actions';
+import {HIDE_TOOLBAR_BUTTON, LOAD_SETTINGS, SHOW_TOOLBAR_BUTTON} from './buttons.actions';
 import {SETTINGS_NAME} from '../../shared/constants/constants';
 
 export const INIT_BUTTONS_PACK: MenuButtonModel[] = [
@@ -10,7 +10,7 @@ export const INIT_BUTTONS_PACK: MenuButtonModel[] = [
   {name: 'Options', icon: 'settings', toolbar: false, functionName: 'openSettings', title: 'O'},
 ];
 
-export const menuReducer = createReducer(
+export const buttonsReducer = createReducer(
   INIT_BUTTONS_PACK,
   on(SHOW_TOOLBAR_BUTTON, (state: MenuButtonModel[], {button}) => {
     const newState: MenuButtonModel[] = [];
@@ -31,7 +31,9 @@ export const menuReducer = createReducer(
   on(LOAD_SETTINGS, (() => {
     const storedButtons = localStorage.getItem(SETTINGS_NAME);
     let rsl;
-    if (storedButtons === 'undefined') {
+    if (storedButtons === 'undefined'
+      || storedButtons == null
+      || storedButtons === '') {
       localStorage.setItem(SETTINGS_NAME, JSON.stringify(INIT_BUTTONS_PACK));
       rsl = INIT_BUTTONS_PACK;
     }

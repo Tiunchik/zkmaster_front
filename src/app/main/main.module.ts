@@ -1,8 +1,6 @@
 import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {StoreModule} from '@ngrx/store';
-import {menuReducer} from './redux/menu/menu.reducer';
-import {leftReducer} from './redux/tab/tab.reducer';
 
 import {MainRoutingModule} from './main-routing.module';
 import {MainPageComponent} from './main-page/main-page.component';
@@ -22,9 +20,13 @@ import {DragDropModule} from '@angular/cdk/drag-drop';
 import {DivBlockComponent} from './main-page/div-block/div-block.component';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import {DisplaySettingsComponent} from './modals/display-settings/display-settings.component';
-import { ChangeValueComponent } from './modals/change-value/change-value.component';
-import {hostReducer} from './redux/zkhost/zkhost.reducer';
-import { ApproveComponent } from './modals/approve/approve.component';
+import {ChangeValueComponent} from './modals/change-value/change-value.component';
+import {ApproveComponent} from './modals/approve/approve.component';
+import {buttonsReducer} from './redux/menu/buttons.reducer';
+import {currentTabsReducer} from './redux/currentTab/currentTabs.reducer';
+import {tabsReducer} from './redux/tabs/tabs.reducer';
+import {hostReducer} from './redux/host/host.reducer';
+import {treeReducer} from './redux/zktrees/zktree.reducer';
 
 
 @NgModule({
@@ -53,9 +55,11 @@ import { ApproveComponent } from './modals/approve/approve.component';
     DragDropModule,
     MatCheckboxModule,
     StoreModule.forRoot({
-      buttons: menuReducer,
-      leftTabs: leftReducer,
-      zkHost: hostReducer
+      buttons: buttonsReducer,
+      currentTab: currentTabsReducer,
+      tabs: tabsReducer,
+      hosts: hostReducer,
+      trees: treeReducer
     }),
     ReactiveFormsModule
   ]

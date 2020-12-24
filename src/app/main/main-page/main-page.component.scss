@@ -23,7 +23,8 @@
 }
 
 .main-columns {
-  grid-template-columns: [line1] 50%  [line2] 50% !important;
+  grid-template-columns: [line1] 45%  [line2] 45% !important;
+  grid-column-gap: 2%;
 }
 
 .marg-span {

@@ -8,9 +8,9 @@ import {takeUntil} from 'rxjs/operators';
 import {MatMenuTrigger} from '@angular/material/menu';
 import {RequestDto} from '../../../shared/domains/request.dto';
 import {Store} from '@ngrx/store';
-import {selectZkHosts} from '../../../redux/zkhost/zkhost.selector';
-import {ZkHostModel} from '../../../shared/domains/zk-host.model';
-import {LOAD_TREE} from '../../../redux/zkhost/zkhost.actions';
+import {selectTrees} from '../../../redux/zktrees/zktree.selector';
+import {TreeModel} from '../../../shared/domains/tree.model';
+import {ADD_TREE} from '../../../redux/zktrees/zktree.actions';
 import {MatDialog} from '@angular/material/dialog';
 import {ChangeValueComponent} from '../../../modals/change-value/change-value.component';
 import {log} from 'util';
@@ -42,7 +42,7 @@ export class TreeElemComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.store.select(selectZkHosts)
+    this.store.select(selectTrees)
       .pipe(takeUntil(this.subject$))
       .subscribe((data) => {
         data.forEach((value) => {
@@ -77,8 +77,8 @@ export class TreeElemComponent implements OnInit, OnChanges, OnDestroy {
     this.http.getAll(this.host)
       .pipe(takeUntil(this.subject$))
       .subscribe((data) => {
-        const tree: ZkHostModel = new ZkHostModel(this.host, data);
-        this.store.dispatch(LOAD_TREE({tree}));
+        const tree: TreeModel = new TreeModel(this.host, data);
+        this.store.dispatch(ADD_TREE({tree}));
       });
   }
 

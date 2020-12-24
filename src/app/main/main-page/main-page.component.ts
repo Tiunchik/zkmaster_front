@@ -1,5 +1,4 @@
-import {AfterViewInit, Component, ElementRef, HostListener, OnDestroy, OnInit} from '@angular/core';
-import {ZkNodeModel} from '../shared/domains/zk-node.model';
+import {Component, HostListener, OnDestroy, OnInit} from '@angular/core';
 import {CrudService} from '../shared/services/crud.service';
 import {MatDialog} from '@angular/material/dialog';
 import {AddHostModalElemComponent} from '../modals/add-host-modal-elem/add-host-modal-elem.component';
@@ -7,12 +6,20 @@ import {DisplaySettingsComponent} from '../modals/display-settings/display-setti
 import {Observable, Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
 import {select, Store} from '@ngrx/store';
-import {selectButtons} from '../redux/menu/menu.selectors';
+import {selectButtons} from '../redux/menu/buttons.selectors';
 import {AppState} from '../redux/app.state';
 import {MenuButtonModel} from '../shared/domains/menu-button.model';
-import {LOAD_SETTINGS} from '../redux/menu/menu.actions';
-import {CREATE_TAB} from '../redux/tab/tab.actions';
+import {LOAD_SETTINGS} from '../redux/menu/buttons.actions';
+
 import {HostModel} from '../shared/domains/host.model';
+import {TabModel} from '../shared/domains/tab.model';
+import {selectTabs} from '../redux/tabs/tabs.selector';
+import {selectCurrentTab} from '../redux/currentTab/currentTabs.selector';
+import {ADD_TREE} from '../redux/zktrees/zktree.actions';
+import {ZkNodeModel} from '../shared/domains/zk-node.model';
+import {SET_CURRENT_TAB} from '../redux/currentTab/currentTabs.actions';
+import {ADD_HOST} from '../redux/host/host.actions';
+import {ADD_TAB} from '../redux/tabs/tabs.actions';
 
 @Component({
   selector: 'app-main-page',
@@ -21,15 +28,12 @@ import {HostModel} from '../shared/domains/host.model';
 })
 export class MainPageComponent implements OnDestroy, OnInit {
 
-
   destroy$ = new Subject();
-
-  buttons$: Observable<MenuButtonModel[]> = this.store.pipe(
+  buttons$: Observable<MenuButtonModel[]> = this.store.pipe(takeUntil(this.destroy$),
     select(selectButtons));
+  tabs: TabModel[];
+  currentTab: string;
 
-  trees: ZkNodeModel[] = [];
-
-  // TODO: re-Fuck-toring var naming
   dragAndDrop = false;
 
   @HostListener('window:keypress', ['$event']) onPress(event: KeyboardEvent): void {
@@ -51,6 +55,12 @@ export class MainPageComponent implements OnDestroy, OnInit {
 
   ngOnInit(): void {
     this.store.dispatch(LOAD_SETTINGS());
+    this.store
+      .select(selectTabs)
+      .subscribe((obsTabs) => this.tabs = obsTabs);
+    this.store
+      .select(selectCurrentTab)
+      .subscribe((obsCurr) => this.currentTab = obsCurr);
   }
 
   ngOnDestroy(): void {
@@ -66,13 +76,14 @@ export class MainPageComponent implements OnDestroy, OnInit {
     dialogResult.afterClosed()
       .pipe(takeUntil(this.destroy$))
       .subscribe((host: HostModel) => {
-        console.log(`host - ${host.name}`);
         if (host && host.name.length === 0) {
-          console.log(`внутри`);
           host.name = host.address;
         }
         if (host && host.address.length > 5) {
-          this.store.dispatch(CREATE_TAB({host}));
+          this.setCurrentTab();
+          console.log(`Current tab os ${this.currentTab}`);
+          const tabModel = new TabModel(this.currentTab, [host]);
+          this.store.dispatch(ADD_TAB({model: tabModel}));
         }
       });
   }
@@ -89,7 +100,26 @@ export class MainPageComponent implements OnDestroy, OnInit {
     this[name]();
   }
 
-  keyPress($event): void {
-    console.log($event);
+  generateTabUniqueId(): string {
+    let randomStr = '';
+    do {
+      randomStr = Math.random()
+        .toString(36)
+        .replace(/[^a-z]+/g, '')
+        .substr(0, 5);
+    } while (this.tabs.filter((x) => x.name === randomStr).length > 0);
+    return randomStr;
+  }
+
+  setCurrentTab(): void {
+    if (this.currentTab === ''
+      || this.currentTab == null
+      || this.currentTab === 'undefined') {
+      if (this.tabs.length === 0) {
+        this.store.dispatch(SET_CURRENT_TAB({name: this.generateTabUniqueId()}));
+      } else {
+        this.store.dispatch(SET_CURRENT_TAB({name: this.tabs[0].name}));
+      }
+    }
   }
 }

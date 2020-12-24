@@ -28,8 +28,6 @@
 </mat-menu>
 
 <main class="main" [ngClass]="{'main-columns': dragAndDrop}" cdkDropListGroup>
-  <div class="tab"></div>
-  <app-dra-navbar></app-dra-navbar>
+  <app-dra-navbar [name]="tab.name" *ngFor="let tab of tabs"></app-dra-navbar>
 </main>
-
 
