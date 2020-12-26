@@ -13,7 +13,6 @@ import {TreeModel} from '../../../shared/domains/tree.model';
 import {ADD_TREE} from '../../../redux/zktrees/zktree.actions';
 import {MatDialog} from '@angular/material/dialog';
 import {ChangeValueComponent} from '../../../modals/change-value/change-value.component';
-import {log} from 'util';
 import {ApproveComponent} from '../../../modals/approve/approve.component';
 
 @Component({
@@ -88,7 +87,8 @@ export class TreeElemComponent implements OnInit, OnChanges, OnDestroy {
       .pipe(takeUntil(this.subject$))
       .subscribe((data: ZkNodeModel) => {
         if (data) {
-          const dto = new RequestDto(this.host, `${parent.path}/${data.name}`, data.value);
+          const dto = new RequestDto(this.host, (`${parent.path}/${data.name}`)
+                                                              .replace('//', '/'), data.value);
           this.http.addNode(dto).pipe(takeUntil(this.subject$))
             .pipe(takeUntil(this.subject$))
             .subscribe(() => this.getAll());
@@ -106,7 +106,7 @@ export class TreeElemComponent implements OnInit, OnChanges, OnDestroy {
       .pipe(takeUntil(this.subject$))
       .subscribe((data: ZkNodeModel) => {
           if (data) {
-            const dto = new RequestDto(this.host, `${node.path}`, data.value);
+            const dto = new RequestDto(this.host, `${node.path}`, `${data.name}&${data.value}`);
             this.http.updateNode(dto).pipe(takeUntil(this.subject$))
               .pipe(takeUntil(this.subject$))
               .subscribe(() => this.getAll());

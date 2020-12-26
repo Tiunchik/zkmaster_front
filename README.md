@@ -12,3 +12,7 @@ It's UI for backend server that works with Zookeeper.
  - Update/Remove data from zookeeper node;
  
  
+## TODO
+
+сделать ctrl + клавиша HostListener
+переделать апдейт - добавить возможность ренейма

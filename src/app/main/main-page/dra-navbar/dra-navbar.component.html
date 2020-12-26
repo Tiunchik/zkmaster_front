@@ -1,6 +1,11 @@
-<div cdkDropList cdkDropListOrientation="horizontal" [cdkDropListData]="tab.hosts" class="example-list"
-     (cdkDropListDropped)="drop($event)">
-  <div class="example-box" *ngFor="let host of tab.hosts" cdkDrag
-       (click)="chooseHost(host.address)">{{host.name}}</div>
-</div>
-<app-tree-elem *ngIf="currentTree.length > 0" [loadHost]="currentTree"></app-tree-elem>
+<ng-container (click)="setCurrentTabBar()">
+  <div cdkDropList cdkDropListOrientation="horizontal" [cdkDropListData]="tab.hosts" class="example-list"
+       (cdkDropListDropped)="drop($event)">
+    <div class="example-box" *ngFor="let host of tab.hosts" cdkDrag
+         (click)="chooseHost(host.address)">{{host.name}}</div>
+  </div>
+  <app-tree-elem *ngIf="currentTree.length > 0" [loadHost]="currentTree"></app-tree-elem>
+</ng-container>
+
+
+

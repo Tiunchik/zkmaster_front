@@ -15,11 +15,8 @@ import {HostModel} from '../shared/domains/host.model';
 import {TabModel} from '../shared/domains/tab.model';
 import {selectTabs} from '../redux/tabs/tabs.selector';
 import {selectCurrentTab} from '../redux/currentTab/currentTabs.selector';
-import {ADD_TREE} from '../redux/zktrees/zktree.actions';
-import {ZkNodeModel} from '../shared/domains/zk-node.model';
 import {SET_CURRENT_TAB} from '../redux/currentTab/currentTabs.actions';
-import {ADD_HOST} from '../redux/host/host.actions';
-import {ADD_TAB} from '../redux/tabs/tabs.actions';
+import {ADD_TAB, REMOVE_TAB} from '../redux/tabs/tabs.actions';
 
 @Component({
   selector: 'app-main-page',
@@ -33,6 +30,7 @@ export class MainPageComponent implements OnDestroy, OnInit {
     select(selectButtons));
   tabs: TabModel[];
   currentTab: string;
+  split: string;
 
   dragAndDrop = false;
 
@@ -94,6 +92,13 @@ export class MainPageComponent implements OnDestroy, OnInit {
 
   addTab(): void {
     this.dragAndDrop = !this.dragAndDrop;
+    if (!this.split) {
+      this.split = this.generateTabUniqueId();
+      this.store.dispatch(ADD_TAB({model: new TabModel(this.split, [])}));
+    } else {
+      this.store.dispatch(REMOVE_TAB({name: this.split}));
+      this.split = null;
+    }
   }
 
   exeFunc(name): void {
