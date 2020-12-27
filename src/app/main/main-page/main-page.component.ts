@@ -78,7 +78,7 @@ export class MainPageComponent implements OnDestroy, OnInit {
           host.name = host.address;
         }
         if (host && host.address.length > 5) {
-          this.setCurrentTab();
+          this.createTabBar();
           console.log(`Current tab os ${this.currentTab}`);
           const tabModel = new TabModel(this.currentTab, [host]);
           this.store.dispatch(ADD_TAB({model: tabModel}));
@@ -116,7 +116,7 @@ export class MainPageComponent implements OnDestroy, OnInit {
     return randomStr;
   }
 
-  setCurrentTab(): void {
+  createTabBar(): void {
     if (this.currentTab === ''
       || this.currentTab == null
       || this.currentTab === 'undefined') {
@@ -126,5 +126,9 @@ export class MainPageComponent implements OnDestroy, OnInit {
         this.store.dispatch(SET_CURRENT_TAB({name: this.tabs[0].name}));
       }
     }
+  }
+
+  setCurrentTabBar(tabName: string): void {
+    this.store.dispatch(SET_CURRENT_TAB({name: tabName}));
   }
 }
