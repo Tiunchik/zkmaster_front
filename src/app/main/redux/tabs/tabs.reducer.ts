@@ -1,6 +1,7 @@
 import {createReducer, on} from '@ngrx/store';
 import {TabModel} from '../../shared/domains/tab.model';
-import {ADD_TAB, GET_ALL_TABS, REMOVE_TAB} from './tabs.actions';
+import {ADD_TAB, CHANGE_POSITION, GET_ALL_TABS, REMOVE_TAB} from './tabs.actions';
+import {HostModel} from '../../shared/domains/host.model';
 
 
 export const TABS: TabModel[] = [
@@ -40,6 +41,50 @@ export const tabsReducer = createReducer(TABS,
       }
     });
     return newState;
+  }),
+  on(CHANGE_POSITION, (state: TabModel[], {tabName, prevNum, newNum}) => {
+    const newState: TabModel[] = [];
+    state.forEach((val) => {
+      if (val.name === tabName) {
+        const oldPos = val.hosts[prevNum];
+        const newPos = val.hosts[newNum];
+        const newHosts: HostModel[] = [];
+        val.hosts.forEach((hostVal) => {
+          switch (hostVal) {
+            case oldPos: {
+              newHosts.push(newPos);
+              break;
+            }
+            case newPos: {
+              newHosts.push(oldPos);
+              break;
+            }
+            default: {
+              newHosts.push(val);
+              break;
+            }
+          }
+        });
+        newState.push(new TabModel(tabName, newHosts));
+      } else {
+        newState.push(val);
+      }
+    });
+    return newState;
   })
 );
 
+// switch(variable_expression) {
+//   case constant_expr1: {
+//     statements;
+//     break;
+//   }
+//   case constant_expr2: {
+//     statements;
+//     break;
+//   }
+//   default: {
+//     statements;
+//     break;
+//   }
+// }

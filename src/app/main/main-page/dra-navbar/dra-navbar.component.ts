@@ -4,6 +4,7 @@ import {Store} from '@ngrx/store';
 import {HostModel} from '../../shared/domains/host.model';
 import {TabModel} from '../../shared/domains/tab.model';
 import {selectTabs} from '../../redux/tabs/tabs.selector';
+import {CHANGE_POSITION} from '../../redux/tabs/tabs.actions';
 
 @Component({
   selector: 'app-dra-navbar',
@@ -34,12 +35,12 @@ export class DraNavbarComponent implements OnInit {
   drop(event: CdkDragDrop<HostModel[]>): void {
     const current: HostModel[] = event.previousContainer.data;
     const next: HostModel[] = event.container.data;
-    console.log(event.previousContainer);
-    console.log(event.container);
-    console.log(current);
-    console.log(next);
-    if (event.previousContainer === event.container) {
-      moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
+    if (event.previousContainer === event.container && event.previousIndex !== event.currentIndex) {
+      this.store.dispatch(CHANGE_POSITION({
+        tabName: current[0].tabName,
+        prevNum: event.previousIndex,
+        newNum: event.currentIndex
+      }));
     } else {
       transferArrayItem(event.previousContainer.data,
         event.container.data,
