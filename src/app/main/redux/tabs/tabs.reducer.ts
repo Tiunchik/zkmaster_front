@@ -4,9 +4,8 @@ import {ADD_TAB, CHANGE_POSITION, GET_ALL_TABS, REMOVE_TAB} from './tabs.actions
 import {HostModel} from '../../shared/domains/host.model';
 
 
-export const TABS: TabModel[] = [
-  {name: 'asdfg', hosts: []}
-];
+export const TABS: TabModel[] = [];
+
 
 export const tabsReducer = createReducer(TABS,
   on(GET_ALL_TABS, (state: TabModel[]) => {
@@ -42,32 +41,36 @@ export const tabsReducer = createReducer(TABS,
     });
     return newState;
   }),
-  on(CHANGE_POSITION, (state: TabModel[], {tabName, prevNum, newNum}) => {
+  on(CHANGE_POSITION, (state: TabModel[], {tabBarName, prevInd, newInd}) => {
     const newState: TabModel[] = [];
-    state.forEach((val) => {
-      if (val.name === tabName) {
-        const oldPos = val.hosts[prevNum];
-        const newPos = val.hosts[newNum];
+    state.forEach((tabVal) => {
+      if (tabVal.name === tabBarName) {
+        const oldPos = tabVal.hosts[prevInd];
+        const newPos = tabVal.hosts[newInd];
         const newHosts: HostModel[] = [];
-        val.hosts.forEach((hostVal) => {
+        tabVal.hosts.forEach((hostVal) => {
           switch (hostVal) {
             case oldPos: {
+              console.log('new pos is');
+              console.log(newPos);
               newHosts.push(newPos);
               break;
             }
             case newPos: {
+              console.log('old pos is');
+              console.log(oldPos);
               newHosts.push(oldPos);
               break;
             }
             default: {
-              newHosts.push(val);
+              newHosts.push(hostVal);
               break;
             }
           }
         });
-        newState.push(new TabModel(tabName, newHosts));
+        newState.push(new TabModel(tabBarName, newHosts));
       } else {
-        newState.push(val);
+        newState.push(tabVal);
       }
     });
     return newState;

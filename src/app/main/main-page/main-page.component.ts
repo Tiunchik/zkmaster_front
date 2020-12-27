@@ -59,6 +59,7 @@ export class MainPageComponent implements OnDestroy, OnInit {
     this.store
       .select(selectCurrentTab)
       .subscribe((obsCurr) => this.currentTab = obsCurr);
+    this.createCurrentTab();
   }
 
   ngOnDestroy(): void {
@@ -74,12 +75,14 @@ export class MainPageComponent implements OnDestroy, OnInit {
     dialogResult.afterClosed()
       .pipe(takeUntil(this.destroy$))
       .subscribe((host: HostModel) => {
+        console.log('host');
+        console.log(host);
         if (host && host.name.length === 0) {
           host.name = host.address;
         }
         if (host && host.address.length > 5) {
-          this.createTabBar();
-          console.log(`Current tab os ${this.currentTab}`);
+
+          console.log(`Current tab is ${this.currentTab}`);
           const tabModel = new TabModel(this.currentTab, [host]);
           this.store.dispatch(ADD_TAB({model: tabModel}));
         }
@@ -116,9 +119,9 @@ export class MainPageComponent implements OnDestroy, OnInit {
     return randomStr;
   }
 
-  createTabBar(): void {
-    if (this.currentTab === ''
-      || this.currentTab == null
+  createCurrentTab(): void {
+    if (this.currentTab === null
+      || this.currentTab === ''
       || this.currentTab === 'undefined') {
       if (this.tabs.length === 0) {
         this.store.dispatch(SET_CURRENT_TAB({name: this.generateTabUniqueId()}));

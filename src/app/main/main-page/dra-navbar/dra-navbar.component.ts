@@ -37,11 +37,11 @@ export class DraNavbarComponent implements OnInit {
     const next: HostModel[] = event.container.data;
     if (event.previousContainer === event.container && event.previousIndex !== event.currentIndex) {
       this.store.dispatch(CHANGE_POSITION({
-        tabName: current[0].tabName,
-        prevNum: event.previousIndex,
-        newNum: event.currentIndex
+        tabBarName: current[0].tabName,
+        prevInd: event.previousIndex,
+        newInd: event.currentIndex
       }));
-    } else {
+    } else if (event.previousContainer !== event.container) {
       transferArrayItem(event.previousContainer.data,
         event.container.data,
         event.previousIndex,
