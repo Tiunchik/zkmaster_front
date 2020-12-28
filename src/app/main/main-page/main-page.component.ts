@@ -34,7 +34,7 @@ export class MainPageComponent implements OnDestroy, OnInit {
   currentHost: ExpHostModel;
   split: string;
 
-  dragAndDrop = false;
+  columns = false;
 
   @HostListener('window:keypress', ['$event']) onPress(event: KeyboardEvent): void {
     if (event.key === 'a') {
@@ -57,7 +57,10 @@ export class MainPageComponent implements OnDestroy, OnInit {
     this.store.dispatch(LOAD_SETTINGS());
     this.store
       .select(selectTabs)
-      .subscribe((obsTabs) => this.tabs = obsTabs);
+      .subscribe((obsTabs) => {
+        this.tabs = obsTabs;
+        this.columns = obsTabs.length > 1;
+      });
     this.store
       .select(selectCurrentTab)
       .subscribe((obsCurr) => this.currentTab = obsCurr);
@@ -101,7 +104,7 @@ export class MainPageComponent implements OnDestroy, OnInit {
         .filter((elem) => elem.name === this.currentHost.host.tabName)
         .shift();
       if (getCurTab.hosts.length > 1) {
-        this.dragAndDrop = true;
+        this.columns = true;
         this.split = this.generateTabUniqueId();
         this.store.dispatch(ADD_TAB({model: new TabModel(this.split, [])}));
         this.store.dispatch(SPLIT_TAB({
@@ -111,7 +114,7 @@ export class MainPageComponent implements OnDestroy, OnInit {
         }));
       }
     } else if (this.tabs.length > 1) {
-      this.dragAndDrop = false;
+      this.columns = false;
       this.store.dispatch(REMOVE_TAB({name: this.split}));
       this.split = null;
     }

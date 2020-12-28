@@ -27,7 +27,7 @@
   </button>
 </mat-menu>
 
-<main class="main" [ngClass]="{'main-columns': dragAndDrop}"  cdkDropListGroup>
+<main class="main" [ngClass]="{'main-columns': columns}" cdkDropListGroup>
   <app-dra-navbar [name]="tab.name" *ngFor="let tab of tabs"
                   (click)="setCurrentTabBar(tab.name)"
                   (emitter)="setCurrentHost($event)"></app-dra-navbar>

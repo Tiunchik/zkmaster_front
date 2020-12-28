@@ -33,29 +33,33 @@ export const tabsReducer = createReducer(TABS,
     return newState;
   }),
   on(SPLIT_TAB, (state: TabModel[], {oldTabBarName, newTabBarName, prevInd}) => {
-    const newState: TabModel[] = [];
-    let hosts: HostModel = null;
-    state.forEach((tabVal) => {
-      if (tabVal.name === oldTabBarName) {
-        const oldHosts = [...tabVal.hosts];
-        hosts = new HostModel(oldHosts[prevInd].name, oldHosts[prevInd].address, oldHosts[prevInd].tabName);
-        console.log('host is - ');
-        console.log(hosts);
-        oldHosts.splice(prevInd, 1);
-        const nwTb = new TabModel(tabVal.name, [...oldHosts]);
-        newState.push(nwTb);
-      } else {
-        newState.push(tabVal);
-      }
-    });
-    newState.forEach((tabVal, index) => {
-      if (tabVal.name === newTabBarName) {
-        const newHosts = [];
-        newHosts.push(new HostModel(hosts.name, hosts.address, newTabBarName));
-        newState.splice(index, 1, new TabModel(newTabBarName, [...newHosts]));
-      }
-    });
-    return newState;
+      const midState: TabModel[] = [];
+      const finishState: TabModel[] = [];
+      let hosts: HostModel = null;
+      state.forEach((tabVal) => {
+        if (tabVal.name === oldTabBarName) {
+          const oldHosts = [...tabVal.hosts];
+          hosts = new HostModel(oldHosts[prevInd].name, oldHosts[prevInd].address, oldHosts[prevInd].tabName);
+          oldHosts.splice(prevInd, 1);
+          const nwTb = new TabModel(tabVal.name, [...oldHosts]);
+          midState.push(nwTb);
+        } else {
+          midState.push(tabVal);
+        }
+      });
+      midState.forEach((tabVal, index) => {
+        if (tabVal.name === newTabBarName) {
+          const newHosts = [];
+          newHosts.push(new HostModel(hosts.name, hosts.address, newTabBarName));
+          midState.splice(index, 1, new TabModel(newTabBarName, [...newHosts]));
+        }
+      });
+      midState.forEach((tabVal) => {
+        if (tabVal.hosts.length > 0) {
+          finishState.push(tabVal);
+        }
+      });
+      return finishState;
     }
   ),
   on(REMOVE_TAB, (state: TabModel[], {name}) => {
@@ -99,7 +103,8 @@ export const tabsReducer = createReducer(TABS,
   }),
   on(TRANSFER_TABBAR, (state: TabModel[],
                        {oldTabBarName, newTabBarName, prevInd, newInd}) => {
-    const newState: TabModel[] = [];
+    const midState: TabModel[] = [];
+    const finishState: TabModel[] = [];
     let hosts: HostModel = null;
     state.forEach((tabVal) => {
       if (tabVal.name === oldTabBarName) {
@@ -107,19 +112,24 @@ export const tabsReducer = createReducer(TABS,
         hosts = new HostModel(oldHosts[prevInd].name, oldHosts[prevInd].address, oldHosts[prevInd].tabName);
         oldHosts.splice(prevInd, 1);
         const nwTb = new TabModel(tabVal.name, [...oldHosts]);
-        newState.push(nwTb);
+        midState.push(nwTb);
       } else {
-        newState.push(tabVal);
+        midState.push(tabVal);
       }
     });
-    newState.forEach((tabVal, index) => {
+    midState.forEach((tabVal, index) => {
       if (tabVal.name === newTabBarName) {
         const newHosts = [...tabVal.hosts];
         newHosts.splice(newInd, 0, new HostModel(hosts.name, hosts.address, newTabBarName));
-        newState.splice(index, 1, new TabModel(newTabBarName, [...newHosts]));
+        midState.splice(index, 1, new TabModel(newTabBarName, [...newHosts]));
       }
     });
-    return newState;
+    midState.forEach((tabVal) => {
+      if (tabVal.hosts.length > 0) {
+        finishState.push(tabVal);
+      }
+    });
+    return finishState;
   })
 );
 
