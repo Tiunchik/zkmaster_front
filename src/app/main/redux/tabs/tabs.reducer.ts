@@ -1,6 +1,6 @@
 import {createReducer, on} from '@ngrx/store';
 import {TabModel} from '../../shared/domains/tab.model';
-import {ADD_TAB, CHANGE_POSITION, GET_ALL_TABS, REMOVE_TAB} from './tabs.actions';
+import {ADD_TAB, MOVE_TABBAR, GET_ALL_TABS, REMOVE_TAB, TRANSFER_TABBAR} from './tabs.actions';
 import {HostModel} from '../../shared/domains/host.model';
 
 
@@ -41,7 +41,7 @@ export const tabsReducer = createReducer(TABS,
     });
     return newState;
   }),
-  on(CHANGE_POSITION, (state: TabModel[], {tabBarName, prevInd, newInd}) => {
+  on(MOVE_TABBAR, (state: TabModel[], {tabBarName, prevInd, newInd}) => {
     const newState: TabModel[] = [];
     state.forEach((tabVal) => {
       if (tabVal.name === tabBarName) {
@@ -51,14 +51,10 @@ export const tabsReducer = createReducer(TABS,
         tabVal.hosts.forEach((hostVal) => {
           switch (hostVal) {
             case oldPos: {
-              console.log('new pos is');
-              console.log(newPos);
               newHosts.push(newPos);
               break;
             }
             case newPos: {
-              console.log('old pos is');
-              console.log(oldPos);
               newHosts.push(oldPos);
               break;
             }
@@ -74,20 +70,33 @@ export const tabsReducer = createReducer(TABS,
       }
     });
     return newState;
+  }),
+  on(TRANSFER_TABBAR, (state: TabModel[],
+                       {oldTabBarName, newTabBarName, prevInd, newInd}) => {
+    const newState: TabModel[] = [];
+    let hosts: HostModel = null;
+    console.log('State is');
+    console.log(state);
+    state.forEach((tabVal) => {
+      if (tabVal.name === oldTabBarName) {
+        const oldHosts = [...tabVal.hosts];
+        hosts = new HostModel(oldHosts[prevInd].name, oldHosts[prevInd].address, oldHosts[prevInd].tabName);
+        oldHosts.splice(prevInd, 1);
+        const nwTb = new TabModel(tabVal.name, [...oldHosts]);
+        newState.push(nwTb);
+      } else {
+        newState.push(tabVal);
+      }
+
+    });
+    newState.forEach((tabVal, index) => {
+      if (tabVal.name === newTabBarName) {
+        const newHosts = [...tabVal.hosts];
+        newHosts.splice(newInd, 0, new HostModel(hosts.name, hosts.address, newTabBarName));
+        newState.splice(index, 1, new TabModel(newTabBarName, [...newHosts]));
+      }
+    });
+    return newState;
   })
 );
 
-// switch(variable_expression) {
-//   case constant_expr1: {
-//     statements;
-//     break;
-//   }
-//   case constant_expr2: {
-//     statements;
-//     break;
-//   }
-//   default: {
-//     statements;
-//     break;
-//   }
-// }

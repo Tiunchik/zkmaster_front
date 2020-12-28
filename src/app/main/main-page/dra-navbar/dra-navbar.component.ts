@@ -4,7 +4,7 @@ import {Store} from '@ngrx/store';
 import {HostModel} from '../../shared/domains/host.model';
 import {TabModel} from '../../shared/domains/tab.model';
 import {selectTabs} from '../../redux/tabs/tabs.selector';
-import {CHANGE_POSITION} from '../../redux/tabs/tabs.actions';
+import {MOVE_TABBAR, TRANSFER_TABBAR} from '../../redux/tabs/tabs.actions';
 
 @Component({
   selector: 'app-dra-navbar',
@@ -36,16 +36,18 @@ export class DraNavbarComponent implements OnInit {
     const current: HostModel[] = event.previousContainer.data;
     const next: HostModel[] = event.container.data;
     if (event.previousContainer === event.container && event.previousIndex !== event.currentIndex) {
-      this.store.dispatch(CHANGE_POSITION({
+      this.store.dispatch(MOVE_TABBAR({
         tabBarName: current[0].tabName,
         prevInd: event.previousIndex,
         newInd: event.currentIndex
       }));
     } else if (event.previousContainer !== event.container) {
-      transferArrayItem(event.previousContainer.data,
-        event.container.data,
-        event.previousIndex,
-        event.currentIndex);
+      this.store.dispatch(TRANSFER_TABBAR({
+        oldTabBarName: current[0].tabName,
+        newTabBarName: next[0].tabName,
+        prevInd: event.previousIndex,
+        newInd: event.currentIndex
+      }));
     }
   }
 
