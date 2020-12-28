@@ -1,10 +1,11 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {CdkDragDrop, moveItemInArray, transferArrayItem} from '@angular/cdk/drag-drop';
 import {Store} from '@ngrx/store';
 import {HostModel} from '../../shared/domains/host.model';
 import {TabModel} from '../../shared/domains/tab.model';
 import {selectTabs} from '../../redux/tabs/tabs.selector';
 import {MOVE_TABBAR, TRANSFER_TABBAR} from '../../redux/tabs/tabs.actions';
+import {ExpHostModel} from '../../shared/domains/expHost.model';
 
 @Component({
   selector: 'app-dra-navbar',
@@ -14,8 +15,11 @@ import {MOVE_TABBAR, TRANSFER_TABBAR} from '../../redux/tabs/tabs.actions';
 export class DraNavbarComponent implements OnInit {
 
   @Input() name: string;
+  @Output() emitter = new EventEmitter<ExpHostModel>();
+
   tab: TabModel;
   currentTree = '';
+
 
   constructor(private store: Store) {
   }
@@ -51,8 +55,8 @@ export class DraNavbarComponent implements OnInit {
     }
   }
 
-  chooseHost(hostName: string): void {
-    console.log('clicked');
-    this.currentTree = hostName;
+  chooseHost(host: HostModel, index: number, hostAddress: string): void {
+    this.currentTree = hostAddress;
+    this.emitter.emit(new ExpHostModel(host, index));
   }
 }

@@ -1,6 +1,6 @@
 import {createReducer, on} from '@ngrx/store';
 import {TabModel} from '../../shared/domains/tab.model';
-import {ADD_TAB, MOVE_TABBAR, GET_ALL_TABS, REMOVE_TAB, TRANSFER_TABBAR} from './tabs.actions';
+import {ADD_TAB, MOVE_TABBAR, GET_ALL_TABS, REMOVE_TAB, TRANSFER_TABBAR, SPLIT_TAB} from './tabs.actions';
 import {HostModel} from '../../shared/domains/host.model';
 
 
@@ -32,6 +32,32 @@ export const tabsReducer = createReducer(TABS,
     }
     return newState;
   }),
+  on(SPLIT_TAB, (state: TabModel[], {oldTabBarName, newTabBarName, prevInd}) => {
+    const newState: TabModel[] = [];
+    let hosts: HostModel = null;
+    state.forEach((tabVal) => {
+      if (tabVal.name === oldTabBarName) {
+        const oldHosts = [...tabVal.hosts];
+        hosts = new HostModel(oldHosts[prevInd].name, oldHosts[prevInd].address, oldHosts[prevInd].tabName);
+        console.log('host is - ');
+        console.log(hosts);
+        oldHosts.splice(prevInd, 1);
+        const nwTb = new TabModel(tabVal.name, [...oldHosts]);
+        newState.push(nwTb);
+      } else {
+        newState.push(tabVal);
+      }
+    });
+    newState.forEach((tabVal, index) => {
+      if (tabVal.name === newTabBarName) {
+        const newHosts = [];
+        newHosts.push(new HostModel(hosts.name, hosts.address, newTabBarName));
+        newState.splice(index, 1, new TabModel(newTabBarName, [...newHosts]));
+      }
+    });
+    return newState;
+    }
+  ),
   on(REMOVE_TAB, (state: TabModel[], {name}) => {
     const newState: TabModel[] = [];
     state.forEach((elem) => {
@@ -75,8 +101,6 @@ export const tabsReducer = createReducer(TABS,
                        {oldTabBarName, newTabBarName, prevInd, newInd}) => {
     const newState: TabModel[] = [];
     let hosts: HostModel = null;
-    console.log('State is');
-    console.log(state);
     state.forEach((tabVal) => {
       if (tabVal.name === oldTabBarName) {
         const oldHosts = [...tabVal.hosts];
@@ -87,7 +111,6 @@ export const tabsReducer = createReducer(TABS,
       } else {
         newState.push(tabVal);
       }
-
     });
     newState.forEach((tabVal, index) => {
       if (tabVal.name === newTabBarName) {

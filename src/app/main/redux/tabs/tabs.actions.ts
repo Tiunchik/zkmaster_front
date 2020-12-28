@@ -8,6 +8,9 @@ export const ADD_TAB = createAction('[ADD TAB]', props<{ model: TabModel }>());
 
 export const REMOVE_TAB = createAction('[REMOVE TAB]', props<{ name: string }>());
 
+export const SPLIT_TAB = createAction('[SPLIT TAB]',
+  props<{ oldTabBarName: string, newTabBarName: string, prevInd: number }>());
+
 export const MOVE_TABBAR = createAction('[CHANGE POSITION]',
   props<{ tabBarName: string, prevInd: number, newInd: number }>());
 

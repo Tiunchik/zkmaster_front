@@ -16,3 +16,5 @@ It's UI for backend server that works with Zookeeper.
 
 сделать ctrl + клавиша HostListener
 переделать апдейт - добавить возможность ренейма
+MOVE_TABBAR переделать через splice
+подумать как при перезагрузке разворачивать дерево как оно уже было развёрнуто

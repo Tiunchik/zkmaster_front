@@ -16,7 +16,8 @@ import {TabModel} from '../shared/domains/tab.model';
 import {selectTabs} from '../redux/tabs/tabs.selector';
 import {selectCurrentTab} from '../redux/currentTab/currentTabs.selector';
 import {SET_CURRENT_TAB} from '../redux/currentTab/currentTabs.actions';
-import {ADD_TAB, REMOVE_TAB} from '../redux/tabs/tabs.actions';
+import {ADD_TAB, REMOVE_TAB, SPLIT_TAB} from '../redux/tabs/tabs.actions';
+import {ExpHostModel} from '../shared/domains/expHost.model';
 
 @Component({
   selector: 'app-main-page',
@@ -30,6 +31,7 @@ export class MainPageComponent implements OnDestroy, OnInit {
     select(selectButtons));
   tabs: TabModel[];
   currentTab: string;
+  currentHost: ExpHostModel;
   split: string;
 
   dragAndDrop = false;
@@ -94,11 +96,22 @@ export class MainPageComponent implements OnDestroy, OnInit {
   }
 
   addTab(): void {
-    this.dragAndDrop = !this.dragAndDrop;
-    if (!this.split) {
-      this.split = this.generateTabUniqueId();
-      this.store.dispatch(ADD_TAB({model: new TabModel(this.split, [])}));
-    } else {
+    if (this.tabs.length === 1 && this.currentHost !== null) {
+      const getCurTab: TabModel = this.tabs
+        .filter((elem) => elem.name === this.currentHost.host.tabName)
+        .shift();
+      if (getCurTab.hosts.length > 1) {
+        this.dragAndDrop = true;
+        this.split = this.generateTabUniqueId();
+        this.store.dispatch(ADD_TAB({model: new TabModel(this.split, [])}));
+        this.store.dispatch(SPLIT_TAB({
+          oldTabBarName: this.currentHost.host.tabName,
+          newTabBarName: this.split,
+          prevInd: this.currentHost.index
+        }));
+      }
+    } else if (this.tabs.length > 1) {
+      this.dragAndDrop = false;
       this.store.dispatch(REMOVE_TAB({name: this.split}));
       this.split = null;
     }
@@ -133,5 +146,9 @@ export class MainPageComponent implements OnDestroy, OnInit {
 
   setCurrentTabBar(tabName: string): void {
     this.store.dispatch(SET_CURRENT_TAB({name: tabName}));
+  }
+
+  setCurrentHost($event: ExpHostModel): void {
+    this.currentHost = $event;
   }
 }
