@@ -1,7 +1,7 @@
 import {Component, HostListener, Inject, OnInit} from '@angular/core';
 import {ZkNodeModel} from '../../shared/domains/zk-node.model';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
-import {FormControl, FormGroup} from '@angular/forms';
+import {FormControl, FormGroup, Validators} from '@angular/forms';
 
 @Component({
   selector: 'app-change-value',
@@ -28,7 +28,7 @@ export class ChangeValueComponent implements OnInit {
       this.zkNode = this.data.oldNode;
     }
     this.form = new FormGroup({
-      name: new FormControl(this.zkNode.name),
+      name: new FormControl(this.zkNode.name, Validators.required),
       value: new FormControl(this.zkNode.value)
     });
   }

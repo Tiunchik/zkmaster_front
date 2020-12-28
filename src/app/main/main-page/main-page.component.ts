@@ -86,8 +86,6 @@ export class MainPageComponent implements OnDestroy, OnInit {
           host.name = host.address;
         }
         if (host && host.address.length > 5) {
-
-          console.log(`Current tab is ${this.currentTab}`);
           const tabModel = new TabModel(this.currentTab, [host]);
           this.store.dispatch(ADD_TAB({model: tabModel}));
         }
