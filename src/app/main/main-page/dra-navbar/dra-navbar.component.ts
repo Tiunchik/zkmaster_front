@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
 import {CdkDragDrop, moveItemInArray, transferArrayItem} from '@angular/cdk/drag-drop';
 import {Store} from '@ngrx/store';
 import {HostModel} from '../../shared/domains/host.model';
@@ -31,10 +31,12 @@ export class DraNavbarComponent implements OnInit {
         inpTab.forEach((val) => {
           if (val.name === this.name) {
             this.tab = val;
+            this.chooseHost(this.tab.chosenOne, this.tab.hosts.indexOf(this.tab.chosenOne));
           }
         });
       });
   }
+
 
   drop(event: CdkDragDrop<HostModel[]>): void {
     const current: HostModel[] = event.previousContainer.data;
@@ -55,8 +57,8 @@ export class DraNavbarComponent implements OnInit {
     }
   }
 
-  chooseHost(host: HostModel, index: number, hostAddress: string): void {
-    this.currentTree = hostAddress;
+  chooseHost(host: HostModel, index: number): void {
+    this.currentTree = host.address;
     this.emitter.emit(new ExpHostModel(host, index));
   }
 }

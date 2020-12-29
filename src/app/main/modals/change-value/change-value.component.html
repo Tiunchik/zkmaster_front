@@ -12,6 +12,6 @@
   </form>
 </mat-dialog-content>
 <mat-dialog-actions align="end">
-  <button mat-button (click)="submit()">{{data ? 'Change' : 'Add'}}</button>
+  <button mat-button (click)="submit()" [disabled]="form.invalid">{{data ? 'Change' : 'Add'}}</button>
   <button mat-button [mat-dialog-close]>Back</button>
 </mat-dialog-actions>

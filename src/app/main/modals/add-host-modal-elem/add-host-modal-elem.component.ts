@@ -34,7 +34,7 @@ export class AddHostModalElemComponent implements OnInit {
         this.currentTab = tabName;
       });
     this.form = new FormGroup({
-      name: new FormControl('local', Validators.required),
+      name: new FormControl(''),
       address: new FormControl('localhost:2181', Validators.required)
     });
   }

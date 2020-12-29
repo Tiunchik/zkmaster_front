@@ -9,16 +9,16 @@
     <mat-form-field class="example-full-width">
       <mat-label><span>Host alias</span></mat-label>
       <input type="text" matInput placeholder="Name" name="host"
-             formControlName="name" cdkFocusInitial>
+             formControlName="name" >
     </mat-form-field>
     <mat-form-field class="example-full-width">
       <mat-label><span>Without http://</span></mat-label>
       <input type="text" matInput placeholder="xxx.xxx.xxx.xxx:port" name="host"
-             formControlName="address">
+             formControlName="address" cdkFocusInitial>
     </mat-form-field>
   </form>
 </mat-dialog-content>
 <mat-dialog-actions>
-  <button mat-button [mat-dialog-close]>Cancel</button>
-  <button class="mat-primary" mat-button (click)="submit()">Create</button>
+  <button [mat-dialog-close] mat-button>Cancel</button>
+  <button (click)="submit()" class="mat-primary" mat-button [disabled]="form.invalid">Create</button>
 </mat-dialog-actions>

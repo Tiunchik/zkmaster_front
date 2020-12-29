@@ -1,7 +1,10 @@
-<div cdkDropList cdkDropListOrientation="horizontal" [cdkDropListData]="tab.hosts" class="example-list"
+<div cdkDropList cdkDropListOrientation="horizontal" [cdkDropListData]="tab.hosts" class="tabbar"
      (cdkDropListDropped)="drop($event)">
-  <div class="example-box" *ngFor="let host of tab.hosts; index as ind" cdkDrag
-       (click)="chooseHost(host, ind, host.address)">{{host.name}}</div>
+  <div class="tab" *ngFor="let host of tab.hosts; index as ind"
+       cdkDrag
+       [class.chosen]="currentTree === host.address"
+       (click)="chooseHost(host, ind)"
+  >{{host.name}}</div>
 </div>
 <app-tree-elem *ngIf="currentTree.length > 0" [loadHost]="currentTree"></app-tree-elem>
 

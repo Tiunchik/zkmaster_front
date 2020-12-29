@@ -80,8 +80,6 @@ export class MainPageComponent implements OnDestroy, OnInit {
     dialogResult.afterClosed()
       .pipe(takeUntil(this.destroy$))
       .subscribe((host: HostModel) => {
-        console.log('host');
-        console.log(host);
         if (host && host.name.length === 0) {
           host.name = host.address;
         }
