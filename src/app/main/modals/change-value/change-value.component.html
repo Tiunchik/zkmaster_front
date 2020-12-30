@@ -1,17 +1,30 @@
-<h1 mat-dialog-title>{{data ? 'Change Node Value' : 'Create Node'}}</h1>
+<h1 mat-dialog-title
+    class="unselectable">{{data.action ? 'Change Node' : 'Create Node'}}</h1>
 <mat-dialog-content class="mat-typography">
-  <form class="example-form" [formGroup]="form">
-    <mat-form-field class="example-full-width">
+  <form class="form area-width" [formGroup]="form">
+    <p>Node Path:</p>
+    <p style="font-weight: bold;">{{path()}}/<span style="color: darkred;">{{form.value.name}}</span></p>
+    <mat-divider></mat-divider>
+    <br>
+    <mat-form-field class="full-width area-width">
       <mat-label><span>Name</span></mat-label>
-      <input type="text" matInput placeholder="name" name="host" cdkFocusInitial formControlName="name">
+      <input matInput
+             placeholder="name"
+             formControlName="name"
+             cdkFocusInitial>
     </mat-form-field>
-    <mat-form-field class="example-full-width">
+    <br>
+    <mat-form-field class="full-width area-width area-height">
       <mat-label><span>Value</span></mat-label>
-      <input type="text" matInput placeholder="value" name="host" formControlName="value">
+      <textarea matInput
+                class="area-height"
+                placeholder="value"
+                formControlName="value"></textarea>
     </mat-form-field>
   </form>
 </mat-dialog-content>
 <mat-dialog-actions align="end">
-  <button mat-button (click)="submit()" [disabled]="form.invalid">{{data ? 'Change' : 'Add'}}</button>
+  <button mat-button (click)="submit()"
+          [disabled]="disabled()">{{data.action ? 'Change' : 'Add'}}</button>
   <button mat-button [mat-dialog-close]>Back</button>
 </mat-dialog-actions>

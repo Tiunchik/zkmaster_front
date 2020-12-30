@@ -11,6 +11,7 @@ import {FormControl, FormGroup, Validators} from '@angular/forms';
 export class ChangeValueComponent implements OnInit {
 
   form: FormGroup;
+  action = false;
   zkNode: ZkNodeModel = new ZkNodeModel('', '', '');
 
   @HostListener('window:keypress', ['$event']) onPress(event: KeyboardEvent): void {
@@ -19,21 +20,40 @@ export class ChangeValueComponent implements OnInit {
     }
   }
 
-  constructor(@Inject(MAT_DIALOG_DATA) public data: { oldNode: ZkNodeModel },
+  constructor(@Inject(MAT_DIALOG_DATA) public data: { oldNode: ZkNodeModel, action: string },
               public dialogRef: MatDialogRef<ChangeValueComponent>) {
   }
 
   ngOnInit(): void {
-    if (this.data) {
+    this.zkNode.path = this.data.oldNode.path;
+    if (this.data.action) {
       this.zkNode = this.data.oldNode;
     }
+    this.initForm();
+  }
+
+  initForm(): void {
     this.form = new FormGroup({
       name: new FormControl(this.zkNode.name, Validators.required),
       value: new FormControl(this.zkNode.value)
     });
   }
 
+  path(): string {
+    return this.action ? this.zkNode.path.substring(0, this.zkNode.path.lastIndexOf('/')) : this.zkNode.path;
+  }
+
+  disabled(): boolean {
+    const update = this.data.action === 'update' ?
+      (this.form.value.name !== this.zkNode.name || this.form.value.value !== this.zkNode.value) :
+      true;
+    return !(!this.form.invalid && update);
+  }
+
   submit(): void {
+    console.log(this.zkNode);
+    console.log('form');
+    console.log(this.form.value);
     this.dialogRef.close({...this.form.value});
   }
 }

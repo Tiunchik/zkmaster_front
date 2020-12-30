@@ -24,7 +24,7 @@ import {ExpHostModel} from '../shared/domains/expHost.model';
   templateUrl: './main-page.component.html',
   styleUrls: ['./main-page.component.scss']
 })
-export class MainPageComponent implements OnDestroy, OnInit {
+export class MainPageComponent implements OnInit, OnDestroy {
 
   destroy$ = new Subject();
   buttons$: Observable<MenuButtonModel[]> = this.store.pipe(takeUntil(this.destroy$),
@@ -36,14 +36,14 @@ export class MainPageComponent implements OnDestroy, OnInit {
 
   columns = false;
 
-  @HostListener('window:keypress', ['$event']) onPress(event: KeyboardEvent): void {
-    if (event.key === 'a') {
+  @HostListener('window:keyup', ['$event']) onPress(event: KeyboardEvent): void {
+    if (event.key === 'a' && event.altKey) {
       this.openModalAddHost();
     }
-    if (event.key === 'o') {
+    if (event.key === 'o' && event.altKey) {
       this.openSettings();
     }
-    if (event.key === 's') {
+    if (event.key === 's' && event.altKey) {
       this.addTab();
     }
   }
@@ -67,13 +67,11 @@ export class MainPageComponent implements OnDestroy, OnInit {
     this.createCurrentTab();
   }
 
+
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
   }
-
-  // TODO: сделать верную цепочку observable - pipeline
-  // TODO: сделать отдельный метод для валидации, либо вытащить сюда ФормМодуль ?
 
   openModalAddHost(): void {
     const dialogResult = this.modal.open(AddHostModalElemComponent);
@@ -112,6 +110,7 @@ export class MainPageComponent implements OnDestroy, OnInit {
     } else if (this.tabs.length > 1) {
       this.columns = false;
       this.store.dispatch(REMOVE_TAB({name: this.split}));
+
       this.split = null;
     }
   }

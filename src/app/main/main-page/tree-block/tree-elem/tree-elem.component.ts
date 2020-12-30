@@ -89,7 +89,11 @@ export class TreeElemComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   addChildren(parent: ZkNodeModel): void {
-    const dialogResult = this.modal.open(ChangeValueComponent, {data: null});
+    const dialogResult = this.modal.open(ChangeValueComponent,
+      {
+        data:
+          {oldNode: parent, action: null}
+      });
     dialogResult.afterClosed()
       .pipe(takeUntil(this.subject$))
       .subscribe((data: ZkNodeModel) => {
@@ -107,7 +111,9 @@ export class TreeElemComponent implements OnInit, OnChanges, OnDestroy {
   updateValue(node: ZkNodeModel): void {
     const dialogResult = this.modal.open(ChangeValueComponent, {
       data:
-        {oldNode: node},
+        {
+          oldNode: node, action: 'update'
+        },
     });
     dialogResult.afterClosed()
       .pipe(takeUntil(this.subject$))

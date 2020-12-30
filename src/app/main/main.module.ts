@@ -27,6 +27,8 @@ import {currentTabsReducer} from './redux/currentTab/currentTabs.reducer';
 import {tabsReducer} from './redux/tabs/tabs.reducer';
 import {hostReducer} from './redux/host/host.reducer';
 import {treeReducer} from './redux/zktrees/zktree.reducer';
+import {MatCardModule} from '@angular/material/card';
+import {MatDividerModule} from '@angular/material/divider';
 
 
 @NgModule({
@@ -61,7 +63,9 @@ import {treeReducer} from './redux/zktrees/zktree.reducer';
       hosts: hostReducer,
       trees: treeReducer
     }),
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    MatCardModule,
+    MatDividerModule
   ]
 })
 export class MainModule {

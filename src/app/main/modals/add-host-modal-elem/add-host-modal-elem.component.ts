@@ -42,6 +42,9 @@ export class AddHostModalElemComponent implements OnInit {
   submit(): void {
     if (this.currentTab !== '' && this.currentTab !== null) {
       const host: HostModel = new HostModel(this.form.value.name, this.form.value.address, this.currentTab);
+      if (!host.address.match('^.*:[0-9]{4}$')) {
+        host.address = host.address + ':2181';
+      }
       this.dialogRef.close({...host});
     } else {
       this.dialogRef.close();
