@@ -18,6 +18,10 @@ import {selectCurrentTab} from '../redux/currentTab/currentTabs.selector';
 import {SET_CURRENT_TAB} from '../redux/currentTab/currentTabs.actions';
 import {ADD_TAB, REMOVE_TAB, SPLIT_TAB} from '../redux/tabs/tabs.actions';
 import {ExpHostModel} from '../shared/domains/expHost.model';
+import {selectHosts} from '../redux/bookmarks/host.selector';
+import {GET_BOOKMARKS_FROM_STORAGE} from '../redux/bookmarks/host.actions';
+
+const bookmarks: MenuButtonModel = {name: 'Bookmarks', icon: 'playlist_add', toolbar: true, functionName: '', title: 'ALT+B'};
 
 @Component({
   selector: 'app-main-page',
@@ -26,9 +30,12 @@ import {ExpHostModel} from '../shared/domains/expHost.model';
 })
 export class MainPageComponent implements OnInit, OnDestroy {
 
+  bookmarks: MenuButtonModel = {name: 'Bookmarks', icon: 'bookmark_border', toolbar: true, functionName: '', title: 'ALT+B'};
   destroy$ = new Subject();
   buttons$: Observable<MenuButtonModel[]> = this.store.pipe(takeUntil(this.destroy$),
     select(selectButtons));
+  bookmarks$: Observable<HostModel[]> = this.store.pipe(takeUntil(this.destroy$),
+    select(selectHosts));
   tabs: TabModel[];
   currentTab: string;
   currentHost: ExpHostModel;
@@ -55,6 +62,7 @@ export class MainPageComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.store.dispatch(LOAD_SETTINGS());
+    this.store.dispatch(GET_BOOKMARKS_FROM_STORAGE());
     this.store
       .select(selectTabs)
       .subscribe((obsTabs) => {
@@ -78,14 +86,18 @@ export class MainPageComponent implements OnInit, OnDestroy {
     dialogResult.afterClosed()
       .pipe(takeUntil(this.destroy$))
       .subscribe((host: HostModel) => {
-        if (host && host.name.length === 0) {
-          host.name = host.address;
-        }
-        if (host && host.address.length > 5) {
-          const tabModel = new TabModel(this.currentTab, [host]);
-          this.store.dispatch(ADD_TAB({model: tabModel}));
-        }
+        this.addHostToTabbar(host);
       });
+  }
+
+  addHostToTabbar(host: HostModel): void {
+    if (host && host.name.length === 0) {
+      host.name = host.address;
+    }
+    if (host && host.address.length > 5) {
+      const tabModel = new TabModel(this.currentTab, [host]);
+      this.store.dispatch(ADD_TAB({model: tabModel}));
+    }
   }
 
   openSettings(): void {

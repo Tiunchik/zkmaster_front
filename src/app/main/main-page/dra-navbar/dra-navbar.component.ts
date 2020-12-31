@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild} from '@angular/core';
 import {CdkDragDrop, moveItemInArray, transferArrayItem} from '@angular/cdk/drag-drop';
 import {Store} from '@ngrx/store';
 import {HostModel} from '../../shared/domains/host.model';
@@ -6,6 +6,8 @@ import {TabModel} from '../../shared/domains/tab.model';
 import {selectTabs} from '../../redux/tabs/tabs.selector';
 import {MOVE_TABBAR, TRANSFER_TABBAR} from '../../redux/tabs/tabs.actions';
 import {ExpHostModel} from '../../shared/domains/expHost.model';
+import {MatMenuTrigger} from '@angular/material/menu';
+import {ADD_BOOKMARK} from '../../redux/bookmarks/host.actions';
 
 @Component({
   selector: 'app-dra-navbar',
@@ -16,6 +18,9 @@ export class DraNavbarComponent implements OnInit {
 
   @Input() name: string;
   @Output() emitter = new EventEmitter<ExpHostModel>();
+
+  @ViewChild(MatMenuTrigger, {static: false}) tabMenu: MatMenuTrigger;
+  tabMenuPosition = {x: '0px', y: '0px'};
 
   tab: TabModel;
   currentTree = '';
@@ -60,5 +65,18 @@ export class DraNavbarComponent implements OnInit {
   chooseHost(host: HostModel, index: number): void {
     this.currentTree = host.address;
     this.emitter.emit(new ExpHostModel(host, index));
+  }
+
+  tabMenuAction(event: MouseEvent, host: HostModel): void {
+    event.preventDefault();
+    this.tabMenuPosition.x = event.clientX + 'px';
+    this.tabMenuPosition.y = event.clientY + 'px';
+    this.tabMenu.menuData = {host};
+    this.tabMenu.menu.focusFirstItem('mouse');
+    this.tabMenu.openMenu();
+  }
+
+  addToBookmarks(host: HostModel): void {
+    this.store.dispatch(ADD_BOOKMARK({model: host}));
   }
 }

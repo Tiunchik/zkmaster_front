@@ -2,12 +2,22 @@
      (cdkDropListDropped)="drop($event)">
   <div class="tab" *ngFor="let host of tab.hosts; index as ind"
        cdkDrag
+       title="Right click - context menu"
        [class.chosen]="currentTree === host.address"
        (click)="chooseHost(host, ind)"
+       (contextmenu)="tabMenuAction($event, host)"
   >{{host.name}}</div>
 </div>
 <app-tree-elem *ngIf="currentTree.length > 0" [loadHost]="currentTree"></app-tree-elem>
 
-
-
+<div style="visibility: hidden; position: fixed"
+     [style.left]="tabMenuPosition.x"
+     [style.top]="tabMenuPosition.y"
+     [matMenuTriggerFor]="tabMenu">
+</div>
+<mat-menu #tabMenu="matMenu">
+  <ng-template matMenuContent let-host="host">
+    <button mat-menu-item (click)="addToBookmarks(host)">Add to Bookmarks</button>
+  </ng-template>
+</mat-menu>
 

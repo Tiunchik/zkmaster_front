@@ -15,6 +15,7 @@ import {MatDialog} from '@angular/material/dialog';
 import {ChangeValueComponent} from '../../../modals/change-value/change-value.component';
 import {ApproveComponent} from '../../../modals/approve/approve.component';
 import {SessionStorageService} from '../../../shared/services/session-storage.service';
+import {HostModel} from '../../../shared/domains/host.model';
 
 @Component({
   selector: 'app-tree-elem',
@@ -34,6 +35,7 @@ export class TreeElemComponent implements OnInit, OnChanges, OnDestroy {
 
   @ViewChild(MatMenuTrigger, {static: false}) contextMenu: MatMenuTrigger;
   contextMenuPosition = {x: '0px', y: '0px'};
+
 
   constructor(private http: CrudService,
               private modal: MatDialog,
@@ -79,6 +81,8 @@ export class TreeElemComponent implements OnInit, OnChanges, OnDestroy {
     this.contextMenu.openMenu();
   }
 
+
+
   getAll(): void {
     this.http.getAll(this.host)
       .pipe(takeUntil(this.subject$))
@@ -88,7 +92,7 @@ export class TreeElemComponent implements OnInit, OnChanges, OnDestroy {
       });
   }
 
-  addChildren(parent: ZkNodeModel): void {
+  addNode(parent: ZkNodeModel): void {
     const dialogResult = this.modal.open(ChangeValueComponent,
       {
         data:
@@ -108,7 +112,7 @@ export class TreeElemComponent implements OnInit, OnChanges, OnDestroy {
   }
 
 
-  updateValue(node: ZkNodeModel): void {
+  updateNode(node: ZkNodeModel): void {
     const dialogResult = this.modal.open(ChangeValueComponent, {
       data:
         {
@@ -129,7 +133,7 @@ export class TreeElemComponent implements OnInit, OnChanges, OnDestroy {
   }
 
 
-  deleteValue(item: ZkNodeModel): void {
+  deleteNode(item: ZkNodeModel): void {
     const dialogResult = this.modal.open(ApproveComponent);
     dialogResult.afterClosed()
       .pipe(takeUntil(this.subject$))
@@ -146,5 +150,7 @@ export class TreeElemComponent implements OnInit, OnChanges, OnDestroy {
   saveNodeState(node: ZkNodeModel, b: boolean): void {
     this.sessionStore.saveItem(this.host, node.path, !b);
   }
+
+
 }
 

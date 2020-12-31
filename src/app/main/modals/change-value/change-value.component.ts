@@ -11,7 +11,6 @@ import {FormControl, FormGroup, Validators} from '@angular/forms';
 export class ChangeValueComponent implements OnInit {
 
   form: FormGroup;
-  action = false;
   zkNode: ZkNodeModel = new ZkNodeModel('', '', '');
 
   @HostListener('window:keypress', ['$event']) onPress(event: KeyboardEvent): void {
@@ -40,7 +39,7 @@ export class ChangeValueComponent implements OnInit {
   }
 
   path(): string {
-    return this.action ? this.zkNode.path.substring(0, this.zkNode.path.lastIndexOf('/')) : this.zkNode.path;
+    return this.data.action ? this.zkNode.path.substring(0, this.zkNode.path.lastIndexOf('/')) : this.zkNode.path;
   }
 
   disabled(): boolean {
@@ -51,9 +50,6 @@ export class ChangeValueComponent implements OnInit {
   }
 
   submit(): void {
-    console.log(this.zkNode);
-    console.log('form');
-    console.log(this.form.value);
     this.dialogRef.close({...this.form.value});
   }
 }

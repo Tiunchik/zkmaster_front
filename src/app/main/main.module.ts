@@ -25,7 +25,7 @@ import {ApproveComponent} from './modals/approve/approve.component';
 import {buttonsReducer} from './redux/menu/buttons.reducer';
 import {currentTabsReducer} from './redux/currentTab/currentTabs.reducer';
 import {tabsReducer} from './redux/tabs/tabs.reducer';
-import {hostReducer} from './redux/host/host.reducer';
+import {hostReducer} from './redux/bookmarks/host.reducer';
 import {treeReducer} from './redux/zktrees/zktree.reducer';
 import {MatCardModule} from '@angular/material/card';
 import {MatDividerModule} from '@angular/material/divider';

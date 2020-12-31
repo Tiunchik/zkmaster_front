@@ -211,3 +211,5 @@ export const ZKNODES_EXPML: ZkNodeModel = {
 };
 
 export const SETTINGS_NAME = 'options';
+
+export const BOOKMARK = 'bookmarks';

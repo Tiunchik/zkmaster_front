@@ -44,8 +44,9 @@
 </div>
 <mat-menu #contextMenu="matMenu">
   <ng-template matMenuContent let-node="node">
-    <button mat-menu-item (click)="addChildren(node)">Add Children</button>
-    <button mat-menu-item (click)="updateValue(node)">Update value</button>
-    <button mat-menu-item (click)="deleteValue(node)">Delete value</button>
+    <button mat-menu-item (click)="addNode(node)">Add Node</button>
+    <button mat-menu-item (click)="updateNode(node)">Update Node</button>
+    <button mat-menu-item (click)="deleteNode(node)">Delete Node</button>
   </ng-template>
 </mat-menu>
+
