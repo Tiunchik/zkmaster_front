@@ -14,7 +14,6 @@ It's UI for backend server that works with Zookeeper.
  
 ## TODO
 
-закладки сохранение хостов на панели ZK
 сделать кнопку закрытия табы + кнопку обновления табы
 сделать верную цепочку observable - pipeline
 сделать кнопку import/export txt файла

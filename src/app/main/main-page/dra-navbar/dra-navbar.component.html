@@ -5,8 +5,16 @@
        title="Right click - context menu"
        [class.chosen]="currentTree === host.address"
        (click)="chooseHost(host, ind)"
-       (contextmenu)="tabMenuAction($event, host)"
-  >{{host.name}}</div>
+       (contextmenu)="tabMenuAction($event, host)">
+    <div class="tab-text">
+      {{host.name}}
+    </div>
+    <div class="tab-close"
+          >
+      Х
+    </div>
+
+  </div>
 </div>
 <app-tree-elem *ngIf="currentTree.length > 0" [loadHost]="currentTree"></app-tree-elem>
 

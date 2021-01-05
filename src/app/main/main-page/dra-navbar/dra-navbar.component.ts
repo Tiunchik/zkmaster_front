@@ -67,6 +67,8 @@ export class DraNavbarComponent implements OnInit {
     this.emitter.emit(new ExpHostModel(host, index));
   }
 
+
+
   tabMenuAction(event: MouseEvent, host: HostModel): void {
     event.preventDefault();
     this.tabMenuPosition.x = event.clientX + 'px';
