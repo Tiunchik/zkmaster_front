@@ -1,6 +1,6 @@
 import {createReducer, on} from '@ngrx/store';
 import {TabModel} from '../../shared/domains/tab.model';
-import {ADD_TAB, MOVE_TABBAR, GET_ALL_TABS, REMOVE_TAB, TRANSFER_TABBAR, SPLIT_TAB} from './tabs.actions';
+import {ADD_TAB, MOVE_TABBAR, GET_ALL_TABS, REMOVE_TABBAR, TRANSFER_TABBAR, SPLIT_TAB, REMOVE_TAB} from './tabs.actions';
 import {HostModel} from '../../shared/domains/host.model';
 import {Host} from '@angular/core';
 
@@ -39,7 +39,21 @@ export const tabsReducer = createReducer(TABS,
       return deleteEmptyTabBars(newState);
     }
   ),
-  on(REMOVE_TAB, (state: TabModel[], {name}) => {
+  on(REMOVE_TAB, (state: TabModel[], {model, index}) => {
+    const newState: TabModel[] = [];
+    state.forEach((elem) => {
+      if (elem.name === model.tabName) {
+        if (elem.hosts.length > 1) {
+          const newHosts = [...elem.hosts].splice(index, 1);
+          newState.push(new TabModel(elem.name, newHosts, newHosts[0]));
+        }
+      } else {
+        newState.push(elem);
+      }
+    });
+    return deleteEmptyTabBars(newState);
+  }),
+  on(REMOVE_TABBAR, (state: TabModel[], {name}) => {
     const newState: TabModel[] = [];
     let savedTabs: HostModel[] = [];
     const newTabs: HostModel[] = [];

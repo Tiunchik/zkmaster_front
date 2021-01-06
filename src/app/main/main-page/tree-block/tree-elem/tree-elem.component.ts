@@ -36,7 +36,6 @@ export class TreeElemComponent implements OnInit, OnChanges, OnDestroy {
   @ViewChild(MatMenuTrigger, {static: false}) contextMenu: MatMenuTrigger;
   contextMenuPosition = {x: '0px', y: '0px'};
 
-
   constructor(private http: CrudService,
               private modal: MatDialog,
               private sessionStore: SessionStorageService,
@@ -80,7 +79,6 @@ export class TreeElemComponent implements OnInit, OnChanges, OnDestroy {
     this.contextMenu.menu.focusFirstItem('mouse');
     this.contextMenu.openMenu();
   }
-
 
 
   getAll(): void {

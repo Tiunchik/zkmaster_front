@@ -16,7 +16,7 @@ import {TabModel} from '../shared/domains/tab.model';
 import {selectTabs} from '../redux/tabs/tabs.selector';
 import {selectCurrentTab} from '../redux/currentTab/currentTabs.selector';
 import {SET_CURRENT_TAB} from '../redux/currentTab/currentTabs.actions';
-import {ADD_TAB, REMOVE_TAB, SPLIT_TAB} from '../redux/tabs/tabs.actions';
+import {ADD_TAB, REMOVE_TABBAR, SPLIT_TAB} from '../redux/tabs/tabs.actions';
 import {ExpHostModel} from '../shared/domains/expHost.model';
 import {selectHosts} from '../redux/bookmarks/host.selector';
 import {GET_BOOKMARKS_FROM_STORAGE} from '../redux/bookmarks/host.actions';
@@ -121,7 +121,7 @@ export class MainPageComponent implements OnInit, OnDestroy {
       }
     } else if (this.tabs.length > 1) {
       this.columns = false;
-      this.store.dispatch(REMOVE_TAB({name: this.split}));
+      this.store.dispatch(REMOVE_TABBAR({name: this.split}));
 
       this.split = null;
     }

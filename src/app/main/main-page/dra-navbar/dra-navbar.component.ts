@@ -4,7 +4,7 @@ import {Store} from '@ngrx/store';
 import {HostModel} from '../../shared/domains/host.model';
 import {TabModel} from '../../shared/domains/tab.model';
 import {selectTabs} from '../../redux/tabs/tabs.selector';
-import {MOVE_TABBAR, TRANSFER_TABBAR} from '../../redux/tabs/tabs.actions';
+import {MOVE_TABBAR, REMOVE_TAB, TRANSFER_TABBAR} from '../../redux/tabs/tabs.actions';
 import {ExpHostModel} from '../../shared/domains/expHost.model';
 import {MatMenuTrigger} from '@angular/material/menu';
 import {ADD_BOOKMARK} from '../../redux/bookmarks/host.actions';
@@ -42,7 +42,6 @@ export class DraNavbarComponent implements OnInit {
       });
   }
 
-
   drop(event: CdkDragDrop<HostModel[]>): void {
     const current: HostModel[] = event.previousContainer.data;
     const next: HostModel[] = event.container.data;
@@ -67,13 +66,11 @@ export class DraNavbarComponent implements OnInit {
     this.emitter.emit(new ExpHostModel(host, index));
   }
 
-
-
-  tabMenuAction(event: MouseEvent, host: HostModel): void {
+  tabMenuAction(event: MouseEvent, host: HostModel, ind: number): void {
     event.preventDefault();
     this.tabMenuPosition.x = event.clientX + 'px';
     this.tabMenuPosition.y = event.clientY + 'px';
-    this.tabMenu.menuData = {host};
+    this.tabMenu.menuData = {host, ind};
     this.tabMenu.menu.focusFirstItem('mouse');
     this.tabMenu.openMenu();
   }
@@ -81,4 +78,10 @@ export class DraNavbarComponent implements OnInit {
   addToBookmarks(host: HostModel): void {
     this.store.dispatch(ADD_BOOKMARK({model: host}));
   }
+
+  closeTab(host: HostModel, ind: number): void {
+    this.store.dispatch(REMOVE_TAB({model: host, index: ind}));
+  }
+
+
 }
