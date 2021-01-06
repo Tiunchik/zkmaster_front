@@ -15,6 +15,7 @@ import {MatDialog} from '@angular/material/dialog';
 import {ChangeValueComponent} from '../../../modals/change-value/change-value.component';
 import {ApproveComponent} from '../../../modals/approve/approve.component';
 import {SessionStorageService} from '../../../shared/services/session-storage.service';
+import {TxtFileModalComponent} from '../../../modals/txt-file-modal/txt-file-modal.component';
 
 @Component({
   selector: 'app-tree-elem',
@@ -142,6 +143,14 @@ export class TreeElemComponent implements OnInit, OnChanges, OnDestroy {
             .subscribe(() => this.getAll());
         }
       });
+  }
+
+  txtExport(node: ZkNodeModel): void {
+
+  }
+
+  txtImport(node: ZkNodeModel): void {
+    const dialogResult = this.modal.open(TxtFileModalComponent);
   }
 
   saveNodeState(node: ZkNodeModel, b: boolean): void {

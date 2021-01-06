@@ -1,0 +1,14 @@
+<h1 mat-dialog-title>Create connection to Zookeeper</h1>
+<mat-dialog-content class="mat-typography">
+  <form class="example-form" [formGroup]="form">
+    <div class="example-full-width">
+      <label><span>Without http://</span></label>
+      <input type="file" name="file"
+             formControlName="file" cdkFocusInitial>
+    </div>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button [mat-dialog-close] mat-button>Cancel</button>
+  <button  (click)="log()" class="mat-primary" mat-button>Create</button>
+</mat-dialog-actions>

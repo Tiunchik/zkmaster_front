@@ -21,8 +21,6 @@ import {ExpHostModel} from '../shared/domains/expHost.model';
 import {selectHosts} from '../redux/bookmarks/host.selector';
 import {GET_BOOKMARKS_FROM_STORAGE} from '../redux/bookmarks/host.actions';
 
-const bookmarks: MenuButtonModel = {name: 'Bookmarks', icon: 'playlist_add', toolbar: true, functionName: '', title: 'ALT+B'};
-
 @Component({
   selector: 'app-main-page',
   templateUrl: './main-page.component.html',
@@ -44,13 +42,13 @@ export class MainPageComponent implements OnInit, OnDestroy {
   columns = false;
 
   @HostListener('window:keyup', ['$event']) onPress(event: KeyboardEvent): void {
-    if (event.key === 'a' && event.altKey) {
+    if ((event.key === 'a' || event.key === 'ф') && event.altKey) {
       this.openModalAddHost();
     }
-    if (event.key === 'o' && event.altKey) {
+    if ((event.key === 'o' || event.key === 'щ') && event.altKey) {
       this.openSettings();
     }
-    if (event.key === 's' && event.altKey) {
+    if ((event.key === 's' || event.key === 'ы') && event.altKey) {
       this.addTab();
     }
   }
@@ -74,7 +72,6 @@ export class MainPageComponent implements OnInit, OnDestroy {
       .subscribe((obsCurr) => this.currentTab = obsCurr);
     this.createCurrentTab();
   }
-
 
   ngOnDestroy(): void {
     this.destroy$.next();
@@ -122,7 +119,6 @@ export class MainPageComponent implements OnInit, OnDestroy {
     } else if (this.tabs.length > 1) {
       this.columns = false;
       this.store.dispatch(REMOVE_TABBAR({name: this.split}));
-
       this.split = null;
     }
   }

@@ -29,6 +29,7 @@ import {hostReducer} from './redux/bookmarks/host.reducer';
 import {treeReducer} from './redux/zktrees/zktree.reducer';
 import {MatCardModule} from '@angular/material/card';
 import {MatDividerModule} from '@angular/material/divider';
+import { TxtFileModalComponent } from './modals/txt-file-modal/txt-file-modal.component';
 
 
 @NgModule({
@@ -40,7 +41,8 @@ import {MatDividerModule} from '@angular/material/divider';
     DivBlockComponent,
     DisplaySettingsComponent,
     ChangeValueComponent,
-    ApproveComponent],
+    ApproveComponent,
+    TxtFileModalComponent],
   imports: [
     CommonModule,
     MainRoutingModule,

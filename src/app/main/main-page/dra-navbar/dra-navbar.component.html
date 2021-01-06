@@ -17,7 +17,6 @@
     <div class="tab-close" (click)="closeTab(host, ind)">
       <mat-icon>close</mat-icon>
     </div>
-
   </div>
 </div>
 <app-tree-elem *ngIf="currentTree.length > 0" [loadHost]="currentTree"></app-tree-elem>
@@ -29,7 +28,8 @@
 </div>
 <mat-menu #tabMenu="matMenu">
   <ng-template matMenuContent let-host="host" let-ind="index">
-    <button mat-menu-item (click)="addToBookmarks(host)">Add to Bookmarks</button>
+    <button mat-menu-item (click)="addToBookmarks(host)">Add to bookmarks</button>
+    <button mat-menu-item (click)="refreshTab(host)">Refresh tab</button>
     <button mat-menu-item (click)="closeTab(host, ind)">Close tab</button>
   </ng-template>
 </mat-menu>
