@@ -16,7 +16,7 @@
   border-right: solid 1px #ccc;
   border-left: solid 1px #ccc;
   border-top: solid 1px #ccc;
-  max-width: 10rem;
+  max-width: 13rem;
   max-height: 2.5rem;
   color: rgba(0, 0, 0, 0.87);
   display: flex;
@@ -33,10 +33,20 @@
 
 .tab-text {
   text-align: center;
-  width: 9rem;
+  max-width: 10rem;
+  width: 10rem;
+  overflow-x: hidden;
+}
+
+.tab-gap {
+  max-width: 1rem;
+  width: 1rem;
 }
 
 .tab-close {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   text-align: center;
   width: 1rem;
 }

@@ -6,11 +6,16 @@
        [class.chosen]="currentTree === host.address"
        (click)="chooseHost(host, ind)"
        (contextmenu)="tabMenuAction($event, host, ind)">
+    <div class="tab-gap"></div>
     <div class="tab-text">
-      {{host.name}}
+      {{host.name | uppercase}}
+    </div>
+    <div class="tab-gap"></div>
+    <div class="tab-close" (click)="refreshTab(host)">
+      <mat-icon>refresh</mat-icon>
     </div>
     <div class="tab-close" (click)="closeTab(host, ind)">
-      Х
+      <mat-icon>close</mat-icon>
     </div>
 
   </div>

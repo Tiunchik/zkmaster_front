@@ -15,7 +15,6 @@ import {MatDialog} from '@angular/material/dialog';
 import {ChangeValueComponent} from '../../../modals/change-value/change-value.component';
 import {ApproveComponent} from '../../../modals/approve/approve.component';
 import {SessionStorageService} from '../../../shared/services/session-storage.service';
-import {HostModel} from '../../../shared/domains/host.model';
 
 @Component({
   selector: 'app-tree-elem',

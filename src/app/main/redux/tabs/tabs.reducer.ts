@@ -1,8 +1,7 @@
 import {createReducer, on} from '@ngrx/store';
 import {TabModel} from '../../shared/domains/tab.model';
-import {ADD_TAB, MOVE_TABBAR, GET_ALL_TABS, REMOVE_TABBAR, TRANSFER_TABBAR, SPLIT_TAB, REMOVE_TAB} from './tabs.actions';
+import {ADD_TAB, GET_ALL_TABS, MOVE_TABBAR, REMOVE_TAB, REMOVE_TABBAR, SPLIT_TAB, TRANSFER_TABBAR} from './tabs.actions';
 import {HostModel} from '../../shared/domains/host.model';
-import {Host} from '@angular/core';
 
 
 export const TABS: TabModel[] = [];
@@ -44,7 +43,8 @@ export const tabsReducer = createReducer(TABS,
     state.forEach((elem) => {
       if (elem.name === model.tabName) {
         if (elem.hosts.length > 1) {
-          const newHosts = [...elem.hosts].splice(index, 1);
+          const newHosts = [...elem.hosts];
+          newHosts.splice(index, 1);
           newState.push(new TabModel(elem.name, newHosts, newHosts[0]));
         }
       } else {

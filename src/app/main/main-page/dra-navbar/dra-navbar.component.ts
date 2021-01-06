@@ -1,5 +1,5 @@
 import {Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild} from '@angular/core';
-import {CdkDragDrop, moveItemInArray, transferArrayItem} from '@angular/cdk/drag-drop';
+import {CdkDragDrop} from '@angular/cdk/drag-drop';
 import {Store} from '@ngrx/store';
 import {HostModel} from '../../shared/domains/host.model';
 import {TabModel} from '../../shared/domains/tab.model';
@@ -8,13 +8,18 @@ import {MOVE_TABBAR, REMOVE_TAB, TRANSFER_TABBAR} from '../../redux/tabs/tabs.ac
 import {ExpHostModel} from '../../shared/domains/expHost.model';
 import {MatMenuTrigger} from '@angular/material/menu';
 import {ADD_BOOKMARK} from '../../redux/bookmarks/host.actions';
+import {takeUntil} from 'rxjs/operators';
+import {TreeModel} from '../../shared/domains/tree.model';
+import {ADD_TREE} from '../../redux/zktrees/zktree.actions';
+import {CrudService} from '../../shared/services/crud.service';
+import {Subject} from 'rxjs';
 
 @Component({
   selector: 'app-dra-navbar',
   templateUrl: './dra-navbar.component.html',
   styleUrls: ['./dra-navbar.component.scss']
 })
-export class DraNavbarComponent implements OnInit {
+export class DraNavbarComponent implements OnInit, OnDestroy {
 
   @Input() name: string;
   @Output() emitter = new EventEmitter<ExpHostModel>();
@@ -22,11 +27,13 @@ export class DraNavbarComponent implements OnInit {
   @ViewChild(MatMenuTrigger, {static: false}) tabMenu: MatMenuTrigger;
   tabMenuPosition = {x: '0px', y: '0px'};
 
+  subject$ = new Subject();
+
   tab: TabModel;
   currentTree = '';
 
-
-  constructor(private store: Store) {
+  constructor(private store: Store,
+              private http: CrudService) {
   }
 
   ngOnInit(): void {
@@ -40,6 +47,11 @@ export class DraNavbarComponent implements OnInit {
           }
         });
       });
+  }
+
+  ngOnDestroy(): void {
+    this.subject$.next();
+    this.subject$.complete();
   }
 
   drop(event: CdkDragDrop<HostModel[]>): void {
@@ -77,6 +89,15 @@ export class DraNavbarComponent implements OnInit {
 
   addToBookmarks(host: HostModel): void {
     this.store.dispatch(ADD_BOOKMARK({model: host}));
+  }
+
+  refreshTab(host: HostModel): void {
+    this.http.getAll(host.address)
+      .pipe(takeUntil(this.subject$))
+      .subscribe((data) => {
+        const tree: TreeModel = new TreeModel(host.address, data);
+        this.store.dispatch(ADD_TREE({tree}));
+      });
   }
 
   closeTab(host: HostModel, ind: number): void {
