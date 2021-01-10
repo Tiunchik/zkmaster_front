@@ -213,3 +213,9 @@ export const ZKNODES_EXPML: ZkNodeModel = {
 export const SETTINGS_NAME = 'options';
 
 export const BOOKMARK = 'bookmarks';
+
+export const BackEnd = 'http://localhost:8081';
+
+export const Rest = '/api/zkm/data/';
+
+export const Transform = '/api/zkm/transform/';

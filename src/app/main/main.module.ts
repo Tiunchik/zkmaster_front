@@ -1,5 +1,5 @@
 import {NgModule} from '@angular/core';
-import {CommonModule} from '@angular/common';
+import {CommonModule, HashLocationStrategy, Location, LocationStrategy, PathLocationStrategy} from '@angular/common';
 import {StoreModule} from '@ngrx/store';
 
 import {MainRoutingModule} from './main-routing.module';
@@ -68,6 +68,9 @@ import { TxtFileModalComponent } from './modals/txt-file-modal/txt-file-modal.co
     ReactiveFormsModule,
     MatCardModule,
     MatDividerModule
+  ],
+  providers: [
+    Location, {provide: LocationStrategy, useClass: PathLocationStrategy}
   ]
 })
 export class MainModule {

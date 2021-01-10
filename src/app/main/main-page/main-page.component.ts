@@ -92,7 +92,8 @@ export class MainPageComponent implements OnInit, OnDestroy {
       host.name = host.address;
     }
     if (host && host.address.length > 5) {
-      const tabModel = new TabModel(this.currentTab, [host]);
+      const stabHost = new HostModel(host.name, host.address, this.currentTab);
+      const tabModel = new TabModel(this.currentTab, [stabHost]);
       this.store.dispatch(ADD_TAB({model: tabModel}));
     }
   }
