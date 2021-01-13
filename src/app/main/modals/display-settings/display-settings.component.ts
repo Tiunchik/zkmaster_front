@@ -5,7 +5,11 @@ import {Store} from '@ngrx/store';
 import {HIDE_TOOLBAR_BUTTON, SHOW_TOOLBAR_BUTTON} from '../../redux/menu/buttons.actions';
 import {Subject} from 'rxjs';
 import {selectButtons} from '../../redux/menu/buttons.selectors';
-import {takeUntil} from 'rxjs/operators';
+import {map, takeUntil} from 'rxjs/operators';
+import {selectBookmarks} from '../../redux/bookmarks/host.selector';
+import {Bookmark} from '../../shared/domains/bookmarks.model';
+import {REMOVE_BOOKMARK} from '../../redux/bookmarks/host.actions';
+
 
 @Component({
   selector: 'app-display-settings',
@@ -15,7 +19,9 @@ import {takeUntil} from 'rxjs/operators';
 export class DisplaySettingsComponent implements OnInit, OnDestroy {
 
   innerSettings: MenuButtonModel[];
+  bookmarks: Bookmark [];
   subject$ = new Subject();
+  delete = 'delete';
 
   constructor(private store: Store) {
   }
@@ -24,6 +30,14 @@ export class DisplaySettingsComponent implements OnInit, OnDestroy {
     this.store.select(selectButtons)
       .pipe(takeUntil(this.subject$))
       .subscribe(data => this.innerSettings = data);
+    this.store.select(selectBookmarks)
+      .pipe(takeUntil(this.subject$),
+        map((data) => {
+          const bookmarks: Bookmark[] = [];
+          data.forEach((elem) => bookmarks.push({host: elem, button: false}));
+          return bookmarks;
+        }))
+      .subscribe(data => this.bookmarks = data);
   }
 
   ngOnDestroy(): void {
@@ -44,4 +58,7 @@ export class DisplaySettingsComponent implements OnInit, OnDestroy {
     }
   }
 
+  deleteBookmark(index: number): void {
+    this.store.dispatch(REMOVE_BOOKMARK({index}));
+  }
 }

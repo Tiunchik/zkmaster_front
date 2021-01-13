@@ -7,7 +7,7 @@ import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
 import {MatMenuTrigger} from '@angular/material/menu';
 import {RequestDto} from '../../../shared/domains/request.dto';
-import {Store} from '@ngrx/store';
+import {select, Store} from '@ngrx/store';
 import {selectTrees} from '../../../redux/zktrees/zktree.selector';
 import {TreeModel} from '../../../shared/domains/tree.model';
 import {ADD_TREE} from '../../../redux/zktrees/zktree.actions';
@@ -16,6 +16,9 @@ import {ChangeValueComponent} from '../../../modals/change-value/change-value.co
 import {ApproveComponent} from '../../../modals/approve/approve.component';
 import {SessionStorageService} from '../../../shared/services/session-storage.service';
 import {TxtFileModalComponent} from '../../../modals/txt-file-modal/txt-file-modal.component';
+import {ADD_CLIPBOARD} from '../../../redux/copy-past/copy-past.actions';
+import {copyPastData} from '../../../redux/copy-past/copy-past.selector';
+import {CopyPastModalComponent} from '../../../modals/copy-past-modal/copy-past-modal.component';
 
 @Component({
   selector: 'app-tree-elem',
@@ -32,6 +35,7 @@ export class TreeElemComponent implements OnInit, OnChanges, OnDestroy {
   host = '';
   treeControl = new NestedTreeControl<ZkNodeModel>(node => node.children);
   dataSource = new MatTreeNestedDataSource<ZkNodeModel>();
+  copiedZkNode: ZkNodeModel = null;
 
   @ViewChild(MatMenuTrigger, {static: false}) contextMenu: MatMenuTrigger;
   contextMenuPosition = {x: '0px', y: '0px'};
@@ -57,6 +61,11 @@ export class TreeElemComponent implements OnInit, OnChanges, OnDestroy {
             }
           }
         });
+      });
+    this.store.select(copyPastData)
+      .pipe(takeUntil(this.subject$))
+      .subscribe((data) => {
+        this.copiedZkNode = data;
       });
   }
 
@@ -153,10 +162,24 @@ export class TreeElemComponent implements OnInit, OnChanges, OnDestroy {
     const dialogResult = this.modal.open(TxtFileModalComponent);
   }
 
+
   saveNodeState(node: ZkNodeModel, b: boolean): void {
     this.sessionStore.saveItem(this.host, node.path, !b);
   }
 
 
+  copyNode(zkNode: ZkNodeModel): void {
+    this.store.dispatch(ADD_CLIPBOARD({node: zkNode}));
+  }
+
+  pastNode(zkNode: ZkNodeModel): void {
+    const dialogResult = this.modal.open(CopyPastModalComponent,
+      {
+        data: {
+          copiedNode: this.copiedZkNode,
+          newFatherNode: zkNode
+        }
+      });
+  }
 }
 

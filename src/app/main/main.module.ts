@@ -29,7 +29,10 @@ import {hostReducer} from './redux/bookmarks/host.reducer';
 import {treeReducer} from './redux/zktrees/zktree.reducer';
 import {MatCardModule} from '@angular/material/card';
 import {MatDividerModule} from '@angular/material/divider';
-import { TxtFileModalComponent } from './modals/txt-file-modal/txt-file-modal.component';
+import {TxtFileModalComponent} from './modals/txt-file-modal/txt-file-modal.component';
+import {copyPastReducer} from './redux/copy-past/copy-past.reducer';
+import { CopyPastModalComponent } from './modals/copy-past-modal/copy-past-modal.component';
+import { SimpleTreeComponent } from './modals/copy-past-modal/simple-tree/simple-tree.component';
 
 
 @NgModule({
@@ -42,7 +45,10 @@ import { TxtFileModalComponent } from './modals/txt-file-modal/txt-file-modal.co
     DisplaySettingsComponent,
     ChangeValueComponent,
     ApproveComponent,
-    TxtFileModalComponent],
+    TxtFileModalComponent,
+    CopyPastModalComponent,
+    SimpleTreeComponent
+  ],
   imports: [
     CommonModule,
     MainRoutingModule,
@@ -63,7 +69,8 @@ import { TxtFileModalComponent } from './modals/txt-file-modal/txt-file-modal.co
       currentTab: currentTabsReducer,
       tabs: tabsReducer,
       hosts: hostReducer,
-      trees: treeReducer
+      trees: treeReducer,
+      copyPast: copyPastReducer
     }),
     ReactiveFormsModule,
     MatCardModule,

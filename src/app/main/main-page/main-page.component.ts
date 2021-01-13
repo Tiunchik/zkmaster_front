@@ -18,7 +18,7 @@ import {selectCurrentTab} from '../redux/currentTab/currentTabs.selector';
 import {SET_CURRENT_TAB} from '../redux/currentTab/currentTabs.actions';
 import {ADD_TAB, REMOVE_TABBAR, SPLIT_TAB} from '../redux/tabs/tabs.actions';
 import {ExpHostModel} from '../shared/domains/expHost.model';
-import {selectHosts} from '../redux/bookmarks/host.selector';
+import {selectBookmarks} from '../redux/bookmarks/host.selector';
 import {GET_BOOKMARKS_FROM_STORAGE} from '../redux/bookmarks/host.actions';
 
 @Component({
@@ -33,7 +33,7 @@ export class MainPageComponent implements OnInit, OnDestroy {
   buttons$: Observable<MenuButtonModel[]> = this.store.pipe(takeUntil(this.destroy$),
     select(selectButtons));
   bookmarks$: Observable<HostModel[]> = this.store.pipe(takeUntil(this.destroy$),
-    select(selectHosts));
+    select(selectBookmarks));
   tabs: TabModel[];
   currentTab: string;
   currentHost: ExpHostModel;

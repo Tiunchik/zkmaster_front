@@ -1,7 +1,6 @@
 import {createReducer, on} from '@ngrx/store';
 import {TreeModel} from '../../shared/domains/tree.model';
 import {ADD_TREE} from './zktree.actions';
-import {HostModel} from '../../shared/domains/host.model';
 
 export const initialState: TreeModel[] = [];
 

@@ -20,12 +20,23 @@ export const hostReducer = createReducer(BOOKMARKS,
     return newState.length > state.length ? newState : state;
   }),
   on(ADD_BOOKMARK, (state: HostModel[], {model}) => {
-    const newState = [...state, model];
+    let newState = [...state];
+    const findRepeat = state.filter((elem) => elem.address === model.address);
+    if (findRepeat.length > 0) {
+      const index = state.indexOf(findRepeat.shift());
+      newState.splice(index, 1, model);
+    } else {
+      newState = [...state, model];
+    }
+    console.log(newState);
     localStorage.setItem(BOOKMARK, JSON.stringify(newState));
     return newState;
   }),
-  on(REMOVE_BOOKMARK, (state: HostModel[], {model}) => {
-    return state.filter((elem) => elem.name !== model.name && elem.address !== model.address);
+  on(REMOVE_BOOKMARK, (state: HostModel[], {index}) => {
+    const newState = [...state];
+    newState.splice(index, 1);
+    localStorage.setItem(BOOKMARK, JSON.stringify(newState));
+    return newState;
   })
 );
 
