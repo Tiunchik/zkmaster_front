@@ -16,7 +16,6 @@ export class SimpleTreeComponent implements OnInit {
   @Input() zkNode: ZkNodeModel;
   @Input() accessCheckerList: ZkNodeModel[];
   @Output() checkerEvent = new EventEmitter<ZkEmitModel>();
-  checkerList: ZkNodeModel[];
   treeControl = new NestedTreeControl<ZkNodeModel>(node => node.children);
   dataSource = new MatTreeNestedDataSource<ZkNodeModel>();
 
@@ -25,17 +24,12 @@ export class SimpleTreeComponent implements OnInit {
 
   ngOnInit(): void {
     this.dataSource.data = [this.zkNode];
-    this.checkerList = [...this.accessCheckerList];
   }
 
   hasChild = (_: number, node: ZkNodeModel) => !!node.children && node.children.length > 0;
 
   testAccess(node: ZkNodeModel): boolean {
     return this.accessCheckerList.filter((el) => el.path === node.path).length === 0;
-  }
-
-  testChecker(node: ZkNodeModel): boolean {
-    return this.checkerList.filter((el) => el.path === node.path).length > 0;
   }
 
   changeChecker($event: MatCheckboxChange, zkNode: ZkNodeModel): void {

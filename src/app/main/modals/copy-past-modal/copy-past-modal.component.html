@@ -1,7 +1,7 @@
 <h1 mat-dialog-title>Copy-Past Options</h1>
 <mat-dialog-content class="mat-typography main" *ngIf="unitedTreeModel">
   <app-simple-tree [zkNode]="unitedTreeModel"
-                   [accessCheckerList]="isCopy"
+                   [accessCheckerList]="fullList"
   (checkerEvent)="changeUnitedTree($event)"></app-simple-tree>
 </mat-dialog-content>
 <mat-dialog-actions>

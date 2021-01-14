@@ -22,6 +22,8 @@ export class CopyPastModalComponent implements OnInit {
   isCopy: ZkNodeModel[] = [];
   newValue: ZkNodeModel[] = [];
 
+  fullList: ZkNodeModel[] = [];
+
   constructor(@Inject(MAT_DIALOG_DATA) public data: { copiedNode: ZkNodeModel, newFatherNode: ZkNodeModel },
               public dialogRef: MatDialogRef<CopyPastModalComponent>) {
   }
@@ -50,38 +52,6 @@ export class CopyPastModalComponent implements OnInit {
     this.copiedNode = this.preparePaths(this.copiedNode, this.copiedNodePath.length, this.newFatherNode.path);
     this.copiedNodeList = this.makeList(this.copiedNode);
     this.newFatherNodeList = this.makeList(this.newFatherNode);
-  }
-
-  prepareUnitedTree(): void {
-    this.unitedTreeModel = {...this.deepRecursionCopy(this.newFatherNode)};
-    const unitedListForCheck: ZkNodeModel[] = [this.unitedTreeModel];
-    let currentNode: ZkNodeModel;
-    while (unitedListForCheck.length !== 0) {
-      currentNode = unitedListForCheck.shift();
-      currentNode.children.forEach((elem) => unitedListForCheck.push(elem));
-      const newChildrens = this.copiedNodeList.filter((elem) => {
-        const fatherPath = elem.path.substring(0, elem.path.length - (elem.name.length + 1));
-        return currentNode.path === fatherPath;
-      });
-      newChildrens.forEach((newChild) => {
-        let check = true;
-        currentNode.children.forEach((child) => {
-          if (child.path === newChild.path) {
-            this.isCopy.push(child);
-            check = false;
-            if (child.value !== newChild.value) {
-              this.newValue.push(child);
-              child.value = newChild.value;
-            }
-          }
-        });
-        if (check) {
-          this.isCopy.push(newChild);
-          currentNode.children.push(newChild);
-        }
-      });
-    }
-
   }
 
   deepRecursionCopy(zkNode: ZkNodeModel): ZkNodeModel {
@@ -118,7 +88,63 @@ export class CopyPastModalComponent implements OnInit {
     return answerList;
   }
 
-  changeUnitedTree($event: ZkEmitModel): void {
-    console.log($event);
+  prepareUnitedTree(): void {
+    this.unitedTreeModel = {...this.deepRecursionCopy(this.newFatherNode)};
+    const unitedListForCheck: ZkNodeModel[] = [this.unitedTreeModel];
+    let currentNode: ZkNodeModel;
+    while (unitedListForCheck.length !== 0) {
+      currentNode = unitedListForCheck.shift();
+      currentNode.children.forEach((elem) => unitedListForCheck.push(elem));
+      const newChildrens = this.copiedNodeList.filter((elem) => {
+        const fatherPath = elem.path.substring(0, elem.path.length - (elem.name.length + 1));
+        return currentNode.path === fatherPath;
+      });
+      newChildrens.forEach((newChild) => {
+        let check = true;
+        currentNode.children.forEach((child) => {
+          if (child.path === newChild.path) {
+            check = false;
+            if (child.value !== newChild.value) {
+              this.newValue.push(child);
+              child.value = newChild.value;
+            }
+
+          }
+        });
+        if (check) {
+          this.isCopy.push(newChild);
+          currentNode.children.push(newChild);
+        }
+      });
+    }
+    this.fullList = [...this.isCopy, ...this.newValue];
+    this.unitedTreeModelList = this.makeList(this.unitedTreeModel);
+  }
+
+  changeUnitedTree(event: ZkEmitModel): void {
+    let add = true;
+    if (this.newValue.filter((elem) => event.node.path === elem.path).length !== 0) {
+      add = false;
+      let newValue: string;
+      if (event.status) {
+        newValue = this.copiedNodeList.filter((elem) => event.node.path === elem.path).shift().value;
+      } else {
+        newValue = this.newFatherNodeList.filter((elem) => event.node.path === elem.path).shift().value;
+      }
+      this.unitedTreeModelList.filter((elem) => event.node.path === elem.path).shift().value = newValue;
+    }
+    if (event.status && add) {
+      if (this.isCopy.filter((elem) => event.node.path === elem.path).length === 0) {
+        this.isCopy.push(event.node);
+      }
+    } else if (add) {
+      this.isCopy.forEach((elem, index) => {
+        if (event.node.path === elem.path) {
+          this.isCopy.splice(index, 1);
+          return;
+        }
+      });
+    }
+    console.log(this.isCopy);
   }
 }

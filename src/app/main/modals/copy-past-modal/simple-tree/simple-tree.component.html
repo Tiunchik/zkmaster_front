@@ -10,7 +10,9 @@
       {{node.name}}{{node.value ? ' : ' + node.value : ''}}
       </span>
       </section>
-      <mat-checkbox [disabled]="testAccess(node)" [checked]="testChecker(node)" (change)="changeChecker($event, node)"></mat-checkbox>
+      <mat-checkbox [disabled]="testAccess(node)"
+                    [checked]="!testAccess(node)"
+                    (change)="changeChecker($event, node)"></mat-checkbox>
     </li>
   </mat-tree-node>
   <!-- This is the tree node template for expandable nodes -->
@@ -20,14 +22,16 @@
         <section>
           <button mat-icon-button>
             <mat-icon class="mat-icon-rtl-mirror">
-              {{treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right'}}
+              {{'expand_more'}}
             </mat-icon>
           </button>
           <span>
          {{node.name}}{{node.value ? ' : ' + node.value : ''}}
        </span>
         </section>
-        <mat-checkbox [disabled]="testAccess(node)" [checked]="testChecker(node)"></mat-checkbox>
+        <mat-checkbox [disabled]="testAccess(node)"
+                      [checked]="!testAccess(node)"
+                      (change)="changeChecker($event, node)"></mat-checkbox>
       </div>
       <ul>
         <ng-container matTreeNodeOutlet></ng-container>
