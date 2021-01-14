@@ -6,8 +6,9 @@
       <!-- use a disabled button to provide padding for tree leaf -->
       <button mat-icon-button
               (contextmenu)="contextMenuAction($event, node)"
-      ></button>
-      <span (contextmenu)="contextMenuAction($event, node)">
+              (dblclick)="updateNode(node)"></button>
+      <span (contextmenu)="contextMenuAction($event, node)"
+            (dblclick)="updateNode(node)">
       {{node.name}}{{node.value ? ' : ' + node.value : ''}}
       </span>
     </li>
@@ -25,7 +26,8 @@
             {{treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right'}}
           </mat-icon>
         </button>
-        <span (contextmenu)="contextMenuAction($event, node)">
+        <span (contextmenu)="contextMenuAction($event, node)"
+              (dblclick)="updateNode(node)">
          {{node.name}}{{node.value ? ' : ' + node.value : ''}}
        </span>
       </div>

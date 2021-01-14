@@ -21,10 +21,14 @@ ul {
 
 // регулирует отступ сверху снизу
 .mat-tree-node, .mat-nested-tree-node {
-  min-height: 20px;
-  max-height: 20px;
+  min-height: 25px;
+  max-height: 25px;
 }
 
 .underline {
   text-decoration-line: underline;
+}
+
+.flex-checkbox {
+  justify-content: space-between;
 }

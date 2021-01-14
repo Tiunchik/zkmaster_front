@@ -1,8 +1,10 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, OnInit, Output} from '@angular/core';
 import {NestedTreeControl} from '@angular/cdk/tree';
 import {ZkNodeModel} from '../../../shared/domains/zk-node.model';
 import {MatTreeNestedDataSource} from '@angular/material/tree';
-import {UnitedModel} from '../../../shared/domains/united.model';
+import {MatCheckboxChange} from '@angular/material/checkbox';
+import {ZkEmitModel} from '../../../shared/domains/zk-emit.model';
+import { EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'app-simple-tree',
@@ -11,16 +13,32 @@ import {UnitedModel} from '../../../shared/domains/united.model';
 })
 export class SimpleTreeComponent implements OnInit {
 
-  @Input() zkNode: UnitedModel;
-  treeControl = new NestedTreeControl<UnitedModel>(node => node.children);
-  dataSource = new MatTreeNestedDataSource<UnitedModel>();
+  @Input() zkNode: ZkNodeModel;
+  @Input() accessCheckerList: ZkNodeModel[];
+  @Output() checkerEvent = new EventEmitter<ZkEmitModel>();
+  checkerList: ZkNodeModel[];
+  treeControl = new NestedTreeControl<ZkNodeModel>(node => node.children);
+  dataSource = new MatTreeNestedDataSource<ZkNodeModel>();
 
   constructor() {
   }
 
   ngOnInit(): void {
     this.dataSource.data = [this.zkNode];
+    this.checkerList = [...this.accessCheckerList];
   }
 
-  hasChild = (_: number, node: UnitedModel) => !!node.children && node.children.length > 0;
+  hasChild = (_: number, node: ZkNodeModel) => !!node.children && node.children.length > 0;
+
+  testAccess(node: ZkNodeModel): boolean {
+    return this.accessCheckerList.filter((el) => el.path === node.path).length === 0;
+  }
+
+  testChecker(node: ZkNodeModel): boolean {
+    return this.checkerList.filter((el) => el.path === node.path).length > 0;
+  }
+
+  changeChecker($event: MatCheckboxChange, zkNode: ZkNodeModel): void {
+    this.checkerEvent.emit({node: zkNode, status: $event.checked});
+  }
 }
