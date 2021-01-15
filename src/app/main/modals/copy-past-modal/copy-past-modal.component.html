@@ -1,10 +1,11 @@
 <h1 mat-dialog-title>Copy-Past Options</h1>
 <mat-dialog-content class="mat-typography main" *ngIf="unitedTreeModel">
   <app-simple-tree [zkNode]="unitedTreeModel"
-                   [accessCheckerList]="fullList"
+                   [updateList]="updateNode"
+                   [addList]="addNode"
   (checkerEvent)="changeUnitedTree($event)"></app-simple-tree>
 </mat-dialog-content>
-<mat-dialog-actions>
+<mat-dialog-actions align="end">
   <button [mat-dialog-close] mat-button>Cancel</button>
-  <button [mat-dialog-close] mat-button>Do It</button>
+  <button [mat-dialog-close] mat-button (click)="submit()">Do It</button>
 </mat-dialog-actions>

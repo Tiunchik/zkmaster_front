@@ -4,7 +4,7 @@ import {MatTreeNestedDataSource} from '@angular/material/tree';
 import {ZkNodeModel} from '../../../shared/domains/zk-node.model';
 import {CrudService} from '../../../shared/services/crud.service';
 import {Subject} from 'rxjs';
-import {takeUntil} from 'rxjs/operators';
+import {finalize, takeUntil} from 'rxjs/operators';
 import {MatMenuTrigger} from '@angular/material/menu';
 import {RequestDto} from '../../../shared/domains/request.dto';
 import {select, Store} from '@ngrx/store';
@@ -19,6 +19,8 @@ import {TxtFileModalComponent} from '../../../modals/txt-file-modal/txt-file-mod
 import {ADD_CLIPBOARD} from '../../../redux/copy-past/copy-past.actions';
 import {copyPastData} from '../../../redux/copy-past/copy-past.selector';
 import {CopyPastModalComponent} from '../../../modals/copy-past-modal/copy-past-modal.component';
+import {CpDTOModel} from '../../../shared/domains/cpDTO.model';
+import {SeriousMethodsService} from '../../../shared/services/seriousMethodsService';
 
 @Component({
   selector: 'app-tree-elem',
@@ -41,6 +43,7 @@ export class TreeElemComponent implements OnInit, OnChanges, OnDestroy {
   contextMenuPosition = {x: '0px', y: '0px'};
 
   constructor(private http: CrudService,
+              private serious: SeriousMethodsService,
               private modal: MatDialog,
               private sessionStore: SessionStorageService,
               private store: Store
@@ -179,6 +182,15 @@ export class TreeElemComponent implements OnInit, OnChanges, OnDestroy {
           copiedNode: this.copiedZkNode,
           newFatherNode: zkNode
         }
+      });
+    dialogResult.afterClosed()
+      .pipe(takeUntil(this.subject$))
+      .subscribe((data: CpDTOModel) => {
+        data.host = this.host;
+        this.serious.sendCopyPast(data)
+          .pipe(takeUntil(this.subject$),
+            finalize(() => this.getAll()))
+          .subscribe();
       });
   }
 }

@@ -1,10 +1,10 @@
 import {HttpClient} from '@angular/common/http';
-import {RequestDto} from '../domains/request.dto';
-import {Observable} from 'rxjs';
-import {BackEnd, Transform} from '../constants/constants';
+import {BackEnd, Injection} from '../constants/constants';
 import {LocationStrategy} from '@angular/common';
+import {CpDTOModel} from '../domains/cpDTO.model';
+import {Observable} from 'rxjs';
 
-export class TransferService {
+export class SeriousMethodsService {
 
   backEnd: string;
 
@@ -16,10 +16,9 @@ export class TransferService {
     }
   }
 
-  public getCommands(dto: RequestDto): Observable<string[]> {
-    return this.http.get<string[]>(`${this.backEnd}${Transform}${dto.host}`);
+  public sendCopyPast(dto: CpDTOModel): Observable<void> {
+    return this.http.post<void>(`${this.backEnd}${Injection}`, dto);
   }
-
 
 
 }

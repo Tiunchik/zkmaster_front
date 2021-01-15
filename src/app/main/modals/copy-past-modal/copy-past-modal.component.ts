@@ -2,6 +2,7 @@ import {Component, Inject, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {ZkNodeModel} from '../../shared/domains/zk-node.model';
 import {ZkEmitModel} from '../../shared/domains/zk-emit.model';
+import {CpDTOModel} from '../../shared/domains/cpDTO.model';
 
 @Component({
   selector: 'app-copy-past-modal',
@@ -12,15 +13,18 @@ export class CopyPastModalComponent implements OnInit {
 
   unitedTreeModel: ZkNodeModel = null;
   unitedTreeModelList: ZkNodeModel[] = [];
+
   copiedNode: ZkNodeModel;
   copiedNodeList: ZkNodeModel[];
+
   newFatherNode: ZkNodeModel;
   newFatherNodeList: ZkNodeModel[] = [];
+
   copiedNodePath: string;
   newFatherNodePath: string;
 
-  isCopy: ZkNodeModel[] = [];
-  newValue: ZkNodeModel[] = [];
+  addNode: ZkNodeModel[] = [];
+  updateNode: ZkNodeModel[] = [];
 
   fullList: ZkNodeModel[] = [];
 
@@ -105,25 +109,25 @@ export class CopyPastModalComponent implements OnInit {
           if (child.path === newChild.path) {
             check = false;
             if (child.value !== newChild.value) {
-              this.newValue.push(child);
+              this.updateNode.push(child);
               child.value = newChild.value;
             }
 
           }
         });
         if (check) {
-          this.isCopy.push(newChild);
+          this.addNode.push(newChild);
           currentNode.children.push(newChild);
         }
       });
     }
-    this.fullList = [...this.isCopy, ...this.newValue];
+    this.fullList = [...this.addNode, ...this.updateNode];
     this.unitedTreeModelList = this.makeList(this.unitedTreeModel);
   }
 
   changeUnitedTree(event: ZkEmitModel): void {
     let add = true;
-    if (this.newValue.filter((elem) => event.node.path === elem.path).length !== 0) {
+    if (this.updateNode.filter((elem) => event.node.path === elem.path).length !== 0) {
       add = false;
       let newValue: string;
       if (event.status) {
@@ -134,17 +138,36 @@ export class CopyPastModalComponent implements OnInit {
       this.unitedTreeModelList.filter((elem) => event.node.path === elem.path).shift().value = newValue;
     }
     if (event.status && add) {
-      if (this.isCopy.filter((elem) => event.node.path === elem.path).length === 0) {
-        this.isCopy.push(event.node);
+      if (this.addNode.filter((elem) => event.node.path === elem.path).length === 0) {
+        this.addNode.push(event.node);
       }
     } else if (add) {
-      this.isCopy.forEach((elem, index) => {
+      this.addNode.forEach((elem, index) => {
         if (event.node.path === elem.path) {
-          this.isCopy.splice(index, 1);
+          this.addNode.splice(index, 1);
           return;
         }
       });
     }
-    console.log(this.isCopy);
   }
+
+  submit(): void {
+    const finUpNodes: ZkNodeModel[] = [];
+    this.updateNode.forEach(elem => {
+      if (this.newFatherNodeList
+        .filter(el => el.path === elem.path)
+        .shift().value !== elem.value) {
+        elem.path = this.newFatherNodePath + elem.path;
+        finUpNodes.push(elem);
+      }
+    });
+    const finAddNote: ZkNodeModel[] = [];
+    this.addNode.forEach(elem => {
+      elem.path = this.newFatherNodePath + elem.path;
+      finAddNote.push(elem);
+    });
+    const cpModel = {addNode: finAddNote, updateNode: finUpNodes};
+    this.dialogRef.close({cpModel});
+  }
+
 }

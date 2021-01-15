@@ -6,13 +6,15 @@
       <section>
         <!-- use a disabled button to provide padding for tree leaf -->
         <button mat-icon-button></button>
-        <span>
-      {{node.name}}{{node.value ? ' : ' + node.value : ''}}
+        <span [ngClass]="{'new_nodes': !beInPathList(node) && beInAccessList(node),
+                    'note_add_nodes': beInPathList(node) && beInAddList(node)}">
+          {{node.name}}{{node.value ? ' : ' + node.value : ''}}
       </span>
       </section>
-      <mat-checkbox [disabled]="testAccess(node)"
-                    [checked]="!testAccess(node)"
-                    (change)="changeChecker($event, node)"></mat-checkbox>
+      <section *ngIf="beInAccessList(node)">
+        {{nodeCurrentStatus(node)}} <mat-checkbox [checked]="beInAccessList(node)"
+                                                  (change)="changeChecker($event, node)"></mat-checkbox>
+      </section>
     </li>
   </mat-tree-node>
   <!-- This is the tree node template for expandable nodes -->
@@ -25,13 +27,16 @@
               {{'expand_more'}}
             </mat-icon>
           </button>
-          <span>
+          <span [ngClass]="{'new_nodes': !beInPathList(node) && beInAccessList(node),
+                    'note_add_nodes': beInPathList(node) && beInAddList(node)}">
          {{node.name}}{{node.value ? ' : ' + node.value : ''}}
        </span>
         </section>
-        <mat-checkbox [disabled]="testAccess(node)"
-                      [checked]="!testAccess(node)"
-                      (change)="changeChecker($event, node)"></mat-checkbox>
+        <section *ngIf="beInAccessList(node)">
+          {{nodeCurrentStatus(node)}} <mat-checkbox [checked]="beInAccessList(node)"
+                                                    (change)="changeChecker($event, node)"></mat-checkbox>
+        </section>
+
       </div>
       <ul>
         <ng-container matTreeNodeOutlet></ng-container>
