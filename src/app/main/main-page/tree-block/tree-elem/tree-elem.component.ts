@@ -7,7 +7,7 @@ import {Subject} from 'rxjs';
 import {finalize, takeUntil} from 'rxjs/operators';
 import {MatMenuTrigger} from '@angular/material/menu';
 import {RequestDto} from '../../../shared/domains/request.dto';
-import {select, Store} from '@ngrx/store';
+import {Store} from '@ngrx/store';
 import {selectTrees} from '../../../redux/zktrees/zktree.selector';
 import {TreeModel} from '../../../shared/domains/tree.model';
 import {ADD_TREE} from '../../../redux/zktrees/zktree.actions';
@@ -186,11 +186,15 @@ export class TreeElemComponent implements OnInit, OnChanges, OnDestroy {
     dialogResult.afterClosed()
       .pipe(takeUntil(this.subject$))
       .subscribe((data: CpDTOModel) => {
-        data.host = this.host;
-        this.serious.sendCopyPast(data)
-          .pipe(takeUntil(this.subject$),
-            finalize(() => this.getAll()))
-          .subscribe();
+        if (data !== null && data !== undefined) {
+          // @ts-ignore
+          const sendDTO: CpDTOModel = {...data.cpModel, targetHost: this.host};
+          console.log(sendDTO);
+          this.serious.sendCopyPast(sendDTO)
+            .pipe(takeUntil(this.subject$),
+              finalize(() => this.getAll()))
+            .subscribe();
+        }
       });
   }
 }

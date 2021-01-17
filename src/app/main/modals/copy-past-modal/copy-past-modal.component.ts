@@ -112,12 +112,13 @@ export class CopyPastModalComponent implements OnInit {
               this.updateNode.push(child);
               child.value = newChild.value;
             }
-
           }
         });
         if (check) {
-          this.addNode.push(newChild);
           currentNode.children.push(newChild);
+          this.makeList(newChild).forEach(el => {
+            this.addNode.push(el);
+          });
         }
       });
     }
@@ -166,7 +167,9 @@ export class CopyPastModalComponent implements OnInit {
       elem.path = this.newFatherNodePath + elem.path;
       finAddNote.push(elem);
     });
-    const cpModel = {addNode: finAddNote, updateNode: finUpNodes};
+    finAddNote.sort((el1, el2) => el1.path.length - el2.path.length);
+    console.log(finAddNote);
+    const cpModel = new CpDTOModel('', finAddNote, finUpNodes);
     this.dialogRef.close({cpModel});
   }
 

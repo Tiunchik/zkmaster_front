@@ -10,4 +10,4 @@ export const Rest = '/api/zkm/data/';
 
 export const Transform = '/api/zkm/transform/';
 
-export const Injection = '/api/zkm/injection/';
+export const Injection = '/api/zkm/data/injection/';

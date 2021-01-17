@@ -3,7 +3,11 @@ import {BackEnd, Injection} from '../constants/constants';
 import {LocationStrategy} from '@angular/common';
 import {CpDTOModel} from '../domains/cpDTO.model';
 import {Observable} from 'rxjs';
+import {Injectable} from '@angular/core';
 
+@Injectable({
+  providedIn: 'root'
+})
 export class SeriousMethodsService {
 
   backEnd: string;
@@ -19,6 +23,4 @@ export class SeriousMethodsService {
   public sendCopyPast(dto: CpDTOModel): Observable<void> {
     return this.http.post<void>(`${this.backEnd}${Injection}`, dto);
   }
-
-
 }

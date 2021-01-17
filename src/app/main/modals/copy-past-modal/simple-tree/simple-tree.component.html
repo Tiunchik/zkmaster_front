@@ -6,13 +6,15 @@
       <section>
         <!-- use a disabled button to provide padding for tree leaf -->
         <button mat-icon-button></button>
-        <span [ngClass]="{'new_nodes': !beInPathList(node) && beInAccessList(node),
-                    'note_add_nodes': beInPathList(node) && beInAddList(node)}">
+        <span [ngClass]="{'new_nodes': !(beInAddPathList(node) || beInUpdatePathList(node)) && beInAccessList(node),
+                    'note_add_nodes': (beInAddPathList(node) || beInUpdatePathList(node)) && beInAddList(node)}">
           {{node.name}}{{node.value ? ' : ' + node.value : ''}}
       </span>
       </section>
       <section *ngIf="beInAccessList(node)">
-        {{nodeCurrentStatus(node)}} <mat-checkbox [checked]="beInAccessList(node)"
+        {{nodeCurrentStatus(node)}} <mat-checkbox [name]="node.path"
+                                                  [checked]="!(beInAddPathList(node) || beInUpdatePathList(node)) && beInAccessList(node)"
+                                                  [disabled]="checkDisable(node)"
                                                   (change)="changeChecker($event, node)"></mat-checkbox>
       </section>
     </li>
@@ -27,13 +29,15 @@
               {{'expand_more'}}
             </mat-icon>
           </button>
-          <span [ngClass]="{'new_nodes': !beInPathList(node) && beInAccessList(node),
-                    'note_add_nodes': beInPathList(node) && beInAddList(node)}">
+          <span [ngClass]="{'new_nodes': !(beInAddPathList(node) || beInUpdatePathList(node)) && beInAccessList(node),
+                    'note_add_nodes': (beInAddPathList(node) || beInUpdatePathList(node)) && beInAddList(node)}">
          {{node.name}}{{node.value ? ' : ' + node.value : ''}}
        </span>
         </section>
         <section *ngIf="beInAccessList(node)">
-          {{nodeCurrentStatus(node)}} <mat-checkbox [checked]="beInAccessList(node)"
+          {{nodeCurrentStatus(node)}} <mat-checkbox [name]="node.path"
+                                                    [checked]="!(beInAddPathList(node) || beInUpdatePathList(node)) && beInAccessList(node)"
+                                                    [disabled]="checkDisable(node)"
                                                     (change)="changeChecker($event, node)"></mat-checkbox>
         </section>
 

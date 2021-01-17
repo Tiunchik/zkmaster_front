@@ -5,7 +5,6 @@ import {ZkNodeModel} from '../domains/zk-node.model';
 import {RequestDto} from '../domains/request.dto';
 import {BackEnd, Rest} from '../constants/constants';
 import {LocationStrategy} from '@angular/common';
-import {map, tap} from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'

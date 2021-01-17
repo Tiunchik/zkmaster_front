@@ -25,7 +25,8 @@ export class SimpleTreeComponent implements OnInit {
   dataSource = new MatTreeNestedDataSource<ZkNodeModel>();
 
   stableAddList: ZkNodeModel[] = [];
-  pathList: string[] = [];
+  addPathList: string[] = [];
+  updatePathList: string[] = [];
 
   constructor() {
   }
@@ -50,32 +51,73 @@ export class SimpleTreeComponent implements OnInit {
     return this.accessCheckerList.filter((el) => el.path === node.path).length > 0;
   }
 
-  beInPathList(zkNode: ZkNodeModel): boolean {
-    return this.pathList.filter((elem) => elem === zkNode.path).length > 0;
+  beInAddPathList(zkNode: ZkNodeModel): boolean {
+    return this.addPathList.filter((elem) => elem === zkNode.path).length > 0;
+  }
+
+  beInUpdatePathList(zkNode: ZkNodeModel): boolean {
+    return this.updatePathList.filter((elem) => elem === zkNode.path).length > 0;
+  }
+
+  checkDisable(zkNode: ZkNodeModel): boolean {
+    if (this.beInUpdateList(zkNode)) {
+      return false;
+    }
+    const str = zkNode.path.substring(0, zkNode.path.length - (zkNode.name.length + 1));
+    console.log(this.addPathList);
+    return this.addPathList.filter((elem) => elem === str).length > 0;
   }
 
   changeChecker(event: MatCheckboxChange, zkNode: ZkNodeModel): void {
-    this.checkerEvent.emit({node: zkNode, status: event.checked});
-    if (event.checked) {
-      this.pathList.splice(this.pathList.indexOf(zkNode.path), 1);
-    } else {
-      this.pathList.push(zkNode.path);
+    if (this.beInUpdateList(zkNode)) {
+      this.checkerEvent.emit({node: zkNode, status: event.checked});
+      if (event.checked) {
+        this.updatePathList = this.updatePathList.filter((elem) => elem !== zkNode.path);
+      } else {
+        this.updatePathList.push(zkNode.path);
+      }
+    } else if (this.beInAddList(zkNode)) {
+      const nods: ZkNodeModel[] = this.makeList(zkNode);
+      nods.forEach((nod) => {
+        this.checkerEvent.emit({node: nod, status: event.checked});
+        if (event.checked) {
+          this.addPathList = this.addPathList.filter((elem) => elem !== nod.path);
+        } else {
+          this.addPathList.push(nod.path);
+        }
+      });
     }
   }
 
   nodeCurrentStatus(zkNode: ZkNodeModel): string {
     const beInUpdate = this.beInUpdateList(zkNode);
-    const beInPath = this.beInPathList(zkNode);
+    const beInAddPath = this.beInAddPathList(zkNode);
+    const beInUpdatePath = this.beInUpdatePathList(zkNode);
     let result;
-    if (beInUpdate && beInPath) {
+    if (beInUpdate && beInUpdatePath) {
       result = 'Don\'t change value';
-    } else if (beInUpdate && !beInPath) {
+    } else if (beInUpdate && !beInUpdatePath) {
       result = 'Update node value';
-    } else if (beInPath) {
+    } else if (beInAddPath) {
       result = 'Don\'t copy node';
-    } else if (!beInPath) {
+    } else if (!beInAddPath) {
       result = 'Copy node';
     }
-    return  result;
+    return result;
   }
+
+  makeList(zkNode: ZkNodeModel): ZkNodeModel[] {
+    const circleList = [];
+    const answerList = [];
+    let currentNode;
+    circleList.push(zkNode);
+    while (circleList.length !== 0) {
+      currentNode = circleList.shift();
+      currentNode.children.forEach(elem => circleList.push(elem));
+      answerList.push(currentNode);
+    }
+    return answerList;
+  }
+
+
 }
