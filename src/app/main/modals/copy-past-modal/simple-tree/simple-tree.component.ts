@@ -59,6 +59,18 @@ export class SimpleTreeComponent implements OnInit {
     return this.updatePathList.filter((elem) => elem === zkNode.path).length > 0;
   }
 
+  indeterminate(zkNode: ZkNodeModel): boolean {
+    let check = false;
+    if (zkNode.children.length > 1) {
+      zkNode.children.forEach((elem) => {
+        if (this.beInAddPathList(elem) || this.beInUpdatePathList(elem)) {
+          check = true;
+        }
+      });
+    }
+    return check;
+  }
+
   checkDisable(zkNode: ZkNodeModel): boolean {
     if (this.beInUpdateList(zkNode)) {
       return false;

@@ -14,6 +14,7 @@
       <section *ngIf="beInAccessList(node)">
         {{nodeCurrentStatus(node)}} <mat-checkbox [name]="node.path"
                                                   [checked]="!(beInAddPathList(node) || beInUpdatePathList(node)) && beInAccessList(node)"
+                                                  [indeterminate]="indeterminate(node)"
                                                   [disabled]="checkDisable(node)"
                                                   (change)="changeChecker($event, node)"></mat-checkbox>
       </section>
@@ -37,6 +38,7 @@
         <section *ngIf="beInAccessList(node)">
           {{nodeCurrentStatus(node)}} <mat-checkbox [name]="node.path"
                                                     [checked]="!(beInAddPathList(node) || beInUpdatePathList(node)) && beInAccessList(node)"
+                                                    [indeterminate]="indeterminate(node)"
                                                     [disabled]="checkDisable(node)"
                                                     (change)="changeChecker($event, node)"></mat-checkbox>
         </section>
