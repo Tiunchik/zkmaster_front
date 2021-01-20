@@ -35,3 +35,12 @@ ul {
 .underline {
   text-decoration-line: underline;
 }
+
+.dotted_line {
+  border-bottom: 1px dashed grey !important;
+}
+
+.dotted_line:hover {
+  border-bottom: 1px solid black !important;
+}
+

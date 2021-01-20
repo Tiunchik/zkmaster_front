@@ -39,7 +39,8 @@ export class ChangeValueComponent implements OnInit {
   }
 
   path(): string {
-    return this.data.action ? this.zkNode.path.substring(0, this.zkNode.path.lastIndexOf('/')) : this.zkNode.path;
+    const str = this.data.action ? this.zkNode.path.substring(0, this.zkNode.path.lastIndexOf('/')) : this.zkNode.path;
+    return str === '//' ? '/' : str;
   }
 
   disabled(): boolean {

@@ -1,4 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, Inject, OnInit} from '@angular/core';
+import {MAT_DIALOG_DATA} from '@angular/material/dialog';
+import {ZkNodeModel} from '../../shared/domains/zk-node.model';
 
 @Component({
   selector: 'app-approve',
@@ -7,9 +9,12 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ApproveComponent implements OnInit {
 
-  constructor() { }
+  path: string = '';
+
+  constructor(@Inject(MAT_DIALOG_DATA) public data: { node: ZkNodeModel}) { }
 
   ngOnInit(): void {
+    this.path = this.data.node.path;
   }
 
 }

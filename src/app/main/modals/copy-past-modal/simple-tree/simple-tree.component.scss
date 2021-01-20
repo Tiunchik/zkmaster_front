@@ -41,3 +41,12 @@ ul {
 .note_add_nodes {
   color: grey;
 }
+
+.dotted_line {
+  display: block;
+  border-bottom: 1px dashed grey !important;
+}
+
+.dotted_line:hover {
+  border-bottom: 1px solid black !important;
+}

@@ -3,6 +3,7 @@ import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {ZkNodeModel} from '../../shared/domains/zk-node.model';
 import {ZkEmitModel} from '../../shared/domains/zk-emit.model';
 import {CpDTOModel} from '../../shared/domains/cpDTO.model';
+import {ListService} from '../../shared/services/list.service';
 
 @Component({
   selector: 'app-copy-past-modal',
@@ -29,6 +30,7 @@ export class CopyPastModalComponent implements OnInit {
   fullList: ZkNodeModel[] = [];
 
   constructor(@Inject(MAT_DIALOG_DATA) public data: { copiedNode: ZkNodeModel, newFatherNode: ZkNodeModel },
+              private lister: ListService,
               public dialogRef: MatDialogRef<CopyPastModalComponent>) {
   }
 
@@ -54,8 +56,8 @@ export class CopyPastModalComponent implements OnInit {
   prepareNodes(): void {
     this.newFatherNode = this.preparePaths(this.newFatherNode, this.newFatherNodePath.length, '');
     this.copiedNode = this.preparePaths(this.copiedNode, this.copiedNodePath.length, this.newFatherNode.path);
-    this.copiedNodeList = this.makeList(this.copiedNode);
-    this.newFatherNodeList = this.makeList(this.newFatherNode);
+    this.copiedNodeList = this.lister.makeList(this.copiedNode);
+    this.newFatherNodeList = this.lister.makeList(this.newFatherNode);
   }
 
   deepRecursionCopy(zkNode: ZkNodeModel): ZkNodeModel {
@@ -77,19 +79,6 @@ export class CopyPastModalComponent implements OnInit {
       currentNode.path = fatherPrefix + currentNode.path.substring(pathStart);
     }
     return nodes;
-  }
-
-  makeList(zkNode: ZkNodeModel): ZkNodeModel[] {
-    const circleList = [];
-    const answerList = [];
-    let currentNode;
-    circleList.push(zkNode);
-    while (circleList.length !== 0) {
-      currentNode = circleList.shift();
-      currentNode.children.forEach(elem => circleList.push(elem));
-      answerList.push(currentNode);
-    }
-    return answerList;
   }
 
   prepareUnitedTree(): void {
@@ -116,14 +105,14 @@ export class CopyPastModalComponent implements OnInit {
         });
         if (check) {
           currentNode.children.push(newChild);
-          this.makeList(newChild).forEach(el => {
+          this.lister.makeList(newChild).forEach(el => {
             this.addNode.push(el);
           });
         }
       });
     }
     this.fullList = [...this.addNode, ...this.updateNode];
-    this.unitedTreeModelList = this.makeList(this.unitedTreeModel);
+    this.unitedTreeModelList = this.lister.makeList(this.unitedTreeModel);
   }
 
   changeUnitedTree(event: ZkEmitModel): void {

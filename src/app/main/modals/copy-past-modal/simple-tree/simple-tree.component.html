@@ -1,7 +1,7 @@
 <mat-tree [dataSource]="dataSource" [treeControl]="treeControl"
           class="tree">
   <!-- This is the tree node template for leaf nodes -->
-  <mat-tree-node *matTreeNodeDef="let node" matTreeNodeToggle>
+  <mat-tree-node *matTreeNodeDef="let node" matTreeNodeToggle [class.dotted_line]>
     <li class="mat-tree-node flex-checkbox">
       <section>
         <!-- use a disabled button to provide padding for tree leaf -->
@@ -12,11 +12,12 @@
       </span>
       </section>
       <section *ngIf="beInAccessList(node)">
-        {{nodeCurrentStatus(node)}} <mat-checkbox [name]="node.path"
-                                                  [checked]="!(beInAddPathList(node) || beInUpdatePathList(node)) && beInAccessList(node)"
-                                                  [indeterminate]="indeterminate(node)"
-                                                  [disabled]="checkDisable(node)"
-                                                  (change)="changeChecker($event, node)"></mat-checkbox>
+        {{nodeCurrentStatus(node)}}
+        <mat-checkbox [name]="node.path"
+                      [checked]="!(beInAddPathList(node) || beInUpdatePathList(node)) && beInAccessList(node)"
+                      [indeterminate]="indeterminate(node)"
+                      [disabled]="checkDisable(node)"
+                      (change)="changeChecker($event, node)"></mat-checkbox>
       </section>
     </li>
   </mat-tree-node>
@@ -36,13 +37,13 @@
        </span>
         </section>
         <section *ngIf="beInAccessList(node)">
-          {{nodeCurrentStatus(node)}} <mat-checkbox [name]="node.path"
-                                                    [checked]="!(beInAddPathList(node) || beInUpdatePathList(node)) && beInAccessList(node)"
-                                                    [indeterminate]="indeterminate(node)"
-                                                    [disabled]="checkDisable(node)"
-                                                    (change)="changeChecker($event, node)"></mat-checkbox>
+          {{nodeCurrentStatus(node)}}
+          <mat-checkbox [name]="node.path"
+                        [checked]="!(beInAddPathList(node) || beInUpdatePathList(node)) && beInAccessList(node)"
+                        [indeterminate]="indeterminate(node)"
+                        [disabled]="checkDisable(node)"
+                        (change)="changeChecker($event, node)"></mat-checkbox>
         </section>
-
       </div>
       <ul>
         <ng-container matTreeNodeOutlet></ng-container>

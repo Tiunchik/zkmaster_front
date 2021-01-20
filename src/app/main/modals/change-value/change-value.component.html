@@ -3,7 +3,11 @@
 <mat-dialog-content class="mat-typography">
   <form class="form area-width" [formGroup]="form">
     <p>Node Path:</p>
-    <p style="font-weight: bold;">{{path()}}/<span style="color: darkred;">{{form.value.name}}</span>:<span style="color: darkred;">{{form.value.value}}</span></p>
+    <p style="font-weight: bold;">{{path()}}
+      {{path() === '/' ? '' : '/'}}
+      <span style="color: darkred;">{{form.value.name}}</span>
+      {{form.value.value.length > 0 ? ':' : ''}}
+      <span style="color: darkred;">{{form.value.value}}</span></p>
     <mat-divider></mat-divider>
     <br>
     <mat-form-field class="full-width area-width">

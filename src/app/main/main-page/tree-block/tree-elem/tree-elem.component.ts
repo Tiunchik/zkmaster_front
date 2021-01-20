@@ -21,6 +21,7 @@ import {copyPastData} from '../../../redux/copy-past/copy-past.selector';
 import {CopyPastModalComponent} from '../../../modals/copy-past-modal/copy-past-modal.component';
 import {CpDTOModel} from '../../../shared/domains/cpDTO.model';
 import {SeriousMethodsService} from '../../../shared/services/seriousMethodsService';
+import {ListService} from '../../../shared/services/list.service';
 
 @Component({
   selector: 'app-tree-elem',
@@ -38,6 +39,7 @@ export class TreeElemComponent implements OnInit, OnChanges, OnDestroy {
   treeControl = new NestedTreeControl<ZkNodeModel>(node => node.children);
   dataSource = new MatTreeNestedDataSource<ZkNodeModel>();
   copiedZkNode: ZkNodeModel = null;
+  dataList: ZkNodeModel[];
 
   @ViewChild(MatMenuTrigger, {static: false}) contextMenu: MatMenuTrigger;
   contextMenuPosition = {x: '0px', y: '0px'};
@@ -46,7 +48,8 @@ export class TreeElemComponent implements OnInit, OnChanges, OnDestroy {
               private serious: SeriousMethodsService,
               private modal: MatDialog,
               private sessionStore: SessionStorageService,
-              private store: Store
+              private store: Store,
+              private lister: ListService
   ) {
   }
 
@@ -57,6 +60,7 @@ export class TreeElemComponent implements OnInit, OnChanges, OnDestroy {
         data.forEach((value) => {
           if (value.host === this.host) {
             this.dataSource.data = [value.zkTree];
+            this.dataList = this.lister.makeList(value.zkTree);
             const expand: ZkNodeModel[] = this.sessionStore
               .getExpandedNodes(this.host, this.dataSource.data.shift());
             if (expand) {
@@ -123,28 +127,32 @@ export class TreeElemComponent implements OnInit, OnChanges, OnDestroy {
 
 
   updateNode(node: ZkNodeModel): void {
-    const dialogResult = this.modal.open(ChangeValueComponent, {
-      data:
-        {
-          oldNode: node, action: 'update'
-        },
-    });
-    dialogResult.afterClosed()
-      .pipe(takeUntil(this.subject$))
-      .subscribe((data: ZkNodeModel) => {
-        if (data) {
-          data.value = data.value === null ? ' ' : data.value;
-          const dto = new RequestDto(this.host, `${node.path}`, `${data.name}&${data.value}`);
-          this.http.updateNode(dto).pipe(takeUntil(this.subject$))
-            .pipe(takeUntil(this.subject$))
-            .subscribe(() => this.getAll());
-        }
+    if (node.path !== '/') {
+      const dialogResult = this.modal.open(ChangeValueComponent, {
+        data:
+          {
+            oldNode: node, action: 'update'
+          },
       });
+      dialogResult.afterClosed()
+        .pipe(takeUntil(this.subject$))
+        .subscribe((data: ZkNodeModel) => {
+          if (data) {
+            data.value = data.value === null ? ' ' : data.value;
+            const dto = new RequestDto(this.host, `${node.path}`, `${data.name}&${data.value}`);
+            this.http.updateNode(dto).pipe(takeUntil(this.subject$))
+              .pipe(takeUntil(this.subject$))
+              .subscribe(() => this.getAll());
+          }
+        });
+    }
   }
 
 
   deleteNode(item: ZkNodeModel): void {
-    const dialogResult = this.modal.open(ApproveComponent);
+    const dialogResult = this.modal.open(ApproveComponent, {
+      data: {node: item}
+    });
     dialogResult.afterClosed()
       .pipe(takeUntil(this.subject$))
       .subscribe((data: boolean) => {
@@ -197,5 +205,6 @@ export class TreeElemComponent implements OnInit, OnChanges, OnDestroy {
         }
       });
   }
+
 }
 
