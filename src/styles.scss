@@ -33,7 +33,7 @@ $theme: mat-light-theme((
 @include angular-material-theme($theme);
 
 .chosen {
-  background: mat-color($primary);
-  font-weight: bolder;
-  color: #fff;
+  background: mat-color($primary) !important;
+  font-weight: bolder !important;
+  color: #fff !important;
 }

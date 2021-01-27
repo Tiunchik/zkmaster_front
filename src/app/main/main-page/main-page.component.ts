@@ -16,7 +16,7 @@ import {TabModel} from '../shared/domains/tab.model';
 import {selectTabs} from '../redux/tabs/tabs.selector';
 import {selectCurrentTab} from '../redux/currentTab/currentTabs.selector';
 import {SET_CURRENT_TAB} from '../redux/currentTab/currentTabs.actions';
-import {ADD_TAB, REMOVE_TABBAR, SPLIT_TAB} from '../redux/tabs/tabs.actions';
+import {ADD_TAB, GET_ALL_TABS, REMOVE_TABBAR, SAVE_ALL_TABS, SPLIT_TAB} from '../redux/tabs/tabs.actions';
 import {ExpHostModel} from '../shared/domains/expHost.model';
 import {selectBookmarks} from '../redux/bookmarks/host.selector';
 import {GET_BOOKMARKS_FROM_STORAGE} from '../redux/bookmarks/host.actions';
@@ -59,6 +59,7 @@ export class MainPageComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.store.dispatch(GET_ALL_TABS());
     this.store.dispatch(LOAD_SETTINGS());
     this.store.dispatch(GET_BOOKMARKS_FROM_STORAGE());
     this.store
@@ -74,6 +75,7 @@ export class MainPageComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
+    this.store.dispatch(SAVE_ALL_TABS());
     this.destroy$.next();
     this.destroy$.complete();
   }

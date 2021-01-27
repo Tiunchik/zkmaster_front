@@ -1,14 +1,21 @@
 import {createReducer, on} from '@ngrx/store';
 import {TabModel} from '../../shared/domains/tab.model';
-import {ADD_TAB, GET_ALL_TABS, MOVE_TABBAR, REMOVE_TAB, REMOVE_TABBAR, SPLIT_TAB, TRANSFER_TABBAR} from './tabs.actions';
+import {ADD_TAB, GET_ALL_TABS, MOVE_TABBAR, REMOVE_TAB, REMOVE_TABBAR, SAVE_ALL_TABS, SPLIT_TAB, TRANSFER_TABBAR} from './tabs.actions';
 import {HostModel} from '../../shared/domains/host.model';
+import {TABS} from '../../shared/constants/constants';
 
 
-export const TABS: TabModel[] = [];
+export const TABSMOD: TabModel[] = [];
 
 
-export const tabsReducer = createReducer(TABS,
+export const tabsReducer = createReducer(TABSMOD,
   on(GET_ALL_TABS, (state: TabModel[]) => {
+    const newState = JSON.parse(localStorage.getItem(TABS));
+    console.log('new state');
+    console.log(newState);
+    if (newState !== null && newState !== 'undefined') {
+      return newState;
+    }
     return state;
   }),
   on(ADD_TAB, (state: TabModel[], {model}) => {
@@ -31,11 +38,11 @@ export const tabsReducer = createReducer(TABS,
       newModel.chosenOne = newModel.hosts[0];
       newState.push(newModel);
     }
-    return newState;
+    return saveTabs(newState);
   }),
   on(SPLIT_TAB, (state: TabModel[], {oldTabBarName, newTabBarName, prevInd}) => {
       const newState: TabModel[] = transfer(state, oldTabBarName, newTabBarName, prevInd, 0);
-      return deleteEmptyTabBars(newState);
+      return saveTabs(deleteEmptyTabBars(newState));
     }
   ),
   on(REMOVE_TAB, (state: TabModel[], {model, index}) => {
@@ -51,7 +58,7 @@ export const tabsReducer = createReducer(TABS,
         newState.push(elem);
       }
     });
-    return deleteEmptyTabBars(newState);
+    return saveTabs(deleteEmptyTabBars(newState));
   }),
   on(REMOVE_TABBAR, (state: TabModel[], {name}) => {
     const newState: TabModel[] = [];
@@ -68,7 +75,7 @@ export const tabsReducer = createReducer(TABS,
       newTabs.push(new HostModel(elem.name, elem.address, newState[0].hosts[0].tabName));
     });
     newState[0].hosts = [...newState[0].hosts, ...newTabs];
-    return newState;
+    return saveTabs(newState);
   }),
   on(MOVE_TABBAR, (state: TabModel[], {tabBarName, prevInd, newInd}) => {
     const newState: TabModel[] = [];
@@ -84,14 +91,19 @@ export const tabsReducer = createReducer(TABS,
         newState.push(tabBar);
       }
     });
-    return newState;
+    return saveTabs(newState);
   }),
   on(TRANSFER_TABBAR, (state: TabModel[],
                        {oldTabBarName, newTabBarName, prevInd, newInd}) => {
     const newState: TabModel[] = transfer(state, oldTabBarName, newTabBarName, prevInd, newInd);
-    return deleteEmptyTabBars(newState);
+    return saveTabs(deleteEmptyTabBars(newState));
   })
 );
+
+function saveTabs(state: TabModel[]): TabModel[] {
+  localStorage.setItem(TABS, JSON.stringify(state));
+  return state;
+}
 
 function deleteEmptyTabBars(processedBar: TabModel[]): TabModel[] {
   const completedBar: TabModel[] = [];

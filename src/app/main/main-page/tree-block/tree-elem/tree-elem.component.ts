@@ -4,6 +4,8 @@ import {MatTreeNestedDataSource} from '@angular/material/tree';
 import {ZkNodeModel} from '../../../shared/domains/zk-node.model';
 import {CrudService} from '../../../shared/services/crud.service';
 import {Subject} from 'rxjs';
+import {saveAs} from 'file-saver';
+import * as Blob from 'blob';
 import {finalize, takeUntil} from 'rxjs/operators';
 import {MatMenuTrigger} from '@angular/material/menu';
 import {RequestDto} from '../../../shared/domains/request.dto';
@@ -22,6 +24,9 @@ import {CopyPastModalComponent} from '../../../modals/copy-past-modal/copy-past-
 import {CpDTOModel} from '../../../shared/domains/cpDTO.model';
 import {SeriousMethodsService} from '../../../shared/services/seriousMethodsService';
 import {ListService} from '../../../shared/services/list.service';
+import {TransferDTOModel} from '../../../shared/domains/transferDTO.model';
+import {log} from 'util';
+import {EXPORT_TYPE} from '../../../shared/constants/constants';
 
 @Component({
   selector: 'app-tree-elem',
@@ -166,11 +171,19 @@ export class TreeElemComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   txtExport(node: ZkNodeModel): void {
+    const transferDTO: TransferDTOModel = {host: this.host, nodePath: node.path, type: EXPORT_TYPE};
+    this.serious.toTxt(transferDTO).subscribe(data => {
+      const updatedData = data.map((elem) => elem + '\n');
+      const blob = new Blob([...updatedData], {type: 'text/plain;charset=utf-8'});
+      saveAs(blob, 'export.zkf');
+    });
 
   }
 
   txtImport(node: ZkNodeModel): void {
-    const dialogResult = this.modal.open(TxtFileModalComponent);
+    const dialogResult = this.modal.open(TxtFileModalComponent, {
+      data: { newNode: node }
+    });
   }
 
 

@@ -77,7 +77,6 @@ export class SimpleTreeComponent implements OnInit {
       return false;
     }
     const str = zkNode.path.substring(0, zkNode.path.length - (zkNode.name.length + 1));
-    console.log(this.addPathList);
     return this.addPathList.filter((elem) => elem === str).length > 0;
   }
 

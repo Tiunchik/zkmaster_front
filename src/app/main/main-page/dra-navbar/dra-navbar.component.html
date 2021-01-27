@@ -3,7 +3,7 @@
   <div class="tab" *ngFor="let host of tab.hosts; index as ind"
        cdkDrag
        title="Right click - context menu"
-       [class.chosen]="currentTree === host.address"
+       [ngClass]="{'chosen' : currentTree === host.address}"
        (click)="chooseHost(host, ind)"
        (contextmenu)="tabMenuAction($event, host, ind)">
     <div class="tab-gap"></div>

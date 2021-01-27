@@ -11,3 +11,7 @@ export const Rest = '/api/zkm/data/';
 export const Transform = '/api/zkm/transform/';
 
 export const Injection = '/api/zkm/data/injection/';
+
+export const EXPORT_TYPE = 'TXT';
+
+export const TABS = 'SAVE_TABS';

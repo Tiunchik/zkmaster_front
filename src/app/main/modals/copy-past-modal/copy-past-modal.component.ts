@@ -39,6 +39,9 @@ export class CopyPastModalComponent implements OnInit {
     this.takeNodesFatherPaths();
     this.prepareNodes();
     this.prepareUnitedTree();
+    if (this.addNode.length + this.updateNode.length === 0) {
+      this.dialogRef.close(null);
+    }
   }
 
   makeShortVariables(): void {
@@ -157,7 +160,6 @@ export class CopyPastModalComponent implements OnInit {
       finAddNote.push(elem);
     });
     finAddNote.sort((el1, el2) => el1.path.length - el2.path.length);
-    console.log(finAddNote);
     const cpModel = new CpDTOModel('', finAddNote, finUpNodes);
     this.dialogRef.close({cpModel});
   }
