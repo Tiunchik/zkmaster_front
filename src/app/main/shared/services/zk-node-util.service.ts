@@ -4,12 +4,12 @@ import {ZkNodeModel} from '../domains/zk-node.model';
 @Injectable({
   providedIn: 'root'
 })
-export class ListService {
+export class ZkNodeUtilService {
 
   constructor() {
   }
 
-  makeList(zkNode: ZkNodeModel): ZkNodeModel[] {
+  zkNodeToList(zkNode: ZkNodeModel): ZkNodeModel[] {
     const circleList = [];
     const answerList = [];
     let currentNode;

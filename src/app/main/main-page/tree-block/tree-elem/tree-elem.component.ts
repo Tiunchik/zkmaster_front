@@ -21,11 +21,10 @@ import {TxtFileModalComponent} from '../../../modals/txt-file-modal/txt-file-mod
 import {ADD_CLIPBOARD} from '../../../redux/copy-past/copy-past.actions';
 import {copyPastData} from '../../../redux/copy-past/copy-past.selector';
 import {CopyPastModalComponent} from '../../../modals/copy-past-modal/copy-past-modal.component';
-import {CpDTOModel} from '../../../shared/domains/cpDTO.model';
+import {CopyPasteDTO} from '../../../shared/domains/copyPasteDTO';
 import {SeriousMethodsService} from '../../../shared/services/seriousMethodsService';
-import {ListService} from '../../../shared/services/list.service';
+import {ZkNodeUtilService} from '../../../shared/services/zk-node-util.service';
 import {TransferDTOModel} from '../../../shared/domains/transferDTO.model';
-import {log} from 'util';
 import {EXPORT_TYPE} from '../../../shared/constants/constants';
 
 @Component({
@@ -54,7 +53,7 @@ export class TreeElemComponent implements OnInit, OnChanges, OnDestroy {
               private modal: MatDialog,
               private sessionStore: SessionStorageService,
               private store: Store,
-              private lister: ListService
+              private lister: ZkNodeUtilService
   ) {
   }
 
@@ -65,7 +64,7 @@ export class TreeElemComponent implements OnInit, OnChanges, OnDestroy {
         data.forEach((value) => {
           if (value.host === this.host) {
             this.dataSource.data = [value.zkTree];
-            this.dataList = this.lister.makeList(value.zkTree);
+            this.dataList = this.lister.zkNodeToList(value.zkTree);
             const expand: ZkNodeModel[] = this.sessionStore
               .getExpandedNodes(this.host, this.dataSource.data.shift());
             if (expand) {
@@ -211,10 +210,10 @@ export class TreeElemComponent implements OnInit, OnChanges, OnDestroy {
       });
     dialogResult.afterClosed()
       .pipe(takeUntil(this.subject$))
-      .subscribe((data: CpDTOModel) => {
+      .subscribe((data: CopyPasteDTO) => {
         if (data !== null && data !== undefined) {
           // @ts-ignore
-          const sendDTO: CpDTOModel = {...data.cpModel, targetHost: this.host};
+          const sendDTO: CopyPasteDTO = {...data.cpModel, targetHost: this.host};
           console.log(sendDTO);
           this.serious.sendCopyPast(sendDTO)
             .pipe(takeUntil(this.subject$),

@@ -2,8 +2,8 @@ import {Component, Inject, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {ZkNodeModel} from '../../shared/domains/zk-node.model';
 import {ZkEmitModel} from '../../shared/domains/zk-emit.model';
-import {CpDTOModel} from '../../shared/domains/cpDTO.model';
-import {ListService} from '../../shared/services/list.service';
+import {CopyPasteDTO} from '../../shared/domains/copyPasteDTO';
+import {ZkNodeUtilService} from '../../shared/services/zk-node-util.service';
 
 @Component({
   selector: 'app-copy-past-modal',
@@ -15,22 +15,21 @@ export class CopyPastModalComponent implements OnInit {
   unitedTreeModel: ZkNodeModel = null;
   unitedTreeModelList: ZkNodeModel[] = [];
 
+  copiedNodePath: string;
   copiedNode: ZkNodeModel;
   copiedNodeList: ZkNodeModel[];
 
+  newFatherNodePath: string;
   newFatherNode: ZkNodeModel;
   newFatherNodeList: ZkNodeModel[] = [];
 
-  copiedNodePath: string;
-  newFatherNodePath: string;
-
-  addNode: ZkNodeModel[] = [];
-  updateNode: ZkNodeModel[] = [];
+  addNodeList: ZkNodeModel[] = [];
+  updateNodeList: ZkNodeModel[] = [];
 
   fullList: ZkNodeModel[] = [];
 
   constructor(@Inject(MAT_DIALOG_DATA) public data: { copiedNode: ZkNodeModel, newFatherNode: ZkNodeModel },
-              private lister: ListService,
+              private lister: ZkNodeUtilService,
               public dialogRef: MatDialogRef<CopyPastModalComponent>) {
   }
 
@@ -39,14 +38,19 @@ export class CopyPastModalComponent implements OnInit {
     this.takeNodesFatherPaths();
     this.prepareNodes();
     this.prepareUnitedTree();
-    if (this.addNode.length + this.updateNode.length === 0) {
-      this.dialogRef.close(null);
+    console.log("this.addNodeList.length + this.updateNodeList.length === 0",
+      this.addNodeList.length + this.updateNodeList.length === 0)
+    if (this.addNodeList.length + this.updateNodeList.length === 0) {
+      const tryToFix = new CopyPasteDTO("", [], []);
+      this.dialogRef.close(tryToFix);
     }
   }
 
   makeShortVariables(): void {
     this.copiedNode = {...this.data.copiedNode};
     this.newFatherNode = {...this.data.newFatherNode};
+    console.log("copiedNode", this.copiedNode);
+    console.log("newFatherNode", this.newFatherNode);
   }
 
   takeNodesFatherPaths(): void {
@@ -54,13 +58,18 @@ export class CopyPastModalComponent implements OnInit {
       .substring(0, this.copiedNode.path.length - this.copiedNode.name.length);
     this.newFatherNodePath = this.newFatherNode.path
       .substring(0, this.newFatherNode.path.length - this.newFatherNode.name.length);
+    // this.newFatherNodePath = (this.newFatherNodePath === "") ? "/" : this.newFatherNodePath;
+    console.log("copiedNodePath", this.copiedNodePath);
+    console.log("newFatherNodePath", this.newFatherNodePath);
+    console.log("newFatherNodePath undefined", (this.newFatherNodePath === undefined));
+    console.log("newFatherNodePath null", (this.newFatherNodePath === null));
   }
 
   prepareNodes(): void {
     this.newFatherNode = this.preparePaths(this.newFatherNode, this.newFatherNodePath.length, '');
     this.copiedNode = this.preparePaths(this.copiedNode, this.copiedNodePath.length, this.newFatherNode.path);
-    this.copiedNodeList = this.lister.makeList(this.copiedNode);
-    this.newFatherNodeList = this.lister.makeList(this.newFatherNode);
+    this.copiedNodeList = this.lister.zkNodeToList(this.copiedNode);
+    this.newFatherNodeList = this.lister.zkNodeToList(this.newFatherNode);
   }
 
   deepRecursionCopy(zkNode: ZkNodeModel): ZkNodeModel {
@@ -101,26 +110,30 @@ export class CopyPastModalComponent implements OnInit {
           if (child.path === newChild.path) {
             check = false;
             if (child.value !== newChild.value) {
-              this.updateNode.push(child);
+              this.updateNodeList.push(child);
               child.value = newChild.value;
             }
           }
         });
         if (check) {
           currentNode.children.push(newChild);
-          this.lister.makeList(newChild).forEach(el => {
-            this.addNode.push(el);
+          this.lister.zkNodeToList(newChild).forEach(el => {
+            this.addNodeList.push(el);
           });
         }
       });
     }
-    this.fullList = [...this.addNode, ...this.updateNode];
-    this.unitedTreeModelList = this.lister.makeList(this.unitedTreeModel);
+    this.fullList = [...this.addNodeList, ...this.updateNodeList];
+    this.unitedTreeModelList = this.lister.zkNodeToList(this.unitedTreeModel);
   }
+
+
+  /* Outside methods*/
+
 
   changeUnitedTree(event: ZkEmitModel): void {
     let add = true;
-    if (this.updateNode.filter((elem) => event.node.path === elem.path).length !== 0) {
+    if (this.updateNodeList.filter((elem) => event.node.path === elem.path).length !== 0) {
       add = false;
       let newValue: string;
       if (event.status) {
@@ -131,46 +144,54 @@ export class CopyPastModalComponent implements OnInit {
       this.unitedTreeModelList.filter((elem) => event.node.path === elem.path).shift().value = newValue;
     }
     if (event.status && add) {
-      if (this.addNode.filter((elem) => event.node.path === elem.path).length === 0) {
-        this.addNode.push(event.node);
+      if (this.addNodeList.filter((elem) => event.node.path === elem.path).length === 0) {
+        this.addNodeList.push(event.node);
       }
     } else if (add) {
-      this.addNode.forEach((elem, index) => {
+      this.addNodeList.forEach((elem, index) => {
         if (event.node.path === elem.path) {
-          this.addNode.splice(index, 1);
+          this.addNodeList.splice(index, 1);
           return;
         }
       });
     }
   }
 
+  /**
+   * TODO - fix "root-case" normally.
+   */
   submit(): void {
-    const finUpNodes: ZkNodeModel[] = [];
-    this.updateNode.forEach(elem => {
-      if (this.newFatherNodeList
-        .filter(el => el.path === elem.path)
-        .shift().value !== elem.value) {
+    const updateNodeListRsl: ZkNodeModel[] = [];
+    this.updateNodeList.forEach(elem => {
+      let newFatherNodeListElem: ZkNodeModel = this.newFatherNodeList
+        .filter(el => el.path === elem.path).shift();
+      if (newFatherNodeListElem.value !== elem.value) {
         elem.path = this.newFatherNodePath + elem.path;
-        finUpNodes.push(elem);
+        updateNodeListRsl.push(elem);
       }
     });
-    let finAddNote: ZkNodeModel[] = [];
-    this.addNode.forEach(elem => {
+
+
+    let createNodeListRsl: ZkNodeModel[] = [];
+    this.addNodeList.forEach(elem => {
       elem.path = this.newFatherNodePath + elem.path;
-      finAddNote.push(elem);
+      createNodeListRsl.push(elem);
     });
-    finAddNote = finAddNote.sort((el1, el2) => el1.path.length - el2.path.length);
+    createNodeListRsl = createNodeListRsl
+      .sort((el1, el2) => el1.path.length - el2.path.length);
     console.log('before');
-    console.log(finAddNote);
-    finAddNote.forEach((elem, ind) => {
-      if (finAddNote[ind].path.startsWith('//')) {
-        finAddNote[ind].path = finAddNote[ind].path.substring(1);
+    console.log(createNodeListRsl);
+    createNodeListRsl.forEach((elem, ind) => {
+      if (createNodeListRsl[ind].path.startsWith('//')) {
+        createNodeListRsl[ind].path = createNodeListRsl[ind].path.substring(1);
       }
     });
     console.log('after');
-    console.log(finAddNote);
-    const cpModel = new CpDTOModel('', finAddNote, finUpNodes);
-    this.dialogRef.close({cpModel});
+    console.log(createNodeListRsl);
+    const copyPastModel = new CopyPasteDTO('', createNodeListRsl, updateNodeListRsl);
+    console.log("copyPastModel", copyPastModel);
+    this.dialogRef.close({cpModel: copyPastModel});
   }
+
 
 }

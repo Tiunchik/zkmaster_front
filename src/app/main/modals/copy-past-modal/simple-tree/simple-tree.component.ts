@@ -1,11 +1,10 @@
-import {Component, Input, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {NestedTreeControl} from '@angular/cdk/tree';
 import {ZkNodeModel} from '../../../shared/domains/zk-node.model';
 import {MatTreeNestedDataSource} from '@angular/material/tree';
 import {MatCheckboxChange} from '@angular/material/checkbox';
 import {ZkEmitModel} from '../../../shared/domains/zk-emit.model';
-import {EventEmitter} from '@angular/core';
-import {ListService} from '../../../shared/services/list.service';
+import {ZkNodeUtilService} from '../../../shared/services/zk-node-util.service';
 
 
 @Component({
@@ -29,7 +28,7 @@ export class SimpleTreeComponent implements OnInit {
   addPathList: string[] = [];
   updatePathList: string[] = [];
 
-  constructor(private lister: ListService) {
+  constructor(private lister: ZkNodeUtilService) {
   }
 
   ngOnInit(): void {
@@ -89,7 +88,7 @@ export class SimpleTreeComponent implements OnInit {
         this.updatePathList.push(zkNode.path);
       }
     } else if (this.beInAddList(zkNode)) {
-      const nods: ZkNodeModel[] = this.lister.makeList(zkNode);
+      const nods: ZkNodeModel[] = this.lister.zkNodeToList(zkNode);
       nods.forEach((nod) => {
         this.checkerEvent.emit({node: nod, status: event.checked});
         if (event.checked) {

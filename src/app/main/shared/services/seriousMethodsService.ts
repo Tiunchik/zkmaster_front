@@ -1,7 +1,7 @@
 import {HttpClient} from '@angular/common/http';
 import {BackEnd, Injection, Transform} from '../constants/constants';
 import {LocationStrategy} from '@angular/common';
-import {CpDTOModel} from '../domains/cpDTO.model';
+import {CopyPasteDTO} from '../domains/copyPasteDTO';
 import {Observable} from 'rxjs';
 import {Injectable} from '@angular/core';
 import {TransferDTOModel} from '../domains/transferDTO.model';
@@ -21,7 +21,7 @@ export class SeriousMethodsService {
     }
   }
 
-  public sendCopyPast(dto: CpDTOModel): Observable<void> {
+  public sendCopyPast(dto: CopyPasteDTO): Observable<void> {
     return this.http.post<void>(`${this.backEnd}${Injection}`, dto);
   }
 
