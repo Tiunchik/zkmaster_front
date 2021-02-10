@@ -182,10 +182,15 @@ export class TreeElemComponent implements OnInit, OnChanges, OnDestroy {
 
   txtImport(node: ZkNodeModel): void {
     const dialogResult = this.modal.open(TxtFileModalComponent, {
-      data: { newNode: node }
+      data: {newNode: node}
     });
+    dialogResult.afterClosed()
+      .pipe(takeUntil(this.subject$))
+      .subscribe((data: ZkNodeModel) => {
+        this.copiedZkNode = data;
+        this.pastNode(node);
+      });
   }
-
 
   saveNodeState(node: ZkNodeModel, b: boolean): void {
     this.sessionStore.saveItem(this.host, node.path, !b);

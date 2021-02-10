@@ -154,12 +154,21 @@ export class CopyPastModalComponent implements OnInit {
         finUpNodes.push(elem);
       }
     });
-    const finAddNote: ZkNodeModel[] = [];
+    let finAddNote: ZkNodeModel[] = [];
     this.addNode.forEach(elem => {
       elem.path = this.newFatherNodePath + elem.path;
       finAddNote.push(elem);
     });
-    finAddNote.sort((el1, el2) => el1.path.length - el2.path.length);
+    finAddNote = finAddNote.sort((el1, el2) => el1.path.length - el2.path.length);
+    console.log('before');
+    console.log(finAddNote);
+    finAddNote.forEach((elem, ind) => {
+      if (finAddNote[ind].path.startsWith('//')) {
+        finAddNote[ind].path = finAddNote[ind].path.substring(1);
+      }
+    });
+    console.log('after');
+    console.log(finAddNote);
     const cpModel = new CpDTOModel('', finAddNote, finUpNodes);
     this.dialogRef.close({cpModel});
   }

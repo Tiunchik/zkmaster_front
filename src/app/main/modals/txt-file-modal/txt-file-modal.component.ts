@@ -35,12 +35,57 @@ export class TxtFileModalComponent implements OnInit {
     fileReader.onload = (e) => {
       let fileData: string[] = fileReader.result.toString().split('\n');
       fileData = fileData.filter(el => el !== '');
-      console.log(fileData);
+      const totalNode: ZkNodeModel = fileData.length > 0 ? this.convertToZkNode(fileData) : null;
+      this.dialogRef.close({totalNode});
     };
     fileReader.readAsText(this.file);
   }
 
   convertToZkNode(str: string[]): ZkNodeModel {
-    return null;
+    let zkNodes = this.makeZkNodesList(str);
+    zkNodes = this.findChildrens(zkNodes);
+    return this.findElder(zkNodes);
   }
+
+  makeZkNodesList(str: string[]): ZkNodeModel[] {
+    const zkNodes: ZkNodeModel[] = [];
+    str.forEach(elem => {
+      if (elem.indexOf(':') > 0) {
+        const temp: string[] = elem.split(':');
+        const value = temp[1].trim().length === 0 ? '' : temp[1].trim();
+        const name = temp[0].substring(temp[0].lastIndexOf('/') + 1);
+        const newNode = new ZkNodeModel(temp[0].trim(), value, name.trim(), []);
+        zkNodes.push(newNode);
+      }
+    });
+    return zkNodes;
+  }
+
+  findChildrens(zkNodes: ZkNodeModel[]): ZkNodeModel[] {
+    zkNodes.forEach((outElem, outIndex) => {
+      zkNodes.forEach((inElem, inIndex) => {
+        const inPath = inElem.path.substring(0, inElem.path.length - (inElem.name.length + 1));
+        console.log(`inPath ${inPath}`);
+        if (inElem.path !== '/' && outElem.path === inPath) {
+          zkNodes[outIndex].children.push(zkNodes[inIndex]);
+        }
+      });
+    });
+    return zkNodes;
+  }
+
+  findElder(zkNodes: ZkNodeModel[]): ZkNodeModel {
+    let finalNode: ZkNodeModel = zkNodes.length > 0 ? zkNodes[0] : null;
+    if (finalNode) {
+      zkNodes.forEach((elem, index) => {
+        if (elem.path.length < finalNode.path.length) {
+          finalNode = zkNodes[index];
+        }
+      });
+      return finalNode;
+    } else {
+      return null;
+    }
+  }
+
 }

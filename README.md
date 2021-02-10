@@ -13,7 +13,8 @@ It's UI for backend server that works with Zookeeper.
  
  
 ## TODO
---сделать кнопку import/export txt файла
+сделать кнопку import/export txt файла
+сделать декодер
 сделать compare
 
 СПИННЕР!!!!
