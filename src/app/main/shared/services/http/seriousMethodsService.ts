@@ -1,10 +1,10 @@
 import {HttpClient} from '@angular/common/http';
-import {BackEnd, Injection, Transform} from '../constants/constants';
+import {BackEnd, Injection, Transform} from '../../constants/constants';
 import {LocationStrategy} from '@angular/common';
-import {CopyPasteDTO} from '../domains/copyPasteDTO';
+import {CopyPasteDTO} from '../../domains/copyPasteDTO';
 import {Observable} from 'rxjs';
 import {Injectable} from '@angular/core';
-import {TransferDTOModel} from '../domains/transferDTO.model';
+import {TransferDTOModel} from '../../domains/transferDTO.model';
 
 @Injectable({
   providedIn: 'root'

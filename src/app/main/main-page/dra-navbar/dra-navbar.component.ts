@@ -11,7 +11,7 @@ import {ADD_BOOKMARK} from '../../redux/bookmarks/host.actions';
 import {takeUntil} from 'rxjs/operators';
 import {TreeModel} from '../../shared/domains/tree.model';
 import {ADD_TREE} from '../../redux/zktrees/zktree.actions';
-import {CrudService} from '../../shared/services/crud.service';
+import {CrudService} from '../../shared/services/http/crud.service';
 import {Subject} from 'rxjs';
 
 @Component({

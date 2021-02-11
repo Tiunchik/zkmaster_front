@@ -1,9 +1,9 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
-import {ZkNodeModel} from '../domains/zk-node.model';
-import {RequestDto} from '../domains/request.dto';
-import {BackEnd, Rest} from '../constants/constants';
+import {ZkNodeModel} from '../../domains/zk-node.model';
+import {RequestDto} from '../../domains/request.dto';
+import {BackEnd, Rest} from '../../constants/constants';
 import {LocationStrategy} from '@angular/common';
 
 @Injectable({

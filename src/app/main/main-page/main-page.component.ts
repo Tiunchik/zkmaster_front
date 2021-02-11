@@ -1,5 +1,5 @@
 import {Component, HostListener, OnDestroy, OnInit} from '@angular/core';
-import {CrudService} from '../shared/services/crud.service';
+import {CrudService} from '../shared/services/http/crud.service';
 import {MatDialog} from '@angular/material/dialog';
 import {AddHostModalElemComponent} from '../modals/add-host-modal-elem/add-host-modal-elem.component';
 import {DisplaySettingsComponent} from '../modals/display-settings/display-settings.component';
@@ -85,11 +85,11 @@ export class MainPageComponent implements OnInit, OnDestroy {
     dialogResult.afterClosed()
       .pipe(takeUntil(this.destroy$))
       .subscribe((host: HostModel) => {
-        this.addHostToTabbar(host);
+        this.addHostToTabBar(host);
       });
   }
 
-  addHostToTabbar(host: HostModel): void {
+  addHostToTabBar(host: HostModel): void {
     if (host && host.name.length === 0) {
       host.name = host.address;
     }

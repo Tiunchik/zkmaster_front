@@ -43,5 +43,5 @@
 <mat-menu #savedBookmarks="matMenu">
   <button *ngFor="let bookmark of (bookmarks$ | async)"
           mat-menu-item
-          (click)="addHostToTabbar(bookmark)">{{bookmark.name}}</button>
+          (click)="addHostToTabBar(bookmark)">{{bookmark.name}}</button>
 </mat-menu>

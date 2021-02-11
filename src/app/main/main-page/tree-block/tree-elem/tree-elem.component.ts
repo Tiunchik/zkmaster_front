@@ -2,7 +2,7 @@ import {Component, Input, OnChanges, OnDestroy, OnInit, ViewChild} from '@angula
 import {NestedTreeControl} from '@angular/cdk/tree';
 import {MatTreeNestedDataSource} from '@angular/material/tree';
 import {ZkNodeModel} from '../../../shared/domains/zk-node.model';
-import {CrudService} from '../../../shared/services/crud.service';
+import {CrudService} from '../../../shared/services/http/crud.service';
 import {Subject} from 'rxjs';
 import {saveAs} from 'file-saver';
 import * as Blob from 'blob';
@@ -22,7 +22,7 @@ import {ADD_CLIPBOARD} from '../../../redux/copy-past/copy-past.actions';
 import {copyPastData} from '../../../redux/copy-past/copy-past.selector';
 import {CopyPastModalComponent} from '../../../modals/copy-past-modal/copy-past-modal.component';
 import {CopyPasteDTO} from '../../../shared/domains/copyPasteDTO';
-import {SeriousMethodsService} from '../../../shared/services/seriousMethodsService';
+import {SeriousMethodsService} from '../../../shared/services/http/seriousMethodsService';
 import {ZkNodeUtilService} from '../../../shared/services/zk-node-util.service';
 import {TransferDTOModel} from '../../../shared/domains/transferDTO.model';
 import {EXPORT_TYPE} from '../../../shared/constants/constants';
