@@ -65,7 +65,6 @@ export class TxtFileModalComponent implements OnInit {
     zkNodes.forEach((outElem, outIndex) => {
       zkNodes.forEach((inElem, inIndex) => {
         const inPath = inElem.path.substring(0, inElem.path.length - (inElem.name.length + 1));
-        console.log(`inPath ${inPath}`);
         if (inElem.path !== '/' && outElem.path === inPath) {
           zkNodes[outIndex].children.push(zkNodes[inIndex]);
         }
@@ -75,6 +74,7 @@ export class TxtFileModalComponent implements OnInit {
   }
 
   findElder(zkNodes: ZkNodeModel[]): ZkNodeModel {
+    let result = null;
     let finalNode: ZkNodeModel = zkNodes.length > 0 ? zkNodes[0] : null;
     if (finalNode) {
       zkNodes.forEach((elem, index) => {
@@ -82,10 +82,9 @@ export class TxtFileModalComponent implements OnInit {
           finalNode = zkNodes[index];
         }
       });
-      return finalNode;
-    } else {
-      return null;
+      result = finalNode;
     }
+    return result;
   }
 
 }

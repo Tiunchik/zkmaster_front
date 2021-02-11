@@ -3,10 +3,10 @@ import {NestedTreeControl} from '@angular/cdk/tree';
 import {MatTreeNestedDataSource} from '@angular/material/tree';
 import {ZkNodeModel} from '../../../shared/domains/zk-node.model';
 import {CrudService} from '../../../shared/services/http/crud.service';
-import {Subject} from 'rxjs';
+import {async, Subject} from 'rxjs';
 import {saveAs} from 'file-saver';
 import * as Blob from 'blob';
-import {finalize, takeUntil} from 'rxjs/operators';
+import {delay, finalize, takeUntil} from 'rxjs/operators';
 import {MatMenuTrigger} from '@angular/material/menu';
 import {RequestDto} from '../../../shared/domains/request.dto';
 import {Store} from '@ngrx/store';
@@ -18,7 +18,7 @@ import {ChangeValueComponent} from '../../../modals/change-value/change-value.co
 import {ApproveComponent} from '../../../modals/approve/approve.component';
 import {SessionStorageService} from '../../../shared/services/session-storage.service';
 import {TxtFileModalComponent} from '../../../modals/txt-file-modal/txt-file-modal.component';
-import {ADD_CLIPBOARD} from '../../../redux/copy-past/copy-past.actions';
+import {ADD_CLIPBOARD, CLEAN_CLIPBOARD} from '../../../redux/copy-past/copy-past.actions';
 import {copyPastData} from '../../../redux/copy-past/copy-past.selector';
 import {CopyPastModalComponent} from '../../../modals/copy-past-modal/copy-past-modal.component';
 import {CopyPasteDTO} from '../../../shared/domains/copyPasteDTO';
@@ -176,7 +176,6 @@ export class TreeElemComponent implements OnInit, OnChanges, OnDestroy {
       const blob = new Blob([...updatedData], {type: 'text/plain;charset=utf-8'});
       saveAs(blob, 'export.zkf');
     });
-
   }
 
   txtImport(node: ZkNodeModel): void {
@@ -185,9 +184,12 @@ export class TreeElemComponent implements OnInit, OnChanges, OnDestroy {
     });
     dialogResult.afterClosed()
       .pipe(takeUntil(this.subject$))
-      .subscribe((data: ZkNodeModel) => {
-        this.copiedZkNode = data;
-        this.pastNode(node);
+      .subscribe((data) => {
+        if (data.totalNode) {
+          this.store.dispatch(ADD_CLIPBOARD({node: data.totalNode}));
+          setTimeout(x => {}, 100);
+          this.pastNode(node);
+        }
       });
   }
 
@@ -210,15 +212,16 @@ export class TreeElemComponent implements OnInit, OnChanges, OnDestroy {
       });
     dialogResult.afterClosed()
       .pipe(takeUntil(this.subject$))
-      .subscribe((data: CopyPasteDTO) => {
-        if (data !== null && data !== undefined) {
+      .subscribe((data) => {
+        console.log('data is', data);
+        if (data.cpModel !== null && data.cpModel !== undefined) {
           // @ts-ignore
           const sendDTO: CopyPasteDTO = {...data.cpModel, targetHost: this.host};
-          console.log(sendDTO);
           this.serious.sendCopyPast(sendDTO)
             .pipe(takeUntil(this.subject$),
               finalize(() => this.getAll()))
             .subscribe();
+          this.store.dispatch(CLEAN_CLIPBOARD());
         }
       });
   }
