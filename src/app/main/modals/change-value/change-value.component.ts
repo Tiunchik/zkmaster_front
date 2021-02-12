@@ -1,15 +1,19 @@
-import {Component, HostListener, Inject, OnInit} from '@angular/core';
+import {Component, HostListener, Inject, OnDestroy, OnInit} from '@angular/core';
 import {ZkNodeModel} from '../../shared/domains/zk-node.model';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
+import {SeriousMethodsService} from '../../shared/services/http/seriousMethodsService';
+import {Subject} from 'rxjs';
+import {takeUntil} from 'rxjs/operators';
 
 @Component({
   selector: 'app-change-value',
   templateUrl: './change-value.component.html',
   styleUrls: ['./change-value.component.scss']
 })
-export class ChangeValueComponent implements OnInit {
+export class ChangeValueComponent implements OnInit, OnDestroy {
 
+  destroy$ = new Subject();
   form: FormGroup;
   zkNode: ZkNodeModel = new ZkNodeModel('', '', '');
 
@@ -20,7 +24,8 @@ export class ChangeValueComponent implements OnInit {
   }
 
   constructor(@Inject(MAT_DIALOG_DATA) public data: { oldNode: ZkNodeModel, action: string },
-              public dialogRef: MatDialogRef<ChangeValueComponent>) {
+              public dialogRef: MatDialogRef<ChangeValueComponent>,
+              private seriousHttp: SeriousMethodsService) {
   }
 
   ngOnInit(): void {
@@ -30,6 +35,12 @@ export class ChangeValueComponent implements OnInit {
     }
     this.initForm();
   }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
 
   initForm(): void {
     this.form = new FormGroup({
@@ -52,5 +63,17 @@ export class ChangeValueComponent implements OnInit {
 
   submit(): void {
     this.dialogRef.close({...this.form.value});
+  }
+
+  encryptValue(): void {
+    const value: string = this.form.value.value.trim();
+    console.log(value);
+    if (value) {
+      this.seriousHttp.encrypt(value)
+        .pipe(takeUntil(this.destroy$))
+        .subscribe((data) => {
+          this.form.get('value').setValue(data.data);
+        });
+    }
   }
 }

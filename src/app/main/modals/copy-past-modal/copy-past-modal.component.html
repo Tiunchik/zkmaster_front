@@ -1,5 +1,5 @@
 <h1 mat-dialog-title>Copy-Past Options</h1>
-<mat-dialog-content class="mat-typography main" *ngIf="unitedTreeModel">
+<mat-dialog-content class="mat-typography main" *ngIf="(addNodeList.length + updateNodeList.length) !== 0; else nothing">
   <app-simple-tree [zkNode]="unitedTreeModel"
                    [updateList]="updateNodeList"
                    [addList]="addNodeList"
@@ -9,3 +9,9 @@
   <button [mat-dialog-close] mat-button>Cancel</button>
   <button [mat-dialog-close] mat-button (click)="submit()">Do It</button>
 </mat-dialog-actions>
+
+<ng-template #nothing>
+  <mat-dialog-content class="mat-typography main">
+    <p>There aren't any nodes to copy/past</p>
+  </mat-dialog-content>
+</ng-template>

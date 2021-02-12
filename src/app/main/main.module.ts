@@ -17,7 +17,6 @@ import {MatFormFieldModule} from '@angular/material/form-field';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {DraNavbarComponent} from './main-page/dra-navbar/dra-navbar.component';
 import {DragDropModule} from '@angular/cdk/drag-drop';
-import {DivBlockComponent} from './main-page/div-block/div-block.component';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import {DisplaySettingsComponent} from './modals/display-settings/display-settings.component';
 import {ChangeValueComponent} from './modals/change-value/change-value.component';
@@ -31,8 +30,10 @@ import {MatCardModule} from '@angular/material/card';
 import {MatDividerModule} from '@angular/material/divider';
 import {TxtFileModalComponent} from './modals/txt-file-modal/txt-file-modal.component';
 import {copyPastReducer} from './redux/copy-past/copy-past.reducer';
-import { CopyPastModalComponent } from './modals/copy-past-modal/copy-past-modal.component';
-import { SimpleTreeComponent } from './modals/copy-past-modal/simple-tree/simple-tree.component';
+import {CopyPastModalComponent} from './modals/copy-past-modal/copy-past-modal.component';
+import {SimpleTreeComponent} from './modals/copy-past-modal/simple-tree/simple-tree.component';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+import {compareReducer} from './redux/compare/compare.reducer';
 
 
 @NgModule({
@@ -41,7 +42,6 @@ import { SimpleTreeComponent } from './modals/copy-past-modal/simple-tree/simple
     TreeElemComponent,
     AddHostModalElemComponent,
     DraNavbarComponent,
-    DivBlockComponent,
     DisplaySettingsComponent,
     ChangeValueComponent,
     ApproveComponent,
@@ -70,11 +70,13 @@ import { SimpleTreeComponent } from './modals/copy-past-modal/simple-tree/simple
       tabs: tabsReducer,
       hosts: hostReducer,
       trees: treeReducer,
-      copyPast: copyPastReducer
+      copyPast: copyPastReducer,
+      compare: compareReducer
     }),
     ReactiveFormsModule,
     MatCardModule,
-    MatDividerModule
+    MatDividerModule,
+    MatProgressSpinnerModule
   ],
   providers: [
     Location, {provide: LocationStrategy, useClass: PathLocationStrategy}

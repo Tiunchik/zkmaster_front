@@ -1,5 +1,5 @@
 import {HttpClient} from '@angular/common/http';
-import {BackEnd, Injection, Transform} from '../../constants/constants';
+import {BackEnd, Encrypt, Injection, Transform} from '../../constants/constants';
 import {LocationStrategy} from '@angular/common';
 import {CopyPasteDTO} from '../../domains/copyPasteDTO';
 import {Observable} from 'rxjs';
@@ -27,5 +27,9 @@ export class SeriousMethodsService {
 
   public toTxt(dto: TransferDTOModel): Observable<string[]> {
     return this.http.post<string[]>(`${this.backEnd}${Transform}${dto.host}`, dto);
+  }
+
+  public encrypt(value: string): Observable<any> {
+    return this.http.get<any>(`${this.backEnd}${Encrypt}${value}`);
   }
 }

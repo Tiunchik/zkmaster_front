@@ -12,6 +12,8 @@ export const Transform = '/api/zkm/transform/';
 
 export const Injection = '/api/zkm/data/injection/';
 
+export const Encrypt = '/api/zkm/crypto/enc/';
+
 export const EXPORT_TYPE = 'TXT';
 
 export const TABS = 'SAVE_TABS';

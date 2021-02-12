@@ -26,6 +26,7 @@ import {SeriousMethodsService} from '../../../shared/services/http/seriousMethod
 import {ZkNodeUtilService} from '../../../shared/services/zk-node-util.service';
 import {TransferDTOModel} from '../../../shared/domains/transferDTO.model';
 import {EXPORT_TYPE} from '../../../shared/constants/constants';
+import {compareSelectorHosts} from '../../../redux/compare/compare.selector';
 
 @Component({
   selector: 'app-tree-elem',
@@ -44,6 +45,7 @@ export class TreeElemComponent implements OnInit, OnChanges, OnDestroy {
   dataSource = new MatTreeNestedDataSource<ZkNodeModel>();
   copiedZkNode: ZkNodeModel = null;
   dataList: ZkNodeModel[];
+  compareList: ZkNodeModel;
 
   @ViewChild(MatMenuTrigger, {static: false}) contextMenu: MatMenuTrigger;
   contextMenuPosition = {x: '0px', y: '0px'};
@@ -78,6 +80,11 @@ export class TreeElemComponent implements OnInit, OnChanges, OnDestroy {
       .subscribe((data) => {
         this.copiedZkNode = data;
       });
+    // this.store.select(compareSelectorHosts)
+    //   .pipe(takeUntil(this.subject$))
+    //   .subscribe((data) => {
+    //     let required:
+    //   })
   }
 
   ngOnChanges(): void {
@@ -187,7 +194,8 @@ export class TreeElemComponent implements OnInit, OnChanges, OnDestroy {
       .subscribe((data) => {
         if (data.totalNode) {
           this.store.dispatch(ADD_CLIPBOARD({node: data.totalNode}));
-          setTimeout(x => {}, 100);
+          setTimeout(x => {
+          }, 100);
           this.pastNode(node);
         }
       });
@@ -213,8 +221,9 @@ export class TreeElemComponent implements OnInit, OnChanges, OnDestroy {
     dialogResult.afterClosed()
       .pipe(takeUntil(this.subject$))
       .subscribe((data) => {
-        console.log('data is', data);
-        if (data.cpModel !== null && data.cpModel !== undefined) {
+        if (data !== null && data !== undefined
+          && data.cpModel !== null && data.cpModel !== undefined
+          && (data.cpModel.createNodeList + data.cpModel.updateNodeList) > 0) {
           // @ts-ignore
           const sendDTO: CopyPasteDTO = {...data.cpModel, targetHost: this.host};
           this.serious.sendCopyPast(sendDTO)

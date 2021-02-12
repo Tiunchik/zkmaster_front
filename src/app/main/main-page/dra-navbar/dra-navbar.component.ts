@@ -13,6 +13,7 @@ import {TreeModel} from '../../shared/domains/tree.model';
 import {ADD_TREE} from '../../redux/zktrees/zktree.actions';
 import {CrudService} from '../../shared/services/http/crud.service';
 import {Subject} from 'rxjs';
+import {ADD_TO_COMPARE} from '../../redux/compare/compare.actions';
 
 @Component({
   selector: 'app-dra-navbar',
@@ -76,6 +77,7 @@ export class DraNavbarComponent implements OnInit, OnDestroy {
   chooseHost(host: HostModel, index: number): void {
     this.currentTree = host.address;
     this.emitter.emit(new ExpHostModel(host, index));
+    this.store.dispatch(ADD_TO_COMPARE({host}));
   }
 
   tabMenuAction(event: MouseEvent, host: HostModel, ind: number): void {

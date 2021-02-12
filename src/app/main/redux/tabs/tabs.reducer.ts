@@ -11,8 +11,6 @@ export const TABSMOD: TabModel[] = [];
 export const tabsReducer = createReducer(TABSMOD,
   on(GET_ALL_TABS, (state: TabModel[]) => {
     const newState = JSON.parse(localStorage.getItem(TABS));
-    console.log('new state');
-    console.log(newState);
     if (newState !== null && newState !== 'undefined') {
       return newState;
     }

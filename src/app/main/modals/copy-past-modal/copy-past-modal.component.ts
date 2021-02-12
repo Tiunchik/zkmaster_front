@@ -38,12 +38,6 @@ export class CopyPastModalComponent implements OnInit {
     this.takeNodesFatherPaths();
     this.prepareNodes();
     this.prepareUnitedTree();
-    this.dialogRef.afterOpened().subscribe(() => {
-      if (this.addNodeList.length + this.updateNodeList.length === 0) {
-        const tryToFix = new CopyPasteDTO('', [], []);
-        this.dialogRef.close({cpModel: null});
-      }
-    });
   }
 
   makeShortVariables(): void {
@@ -52,37 +46,25 @@ export class CopyPastModalComponent implements OnInit {
   }
 
   takeNodesFatherPaths(): void {
-    console.log('takeNodesFatherPaths #START#');
 
-    // console.log("this.copiedNode.path", this.copiedNode.path);
-    // console.log("this.copiedNode.name.length)", this.copiedNode.name.length);
     this.copiedNodePath = this.copiedNode.path
       .substring(0, this.copiedNode.path.length - this.copiedNode.name.length);
 
-    // console.log("this.newFatherNode.path", this.newFatherNode.path);
-    // console.log("this.newFatherNode.name.length", this.newFatherNode.name.length);
     this.newFatherNodePath = this.newFatherNode.path
       .substring(0, this.newFatherNode.path.length - this.newFatherNode.name.length);
 
     this.copiedNodePath = (this.copiedNodePath === '') ? '/' : this.copiedNodePath;
     this.newFatherNodePath = (this.newFatherNodePath === '') ? '/' : this.newFatherNodePath;
 
-    // console.log("copiedNodePath", this.copiedNodePath);
-    // console.log("newFatherNodePath", this.newFatherNodePath);
-    // console.log("newFatherNodePath undefined", (this.newFatherNodePath === undefined));
-    // console.log("newFatherNodePath null", (this.newFatherNodePath === null));
-    console.log('takeNodesFatherPaths #END#');
   }
 
   prepareNodes(): void {
-    console.log('prepareNodes #START#');
     this.newFatherNode = this.preparePaths(this.newFatherNode, this.newFatherNodePath.length, '');
     this.copiedNode = this.preparePaths(this.copiedNode, this.copiedNodePath.length, this.newFatherNode.path);
 
     this.copiedNodeList = this.lister.zkNodeToList(this.copiedNode);
     this.newFatherNodeList = this.lister.zkNodeToList(this.newFatherNode);
 
-    console.log('prepareNodes #START#');
   }
 
   deepRecursionCopy(zkNode: ZkNodeModel): ZkNodeModel {
@@ -107,7 +89,6 @@ export class CopyPastModalComponent implements OnInit {
   }
 
   prepareUnitedTree(): void {
-    console.log('prepareUnitedTree #START#');
     this.unitedTreeModel = {...this.deepRecursionCopy(this.newFatherNode)};
     const unitedListForCheck: ZkNodeModel[] = [this.unitedTreeModel];
     let currentNode: ZkNodeModel;
@@ -139,7 +120,6 @@ export class CopyPastModalComponent implements OnInit {
     }
     this.fullList = [...this.addNodeList, ...this.updateNodeList];
     this.unitedTreeModelList = this.lister.zkNodeToList(this.unitedTreeModel);
-    console.log('prepareUnitedTree #END#');
   }
 
 
@@ -147,7 +127,6 @@ export class CopyPastModalComponent implements OnInit {
 
 
   changeUnitedTree(event: ZkEmitModel): void {
-    console.log('changeUnitedTree #END#');
     let add = true;
     if (this.updateNodeList.filter((elem) => event.node.path === elem.path).length !== 0) {
       add = false;
@@ -171,12 +150,10 @@ export class CopyPastModalComponent implements OnInit {
         }
       });
     }
-    console.log('changeUnitedTree #END#');
   }
 
 
   submit(): void {
-    console.log('submit #### START ');
     const updateNodeListRsl: ZkNodeModel[] = [];
 
     this.updateNodeList.forEach(updElem => {
@@ -200,7 +177,6 @@ export class CopyPastModalComponent implements OnInit {
 
     const copyPasteDTO = new CopyPasteDTO('', createNodeListRsl, updateNodeListRsl);
 
-    console.log('submit #### END ');
     this.dialogRef.close({cpModel: copyPasteDTO});
   }
 
