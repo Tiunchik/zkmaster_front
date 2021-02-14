@@ -1,10 +1,11 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {Observable} from 'rxjs';
+import {EMPTY, Observable} from 'rxjs';
 import {ZkNodeModel} from '../../domains/zk-node.model';
 import {RequestDto} from '../../domains/request.dto';
 import {BackEnd, Rest} from '../../constants/constants';
 import {LocationStrategy} from '@angular/common';
+import {catchError, retry, tap} from "rxjs/operators";
 
 @Injectable({
   providedIn: 'root'
@@ -23,7 +24,15 @@ export class CrudService {
 
   public getAll(host: string): Observable<ZkNodeModel> {
     return this.http
-      .get<ZkNodeModel>(`${this.backEnd}${Rest}${host}`);
+      .get<ZkNodeModel>(`${this.backEnd}${Rest}${host}`)
+      .pipe(
+        retry(1),
+        tap(data => console.log("pipe data: ", data)),
+        catchError(() => {
+          console.log("CrudService::getAll() :: request Failed");
+          return EMPTY;
+        }),
+      );
   }
 
   public addNode(dto: RequestDto): Observable<void> {
