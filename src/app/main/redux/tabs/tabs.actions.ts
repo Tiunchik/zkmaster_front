@@ -11,6 +11,8 @@ export const ADD_TAB = createAction('[ADD TAB]', props<{ model: TabModel }>());
 
 export const REMOVE_TABBAR = createAction('[REMOVE TABBAR]', props<{ name: string }>());
 
+export const CHOOSE_TAB = createAction('[CHOOSE_TAB TAB]', props<{ model: HostModel, index: number }>());
+
 export const REMOVE_TAB = createAction('[REMOVE TAB]', props<{ model: HostModel, index: number }>());
 
 export const SPLIT_TAB = createAction('[SPLIT TAB]',

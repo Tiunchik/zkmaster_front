@@ -4,7 +4,7 @@ import {Store} from '@ngrx/store';
 import {HostModel} from '../../shared/domains/host.model';
 import {TabModel} from '../../shared/domains/tab.model';
 import {selectTabs} from '../../redux/tabs/tabs.selector';
-import {MOVE_TABBAR, REMOVE_TAB, TRANSFER_TABBAR} from '../../redux/tabs/tabs.actions';
+import {CHOOSE_TAB, MOVE_TABBAR, REMOVE_TAB, TRANSFER_TABBAR} from '../../redux/tabs/tabs.actions';
 import {ExpHostModel} from '../../shared/domains/expHost.model';
 import {MatMenuTrigger} from '@angular/material/menu';
 import {ADD_BOOKMARK} from '../../redux/bookmarks/host.actions';
@@ -44,7 +44,7 @@ export class DraNavbarComponent implements OnInit, OnDestroy {
         inpTab.forEach((val) => {
           if (val.name === this.name) {
             this.tab = val;
-            this.chooseHost(this.tab.chosenOne, this.tab.hosts.indexOf(this.tab.chosenOne));
+            this.currentTree = val.chosenOne.address;
           }
         });
       });
@@ -76,8 +76,9 @@ export class DraNavbarComponent implements OnInit, OnDestroy {
 
   chooseHost(host: HostModel, index: number): void {
     this.currentTree = host.address;
+    console.log('host adress', host);
     this.emitter.emit(new ExpHostModel(host, index));
-    this.store.dispatch(ADD_TO_COMPARE({host}));
+    this.store.dispatch(CHOOSE_TAB({model: host, index}));
   }
 
   tabMenuAction(event: MouseEvent, host: HostModel, ind: number): void {

@@ -1,6 +1,16 @@
 import {createReducer, on} from '@ngrx/store';
 import {TabModel} from '../../shared/domains/tab.model';
-import {ADD_TAB, GET_ALL_TABS, MOVE_TABBAR, REMOVE_TAB, REMOVE_TABBAR, SAVE_ALL_TABS, SPLIT_TAB, TRANSFER_TABBAR} from './tabs.actions';
+import {
+  ADD_TAB,
+  CHOOSE_TAB,
+  GET_ALL_TABS,
+  MOVE_TABBAR,
+  REMOVE_TAB,
+  REMOVE_TABBAR,
+  SAVE_ALL_TABS,
+  SPLIT_TAB,
+  TRANSFER_TABBAR
+} from './tabs.actions';
 import {HostModel} from '../../shared/domains/host.model';
 import {TABS} from '../../shared/constants/constants';
 
@@ -14,7 +24,7 @@ export const tabsReducer = createReducer(TABSMOD,
     if (newState !== null && newState !== 'undefined') {
       return newState;
     }
-    return state;
+    return saveTabs(deleteEmptyTabBars(newState));
   }),
   on(ADD_TAB, (state: TabModel[], {model}) => {
     const newState: TabModel[] = [];
@@ -40,9 +50,20 @@ export const tabsReducer = createReducer(TABSMOD,
   }),
   on(SPLIT_TAB, (state: TabModel[], {oldTabBarName, newTabBarName, prevInd}) => {
       const newState: TabModel[] = transfer(state, oldTabBarName, newTabBarName, prevInd, 0);
-      return saveTabs(deleteEmptyTabBars(newState));
+      return saveTabs(newState);
     }
   ),
+  on(CHOOSE_TAB, (state: TabModel[], {model, index}) => {
+    const newState: TabModel[] = [];
+    state.forEach((elem) => {
+      if (elem.name === model.tabName) {
+        newState.push({...elem, chosenOne: model});
+      } else {
+        newState.push(elem);
+      }
+    });
+    return saveTabs(deleteEmptyTabBars(newState));
+  }),
   on(REMOVE_TAB, (state: TabModel[], {model, index}) => {
     const newState: TabModel[] = [];
     state.forEach((elem) => {
@@ -73,7 +94,7 @@ export const tabsReducer = createReducer(TABSMOD,
       newTabs.push(new HostModel(elem.name, elem.address, newState[0].hosts[0].tabName));
     });
     newState[0].hosts = [...newState[0].hosts, ...newTabs];
-    return saveTabs(newState);
+    return saveTabs(deleteEmptyTabBars(newState));
   }),
   on(MOVE_TABBAR, (state: TabModel[], {tabBarName, prevInd, newInd}) => {
     const newState: TabModel[] = [];
@@ -89,7 +110,7 @@ export const tabsReducer = createReducer(TABSMOD,
         newState.push(tabBar);
       }
     });
-    return saveTabs(newState);
+    return saveTabs(deleteEmptyTabBars(newState));
   }),
   on(TRANSFER_TABBAR, (state: TabModel[],
                        {oldTabBarName, newTabBarName, prevInd, newInd}) => {

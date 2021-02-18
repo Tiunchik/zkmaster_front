@@ -105,7 +105,11 @@ export class MainPageComponent implements OnInit, OnDestroy {
   }
 
   addTab(): void {
-    if (this.tabs.length === 1 && this.currentHost !== null) {
+    if (this.currentHost === null || this.currentHost === undefined) {
+      const temp = this.tabs[0];
+      this.currentHost = {host: temp.chosenOne, index: temp.hosts.indexOf(temp.chosenOne)};
+    }
+    if (this.tabs.length === 1) {
       const getCurTab: TabModel = this.tabs
         .filter((elem) => elem.name === this.currentHost.host.tabName)
         .shift();

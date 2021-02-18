@@ -3,10 +3,10 @@ import {NestedTreeControl} from '@angular/cdk/tree';
 import {MatTreeNestedDataSource} from '@angular/material/tree';
 import {ZkNodeModel} from '../../../shared/domains/zk-node.model';
 import {CrudService} from '../../../shared/services/http/crud.service';
-import {async, Subject} from 'rxjs';
+import {Subject} from 'rxjs';
 import {saveAs} from 'file-saver';
 import * as Blob from 'blob';
-import {delay, finalize, takeUntil} from 'rxjs/operators';
+import {finalize, takeUntil} from 'rxjs/operators';
 import {MatMenuTrigger} from '@angular/material/menu';
 import {RequestDto} from '../../../shared/domains/request.dto';
 import {Store} from '@ngrx/store';
@@ -26,7 +26,6 @@ import {SeriousMethodsService} from '../../../shared/services/http/seriousMethod
 import {ZkNodeUtilService} from '../../../shared/services/zk-node-util.service';
 import {TransferDTOModel} from '../../../shared/domains/transferDTO.model';
 import {EXPORT_TYPE} from '../../../shared/constants/constants';
-import {compareSelectorHosts} from '../../../redux/compare/compare.selector';
 
 @Component({
   selector: 'app-tree-elem',
@@ -80,14 +79,10 @@ export class TreeElemComponent implements OnInit, OnChanges, OnDestroy {
       .subscribe((data) => {
         this.copiedZkNode = data;
       });
-    // this.store.select(compareSelectorHosts)
-    //   .pipe(takeUntil(this.subject$))
-    //   .subscribe((data) => {
-    //     let required:
-    //   })
   }
 
   ngOnChanges(): void {
+    console.log('change host', this.host);
     this.getAll();
   }
 
