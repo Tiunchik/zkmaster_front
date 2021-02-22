@@ -29,7 +29,6 @@ export const hostReducer = createReducer(BOOKMARKS,
       newState = [...state, model];
     }
     console.log(newState);
-    localStorage.setItem(BOOKMARK, JSON.stringify(newState));
     return newState;
   }),
   on(REMOVE_BOOKMARK, (state: HostModel[], {index}) => {

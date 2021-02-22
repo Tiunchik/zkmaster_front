@@ -24,7 +24,7 @@ export const tabsReducer = createReducer(TABSMOD,
     if (newState !== null && newState !== 'undefined') {
       return newState;
     }
-    return saveTabs(deleteEmptyTabBars(newState));
+    return saveTabs(state);
   }),
   on(ADD_TAB, (state: TabModel[], {model}) => {
     const newState: TabModel[] = [];

@@ -6,7 +6,7 @@ import {SETTINGS_NAME} from '../../shared/constants/constants';
 export const INIT_BUTTONS_PACK: MenuButtonModel[] = [
   {name: 'Add Zookeeper', icon: 'playlist_add', toolbar: true, functionName: 'openModalAddHost', title: 'ALT+A'},
   {name: 'Split', icon: 'vertical_split', toolbar: true, functionName: 'addTab', title: 'ALT+S'},
-  {name: 'Check connections', icon: 'playlist_add_check', toolbar: false, functionName: 'Cyberpunk2077! Fix me!'},
+//  {name: 'Check connections', icon: 'playlist_add_check', toolbar: false, functionName: 'Cyberpunk2077! Fix me!'},
   {name: 'Options', icon: 'settings', toolbar: false, functionName: 'openSettings', title: 'ALT+O'},
 ];
 

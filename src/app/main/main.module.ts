@@ -34,6 +34,8 @@ import {CopyPastModalComponent} from './modals/copy-past-modal/copy-past-modal.c
 import {SimpleTreeComponent} from './modals/copy-past-modal/simple-tree/simple-tree.component';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {compareReducer} from './redux/compare/compare.reducer';
+import {EffectsModule} from '@ngrx/effects';
+import {CompareEffects} from './redux/compare/compare.effects';
 
 
 @NgModule({
@@ -73,6 +75,7 @@ import {compareReducer} from './redux/compare/compare.reducer';
       copyPast: copyPastReducer,
       compare: compareReducer
     }),
+    EffectsModule.forRoot([CompareEffects]),
     ReactiveFormsModule,
     MatCardModule,
     MatDividerModule,

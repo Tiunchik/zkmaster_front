@@ -7,18 +7,8 @@ export const initialState: TreeModel[] = [];
 export const treeReducer = createReducer(
   initialState,
   on(ADD_TREE, (state: TreeModel[], {tree}) => {
-    let newState: TreeModel[] = [];
-    if (state.filter(elem => elem.host === tree.host).length > 1) {
-      state.forEach((elem) => {
-        if (elem.host === tree.host) {
-          newState.push(tree);
-        } else {
-          newState.push(elem);
-        }
-      });
-    } else {
-      newState = [...state, tree];
-    }
+    let newState: TreeModel[] = state.filter(elem => elem.host !== tree.host);
+    newState = [...newState, tree];
     return newState;
   })
 );

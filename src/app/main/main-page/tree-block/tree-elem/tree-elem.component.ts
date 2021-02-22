@@ -3,10 +3,10 @@ import {NestedTreeControl} from '@angular/cdk/tree';
 import {MatTreeNestedDataSource} from '@angular/material/tree';
 import {ZkNodeModel} from '../../../shared/domains/zk-node.model';
 import {CrudService} from '../../../shared/services/http/crud.service';
-import {Subject} from 'rxjs';
+import {of, Subject} from 'rxjs';
 import {saveAs} from 'file-saver';
 import * as Blob from 'blob';
-import {finalize, takeUntil} from 'rxjs/operators';
+import {finalize, map, switchMap, takeUntil} from 'rxjs/operators';
 import {MatMenuTrigger} from '@angular/material/menu';
 import {RequestDto} from '../../../shared/domains/request.dto';
 import {Store} from '@ngrx/store';
@@ -26,6 +26,9 @@ import {SeriousMethodsService} from '../../../shared/services/http/seriousMethod
 import {ZkNodeUtilService} from '../../../shared/services/zk-node-util.service';
 import {TransferDTOModel} from '../../../shared/domains/transferDTO.model';
 import {EXPORT_TYPE} from '../../../shared/constants/constants';
+import {selectTabs} from '../../../redux/tabs/tabs.selector';
+import {getLocaleFirstDayOfWeek} from '@angular/common';
+import {log} from 'util';
 
 @Component({
   selector: 'app-tree-elem',
@@ -44,7 +47,9 @@ export class TreeElemComponent implements OnInit, OnChanges, OnDestroy {
   dataSource = new MatTreeNestedDataSource<ZkNodeModel>();
   copiedZkNode: ZkNodeModel = null;
   dataList: ZkNodeModel[];
-  compareList: ZkNodeModel;
+
+  fullTreeList: TreeModel[];
+  compareList: ZkNodeModel[];
 
   @ViewChild(MatMenuTrigger, {static: false}) contextMenu: MatMenuTrigger;
   contextMenuPosition = {x: '0px', y: '0px'};
@@ -74,6 +79,7 @@ export class TreeElemComponent implements OnInit, OnChanges, OnDestroy {
           }
         });
       });
+
     this.store.select(copyPastData)
       .pipe(takeUntil(this.subject$))
       .subscribe((data) => {
@@ -82,7 +88,6 @@ export class TreeElemComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   ngOnChanges(): void {
-    console.log('change host', this.host);
     this.getAll();
   }
 

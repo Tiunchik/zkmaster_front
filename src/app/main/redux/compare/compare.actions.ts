@@ -1,7 +1,5 @@
-import {createAction, props} from '@ngrx/store';
-import {HostModel} from '../../shared/domains/host.model';
+import {createAction} from '@ngrx/store';
 
-export const ADD_TO_COMPARE = createAction('[ADD_TO_COMPARE]', props<{ host: HostModel }>());
 
 export const START_COMPARE = createAction('[START_COMPARE]');
 

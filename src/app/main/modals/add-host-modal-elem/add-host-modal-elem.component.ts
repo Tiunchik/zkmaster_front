@@ -17,7 +17,6 @@ export class AddHostModalElemComponent implements OnInit {
   currentTab = '';
 
   @HostListener('window:keypress', ['$event']) onPress(event: KeyboardEvent): void {
-    console.log(event);
     if (event.key === 'Enter') {
       this.submit();
     }

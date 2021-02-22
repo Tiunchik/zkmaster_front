@@ -1,6 +1,6 @@
 import {Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild} from '@angular/core';
 import {CdkDragDrop} from '@angular/cdk/drag-drop';
-import {Store} from '@ngrx/store';
+import {select, Store} from '@ngrx/store';
 import {HostModel} from '../../shared/domains/host.model';
 import {TabModel} from '../../shared/domains/tab.model';
 import {selectTabs} from '../../redux/tabs/tabs.selector';
@@ -8,12 +8,12 @@ import {CHOOSE_TAB, MOVE_TABBAR, REMOVE_TAB, TRANSFER_TABBAR} from '../../redux/
 import {ExpHostModel} from '../../shared/domains/expHost.model';
 import {MatMenuTrigger} from '@angular/material/menu';
 import {ADD_BOOKMARK} from '../../redux/bookmarks/host.actions';
-import {takeUntil} from 'rxjs/operators';
+import {map, takeUntil} from 'rxjs/operators';
 import {TreeModel} from '../../shared/domains/tree.model';
 import {ADD_TREE} from '../../redux/zktrees/zktree.actions';
 import {CrudService} from '../../shared/services/http/crud.service';
-import {Subject} from 'rxjs';
-import {ADD_TO_COMPARE} from '../../redux/compare/compare.actions';
+import {Observable, Subject} from 'rxjs';
+import {START_COMPARE} from '../../redux/compare/compare.actions';
 
 @Component({
   selector: 'app-dra-navbar',
@@ -31,6 +31,7 @@ export class DraNavbarComponent implements OnInit, OnDestroy {
   subject$ = new Subject();
 
   tab: TabModel;
+  countTabs$: Observable<number> = this.store.select(selectTabs).pipe(map(x => x.length));
   currentTree = '';
 
   constructor(private store: Store,
@@ -76,7 +77,6 @@ export class DraNavbarComponent implements OnInit, OnDestroy {
 
   chooseHost(host: HostModel, index: number): void {
     this.currentTree = host.address;
-    console.log('host adress', host);
     this.emitter.emit(new ExpHostModel(host, index));
     this.store.dispatch(CHOOSE_TAB({model: host, index}));
   }
@@ -108,4 +108,7 @@ export class DraNavbarComponent implements OnInit, OnDestroy {
   }
 
 
+  compareMode(): void {
+    this.store.dispatch(START_COMPARE());
+  }
 }
